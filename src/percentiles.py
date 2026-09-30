@@ -54,6 +54,7 @@ LABELS = {
     "passes_into_box": "Passes into box",
     "progressive_carries": "Progressive carries",
     "carries_into_box": "Carries into box",
+    "dribbles": "Dribbles attempted",
     "dribbles_completed": "Successful dribbles",
     "tackles_won": "Tackles won",
     "interceptions": "Interceptions",
