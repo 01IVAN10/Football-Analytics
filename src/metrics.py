@@ -31,6 +31,8 @@ COUNT_COLS = [
 
 def split_xy(points: pd.Series) -> pd.DataFrame:
     """Колонку з парами [x, y] перетворює на дві колонки x і y."""
+    if points.empty:   # напр., у гравця немає жодного удару — повертаємо порожню таблицю x, y
+        return pd.DataFrame({"x": [], "y": []}, index=points.index, dtype=float)
     xy = pd.DataFrame(points.tolist(), index=points.index)
     return xy.iloc[:, :2].set_axis(["x", "y"], axis=1)  # iloc: у кінця удару є ще z (висота)
 
@@ -60,9 +62,18 @@ def count(mask: pd.Series, events: pd.DataFrame) -> pd.Series:
 
 # ---------- метрики за блоками ----------
 
+def non_penalty_shots(ev: pd.DataFrame) -> pd.DataFrame:
+    """Удари без пенальті і без серії пенальті (пенальті — окрема навичка і спотворює xG).
+
+    Окрема функція, бо нею користуються і метрики, і карта ударів (src.pitch_maps):
+    визначення "який удар рахується" живе в одному місці.
+    """
+    return ev[(ev["type"] == "Shot") & (ev["shot_type"] != "Penalty") & (ev["period"] < 5)]
+
+
 def shooting(ev: pd.DataFrame) -> pd.DataFrame:
-    """Удари і голи без пенальті (пенальті — окрема навичка і спотворює xG)."""
-    shots = ev[(ev["type"] == "Shot") & (ev["shot_type"] != "Penalty") & (ev["period"] < 5)]
+    """Удари, голи та npxG без пенальті."""
+    shots = non_penalty_shots(ev)
     g = shots.groupby("player_id")
     return pd.DataFrame({
         "np_goals": g["shot_outcome"].apply(lambda s: (s == "Goal").sum()),
@@ -89,9 +100,13 @@ def creation(ev: pd.DataFrame) -> pd.DataFrame:
     })
 
 
-def passing(ev: pd.DataFrame) -> pd.DataFrame:
-    """Паси: обсяг, точність і просування м'яча вперед."""
-    passes = ev[ev["type"] == "Pass"].copy()
+def classify_passes(passes: pd.DataFrame) -> pd.DataFrame:
+    """Для кожного пасу — прапорці True/False: які метрики він зараховує.
+
+    Так само, як non_penalty_shots, це спільне визначення для метрик і карти пасів.
+    Результат має той самий індекс, що й passes, тому прапорці можна
+    використовувати як маски: passes[flags["progressive"]].
+    """
     completed = passes["pass_outcome"].isna()        # NaN у StatsBomb = пас точний
     open_play = ~passes["pass_type"].isin(SET_PIECES)
 
@@ -100,12 +115,24 @@ def passing(ev: pd.DataFrame) -> pd.DataFrame:
 
     good = completed & open_play                     # точні паси з гри
     return pd.DataFrame({
+        "completed": completed,
+        "progressive": good & is_progressive(start, end),
+        "final_third": good & (start["x"] < FINAL_THIRD_X) & (end["x"] >= FINAL_THIRD_X),
+        "into_box": good & ~in_box(start) & in_box(end),
+        "key": passes["pass_assisted_shot_id"].notna(),   # пас, після якого був удар
+    }, index=passes.index)
+
+
+def passing(ev: pd.DataFrame) -> pd.DataFrame:
+    """Паси: обсяг, точність і просування м'яча вперед."""
+    passes = ev[ev["type"] == "Pass"]
+    flags = classify_passes(passes)
+    return pd.DataFrame({
         "passes": passes.groupby("player_id").size(),
-        "passes_completed": count(completed, passes),
-        "progressive_passes": count(good & is_progressive(start, end), passes),
-        "passes_final_third": count(good & (start["x"] < FINAL_THIRD_X)
-                                    & (end["x"] >= FINAL_THIRD_X), passes),
-        "passes_into_box": count(good & ~in_box(start) & in_box(end), passes),
+        "passes_completed": count(flags["completed"], passes),
+        "progressive_passes": count(flags["progressive"], passes),
+        "passes_final_third": count(flags["final_third"], passes),
+        "passes_into_box": count(flags["into_box"], passes),
     })
 
 

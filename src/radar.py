@@ -6,7 +6,6 @@
 PNG зберігається в reports/figures/.
 """
 import argparse
-import re
 import textwrap
 
 import matplotlib.pyplot as plt
@@ -14,17 +13,10 @@ from matplotlib.colors import to_rgba
 import pandas as pd
 from mplsoccer import Radar, grid
 
-from src.data_loader import PROJECT_ROOT
 from src.percentiles import (LABELS, POOL_NAMES, RADAR_TEMPLATES,
-                             find_player, load_per90, normalize_name, percentile_table)
-
-FIGURES = PROJECT_ROOT / "reports" / "figures"
-
-BG = "#FFFFFF"
-RING_FILL, RING_EDGE = "#F2F2F2", "#D6D6D6"
-PLAYER_COLOR = "#1A78CF"    # синій — основний гравець
-COMPARE_COLOR = "#E4572E"   # помаранчево-червоний — гравець для порівняння
-TEXT, MUTED = "#1F1F1F", "#7A7A7A"
+                             find_player, load_per90, percentile_table)
+from src.style import (BG, BLUE, LINES, ORANGE, RING_FILL, TEXT, draw_endnote, draw_header,
+                       player_subtitle, save_figure, slugify)
 
 
 def polygon_style(color: str) -> dict:
@@ -45,11 +37,6 @@ def format_value(metric: str, value: float) -> str:
     if metric == "pass_completion":
         return f"{value:.0%}"
     return f"{value:.2f}"
-
-
-def slugify(name: str) -> str:
-    """'Kylian Mbappé Lottin' -> 'kylian_mbappe_lottin' (для імені файлу)."""
-    return re.sub(r"[^a-z0-9]+", "_", normalize_name(name)).strip("_")
 
 
 def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
@@ -88,7 +75,7 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
     fig.set_facecolor(BG)
     ax = axs["radar"]
     radar.setup_axis(ax=ax, facecolor=BG)
-    radar.draw_circles(ax=ax, facecolor=RING_FILL, edgecolor=RING_EDGE, lw=1)
+    radar.draw_circles(ax=ax, facecolor=RING_FILL, edgecolor=LINES, lw=1)
 
     # NaN (немає даних) малюємо як 0, але підписуємо "n/a"
     pct_values = pct.loc[player_id, metrics].astype(float)
@@ -97,20 +84,20 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
     if compare_id is None:
         _, _, vertices = radar.draw_radar(
             values, ax=ax,
-            kwargs_radar=polygon_style(PLAYER_COLOR),
-            kwargs_rings={"facecolor": to_rgba(PLAYER_COLOR, 0.12)},
+            kwargs_radar=polygon_style(BLUE),
+            kwargs_rings={"facecolor": to_rgba(BLUE, 0.12)},
         )
         # Число перцентиля в кожній вершині — щоб не вгадувати "на око"
         for (x, y), v in zip(vertices, pct_values):
             ax.text(x, y, "n/a" if pd.isna(v) else f"{v:.0f}", ha="center", va="center",
                     fontsize=9, fontweight="bold", color="white", zorder=5,
-                    bbox=dict(boxstyle="round,pad=0.3", fc=PLAYER_COLOR, ec="none"))
+                    bbox=dict(boxstyle="round,pad=0.3", fc=BLUE, ec="none"))
     else:
         compare_values = pct.loc[compare_id, metrics].astype(float).fillna(0).tolist()
         radar.draw_radar_compare(
             values, compare_values, ax=ax,
-            kwargs_radar=polygon_style(PLAYER_COLOR),
-            kwargs_compare=polygon_style(COMPARE_COLOR),
+            kwargs_radar=polygon_style(BLUE),
+            kwargs_compare=polygon_style(ORANGE),
         )
 
     # wrap=None: переноси рядків робимо самі (textwrap.fill вище), бо вбудований
@@ -119,42 +106,23 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
     for label in labels:
         label.set_rotation(0)   # горизонтальні підписи читати легше, ніж повернуті вздовж осі
 
-    # --- заголовок ---
-    t = axs["title"]
-
-    def player_header(pid, x, ha, color, size):
-        info = f"{raw.loc[pid, 'team']} · {raw.loc[pid, 'main_position']} · {raw.loc[pid, 'minutes']:.0f} min"
-        t.text(x, 0.68, raw.loc[pid, "player"], fontsize=size, fontweight="bold",
-               color=color, ha=ha, va="center")
-        t.text(x, 0.22, info, fontsize=12, color=MUTED, ha=ha, va="center")
-
+    # --- заголовок і підпис ---
+    p = raw.loc[player_id]
     if compare_id is None:
-        player_header(player_id, 0.01, "left", PLAYER_COLOR, 22)
-        t.text(0.99, 0.68, "Euro 2024", fontsize=16, fontweight="bold", color=TEXT,
-               ha="right", va="center")
-        t.text(0.99, 0.22, f"vs {pool_size} {POOL_NAMES[pool]}", fontsize=12,
-               color=MUTED, ha="right", va="center")
+        draw_header(axs["title"], (p["player"], player_subtitle(p)),
+                    ("Euro 2024", f"vs {pool_size} {POOL_NAMES[pool]}"), left_color=BLUE)
     else:
-        player_header(player_id, 0.01, "left", PLAYER_COLOR, 17)
-        player_header(compare_id, 0.99, "right", COMPARE_COLOR, 17)
+        c = raw.loc[compare_id]
+        draw_header(axs["title"], (p["player"], player_subtitle(p)),
+                    (c["player"], player_subtitle(c)),
+                    left_color=BLUE, right_color=ORANGE, left_size=17, right_size=17)
 
-    # --- підпис знизу: як читати графік ---
     lines = [f"Percentile rank vs {pool_size} {POOL_NAMES[pool]} (270+ min, Euro 2024).",
              "Rings: 25th / 50th / 75th percentile."]
     if compare_id is None:
         lines[1] += " Values under labels: per 90 min (ratios as is), penalties excluded."
-    axs["endnote"].text(0.01, 0.9, "\n".join(lines), fontsize=9, color=MUTED, ha="left", va="top")
-    axs["endnote"].text(0.99, 0.9, "Data: StatsBomb Open Data", fontsize=9, color=MUTED,
-                        ha="right", va="top")
+    draw_endnote(axs["endnote"], lines)
     return fig
-
-
-def save_figure(fig: plt.Figure, name: str) -> str:
-    FIGURES.mkdir(parents=True, exist_ok=True)
-    path = FIGURES / f"{name}.png"
-    fig.savefig(path, dpi=150, facecolor=fig.get_facecolor(), bbox_inches="tight")
-    plt.close(fig)   # звільняємо пам'ять: у циклі по гравцях фігури накопичуються
-    return str(path.relative_to(PROJECT_ROOT))
 
 
 def main() -> None:

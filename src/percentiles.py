@@ -119,7 +119,7 @@ def find_player(df: pd.DataFrame, query: str) -> pd.Series:
     mask = df["player"].map(normalize_name).str.contains(normalize_name(query), regex=False)
     found = df[mask]
     if found.empty:
-        raise ValueError(f"'{query}' не знайдено серед {len(df)} гравців з 270+ хв")
+        raise ValueError(f"'{query}' не знайдено серед {len(df)} гравців таблиці")
     if len(found) > 1:
         names = ", ".join(found["player"])
         raise ValueError(f"'{query}' підходить кільком гравцям: {names}. Уточни запит.")
