@@ -1,0 +1,9 @@
+# Тема застосунку = палітра графіків (src/style.py).
+# Світла тема примусово: графіки — PNG на білому тлі, у темній темі вони
+# виглядали б як білі "картки" на чорному.
+[theme]
+base = "light"
+primaryColor = "#2A78D6"              # BLUE: активні віджети, смужки перцентилів
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F2F2F2"  # сайдбар — як заливка кілець радару
+textColor = "#1F1F1F"

@@ -3,15 +3,15 @@
 Навіщо окремий модуль: радар, карти на полі, а згодом Streamlit мають виглядати
 як одна система. Колір "основного гравця" міняємо в одному місці, а не в кожному файлі.
 """
+import io
 import re
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
-from src.data_loader import PROJECT_ROOT
+from src.paths import FIGURES, PROJECT_ROOT
 from src.percentiles import normalize_name
 
-FIGURES = PROJECT_ROOT / "reports" / "figures"
 
 # --- палітра ---
 # Синій і помаранчевий — пара, яку розрізняють і люди з дальтонізмом
@@ -60,10 +60,30 @@ def slugify(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", normalize_name(name)).strip("_")
 
 
+def _savefig(fig: plt.Figure, target) -> None:
+    """Однакові параметри збереження для файлу і для веб-застосунку.
+
+    target — шлях до файлу або буфер у пам'яті (BytesIO): savefig приймає обидва.
+    """
+    fig.savefig(target, format="png", dpi=150, facecolor=fig.get_facecolor(), bbox_inches="tight")
+    plt.close(fig)   # звільняємо пам'ять: у циклі по гравцях фігури накопичуються
+
+
 def save_figure(fig: plt.Figure, name: str) -> str:
     """Зберігає PNG у reports/figures і закриває фігуру."""
     FIGURES.mkdir(parents=True, exist_ok=True)
     path = FIGURES / f"{name}.png"
-    fig.savefig(path, dpi=150, facecolor=fig.get_facecolor(), bbox_inches="tight")
-    plt.close(fig)   # звільняємо пам'ять: у циклі по гравцях фігури накопичуються
+    _savefig(fig, path)
     return str(path.relative_to(PROJECT_ROOT))
+
+
+def figure_to_png(fig: plt.Figure) -> bytes:
+    """PNG у пам'яті, без файлу на диску — для Streamlit.
+
+    Байти легко кешувати (st.cache_data) і показати через st.image.
+    Сам об'єкт Figure кешувати погано: він важкий і його не можна
+    безпечно ділити між кількома користувачами застосунку.
+    """
+    buffer = io.BytesIO()
+    _savefig(fig, buffer)
+    return buffer.getvalue()

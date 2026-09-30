@@ -120,10 +120,11 @@ def player_minutes(events: pd.DataFrame) -> pd.DataFrame:
 
 if __name__ == "__main__":
     # Запуск з кореня проєкту:  python -m src.minutes
-    from src.data_loader import load_events, PROJECT_ROOT
+    from src.data_loader import load_events
+    from src.paths import PROCESSED
 
     table = player_minutes(load_events())
-    out = PROJECT_ROOT / "data" / "processed" / "player_minutes.parquet"
+    out = PROCESSED / "player_minutes.parquet"
     out.parent.mkdir(parents=True, exist_ok=True)
     table.to_parquet(out)
     print(table.head(10).to_string())

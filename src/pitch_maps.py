@@ -18,13 +18,13 @@ from matplotlib.lines import Line2D
 from mplsoccer import Pitch, VerticalPitch
 from scipy.ndimage import gaussian_filter
 
-from src.data_loader import PROJECT_ROOT, load_events
 from src.metrics import FINAL_THIRD_X, classify_passes, non_penalty_shots, split_xy
+from src.paths import PROCESSED
 from src.percentiles import find_player
 from src.style import (BG, BLUE, CONTEXT, HEAT_CMAP, LINES, MUTED, ORANGE, TEXT,
                        draw_endnote, draw_header, player_subtitle, save_figure, slugify)
 
-TOTALS_PATH = PROJECT_ROOT / "data" / "processed" / "player_totals.parquet"
+TOTALS_PATH = PROCESSED / "player_totals.parquet"
 
 # Поле StatsBomb 120x80 ярдів; усі команди атакують зліва направо
 PITCH_STYLE = dict(pitch_type="statsbomb", pitch_color=BG, line_color=LINES, linewidth=1)
@@ -213,6 +213,10 @@ def main() -> None:
     parser.add_argument("player", help="частина імені, напр. 'kane' або 'mbappe'")
     parser.add_argument("--only", choices=list(MAPS), help="намалювати лише одну карту")
     args = parser.parse_args()
+
+    # Імпорт тут, а не вгорі: data_loader тягне statsbombpy (клієнт API), а функції
+    # малювання вище використовує і веб-застосунок, якому API не потрібен
+    from src.data_loader import load_events
 
     try:
         player = find_player(load_totals(), args.player)

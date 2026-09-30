@@ -3,18 +3,15 @@
 Ідея: один раз качаємо все з API, зберігаємо у data/raw,
 а далі весь проєкт читає локальні файли (швидко і без інтернету).
 """
-from pathlib import Path
 import warnings
 
 import pandas as pd
 from statsbombpy import sb
 
+from src.paths import RAW
+
 # statsbombpy без логіна попереджає, що використовує відкриті дані, — це нормально
 warnings.filterwarnings("ignore", message="credentials were not supplied")
-
-# Корінь проєкту = папка на рівень вище за src/ (працює звідки б не запускали)
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-RAW = PROJECT_ROOT / "data" / "raw"
 
 COMPETITION_ID = 55  # UEFA Euro
 SEASON_ID = 282      # 2024

@@ -1,0 +1,6 @@
+# Усе для розробки: застосунок + завантаження даних з API + ноутбуки.
+# pip install -r requirements-dev.txt
+-r requirements.txt
+statsbombpy==1.22.0
+jupyter==1.1.1
+pytest==9.1.1

@@ -14,6 +14,10 @@ FINAL_THIRD_X = 80
 # але це не заслуга гравця, а тип розіграшу.
 SET_PIECES = ["Corner", "Free Kick", "Throw-in", "Goal Kick", "Kick Off"]
 
+# Поріг для метрик на 90: менше 3 повних матчів — на 90 хв виходить здебільшого шум
+# (один удар за 60 хв = 1.5 удару на 90). Використовують і per_90, і застосунок.
+MIN_MINUTES = 270
+
 # Метрики-частки (відсотки, xG за удар) не діляться на хвилини
 RATIO_COLS = ["pass_completion", "dribble_success", "npxg_per_shot"]
 
@@ -207,7 +211,7 @@ def build_table(minutes: pd.DataFrame, totals: pd.DataFrame) -> pd.DataFrame:
     return add_ratios(df)
 
 
-def per_90(table: pd.DataFrame, min_minutes: float = 270) -> pd.DataFrame:
+def per_90(table: pd.DataFrame, min_minutes: float = MIN_MINUTES) -> pd.DataFrame:
     """Лишає гравців з min_minutes+ і перераховує лічильники на 90 хвилин."""
     df = table[table["minutes"] >= min_minutes].copy()
     # div(..., axis=0) ділить кожен РЯДОК на хвилини саме цього гравця
@@ -217,17 +221,17 @@ def per_90(table: pd.DataFrame, min_minutes: float = 270) -> pd.DataFrame:
 
 if __name__ == "__main__":
     # Запуск з кореня проєкту:  python -m src.metrics
-    from src.data_loader import load_events, PROJECT_ROOT
+    from src.data_loader import load_events
+    from src.paths import PROCESSED
     from src.minutes import player_minutes
 
     events = load_events()
     table = build_table(player_minutes(events), player_totals(events))
     p90 = per_90(table)
 
-    processed = PROJECT_ROOT / "data" / "processed"
-    processed.mkdir(parents=True, exist_ok=True)
-    table.to_parquet(processed / "player_totals.parquet")
-    p90.to_parquet(processed / "player_per90.parquet")
+    PROCESSED.mkdir(parents=True, exist_ok=True)
+    table.to_parquet(PROCESSED / "player_totals.parquet")
+    p90.to_parquet(PROCESSED / "player_per90.parquet")
 
     cols = ["player", "team", "position_group", "minutes", "npxg", "xa", "progressive_passes"]
     print(p90.sort_values("npxg", ascending=False)[cols].head(10).round(2).to_string())

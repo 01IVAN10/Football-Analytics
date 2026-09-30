@@ -12,9 +12,9 @@ import unicodedata
 
 import pandas as pd
 
-from src.data_loader import PROJECT_ROOT
+from src.paths import PROCESSED
 
-PER90_PATH = PROJECT_ROOT / "data" / "processed" / "player_per90.parquet"
+PER90_PATH = PROCESSED / "player_per90.parquet"
 
 # 8 позиційних груп -> 6 груп порівняння (так само ділять скаутські звіти FBref).
 # Причина: з 270+ хв у CM лише 8 гравців, в AM — 15. На 8 гравцях перцентиль
