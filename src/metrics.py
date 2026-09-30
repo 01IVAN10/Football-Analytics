@@ -104,6 +104,11 @@ def creation(ev: pd.DataFrame) -> pd.DataFrame:
     })
 
 
+def open_play(passes: pd.DataFrame) -> pd.Series:
+    """True для пасів з гри, False для стандартів (кутові, штрафні, вкидання, від воріт, з центру)."""
+    return ~passes["pass_type"].isin(SET_PIECES)
+
+
 def classify_passes(passes: pd.DataFrame) -> pd.DataFrame:
     """Для кожного пасу — прапорці True/False: які метрики він зараховує.
 
@@ -112,12 +117,11 @@ def classify_passes(passes: pd.DataFrame) -> pd.DataFrame:
     використовувати як маски: passes[flags["progressive"]].
     """
     completed = passes["pass_outcome"].isna()        # NaN у StatsBomb = пас точний
-    open_play = ~passes["pass_type"].isin(SET_PIECES)
 
     start = split_xy(passes["location"])
     end = split_xy(passes["pass_end_location"])
 
-    good = completed & open_play                     # точні паси з гри
+    good = completed & open_play(passes)             # точні паси з гри
     return pd.DataFrame({
         "completed": completed,
         "progressive": good & is_progressive(start, end),

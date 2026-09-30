@@ -7,3 +7,10 @@ primaryColor = "#2A78D6"              # BLUE: активні віджети, с�
 backgroundColor = "#FFFFFF"
 secondaryBackgroundColor = "#F2F2F2"  # сайдбар — як заливка кілець радару
 textColor = "#1F1F1F"
+
+[global]
+# Кнопка "Open profile" (вкладка схожих) свідомо змінює значення віджетів
+# сайдбару через st.session_state. Streamlit у такому разі пише в лог попередження
+# "widget created with a default value but also had its value set via Session State".
+# Для нас це очікувана поведінка: значення з session_state має пріоритет над default.
+disableWidgetStateDuplicationWarning = true

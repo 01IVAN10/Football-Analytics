@@ -115,7 +115,7 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
         c = raw.loc[compare_id]
         draw_header(axs["title"], (p["player"], player_subtitle(p)),
                     (c["player"], player_subtitle(c)),
-                    left_color=BLUE, right_color=ORANGE, left_size=17, right_size=17)
+                    left_color=BLUE, right_color=ORANGE, left_size=17, right_size=17, sub_size=10)
 
     lines = [f"Percentile rank vs {pool_size} {POOL_NAMES[pool]} (270+ min, Euro 2024).",
              "Rings: 25th / 50th / 75th percentile."]

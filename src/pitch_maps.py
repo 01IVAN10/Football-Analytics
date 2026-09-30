@@ -18,7 +18,7 @@ from matplotlib.lines import Line2D
 from mplsoccer import Pitch, VerticalPitch
 from scipy.ndimage import gaussian_filter
 
-from src.metrics import FINAL_THIRD_X, classify_passes, non_penalty_shots, split_xy
+from src.metrics import FINAL_THIRD_X, classify_passes, non_penalty_shots, open_play, split_xy
 from src.paths import PROCESSED
 from src.percentiles import find_player
 from src.style import (BG, BLUE, CONTEXT, HEAT_CMAP, LINES, MUTED, ORANGE, TEXT,
@@ -108,9 +108,16 @@ def plot_shot_map(ev: pd.DataFrame, player: pd.Series) -> plt.Figure:
 
 # ---------- карта пасів ----------
 
-def plot_pass_map(ev: pd.DataFrame, player: pd.Series) -> plt.Figure:
-    """Прогресивні та ключові паси стрілками, решта точних пасів — сірим фоном."""
+def plot_pass_map(ev: pd.DataFrame, player: pd.Series, open_play_only: bool = False) -> plt.Figure:
+    """Прогресивні та ключові паси стрілками, решта точних пасів — сірим фоном.
+
+    open_play_only=True — без стандартів. Прогресивні паси й так рахуються лише з гри,
+    тож перемикач змінює ключові паси (у Кроса багато з кутових), сірий фон і точність.
+    Тоді число ключових у легенді може бути меншим за метрику key_passes: та рахує і стандарти.
+    """
     passes = ev[ev["type"] == "Pass"]
+    if open_play_only:
+        passes = passes[open_play(passes)]
     flags = classify_passes(passes)
     start = split_xy(passes["location"])
     end = split_xy(passes["pass_end_location"])
@@ -146,10 +153,12 @@ def plot_pass_map(ev: pd.DataFrame, player: pd.Series) -> plt.Figure:
     n = len(passes)
     completion = flags["completed"].mean() if n else float("nan")
     draw_header(axs["title"], (player["player"], player_subtitle(player)),
-                ("Pass map", f"{n} passes · {completion:.0%} completed"), left_color=BLUE)
+                ("Pass map" + (" · open play" if open_play_only else ""),
+                 f"{n} passes · {completion:.0%} completed"), left_color=BLUE)
+    set_pieces = "set pieces excluded" if open_play_only else "set pieces included"
     draw_endnote(axs["endnote"], [
         "Progressive: completed open-play pass, ball ≥25% closer to goal.",
-        "Key pass: led directly to a shot (set pieces included), drawn on top. Attacking left → right.",
+        f"Key pass: led directly to a shot ({set_pieces}), drawn on top. Attacking left → right.",
     ])
     return fig
 

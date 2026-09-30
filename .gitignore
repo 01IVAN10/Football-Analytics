@@ -8,3 +8,5 @@ reports/figures/
 .pytest_cache/
 # Секрети Streamlit (ключі API тощо) ніколи не комітимо; зараз їх немає
 .streamlit/secrets.toml
+# Файли, які Claude зберігає в папку проєкту (скріншоти тощо)
+Claude outputs/

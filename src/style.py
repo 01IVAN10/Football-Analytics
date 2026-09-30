@@ -7,6 +7,7 @@ import io
 import re
 
 import matplotlib.pyplot as plt
+import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 
 from src.paths import FIGURES, PROJECT_ROOT
@@ -33,20 +34,29 @@ HEAT_CMAP = LinearSegmentedColormap.from_list(
 
 
 def player_subtitle(row) -> str:
-    """'England · Center Forward · 635 min' — підзаголовок під іменем гравця."""
-    return f"{row['team']} · {row['main_position']} · {row['minutes']:.0f} min"
+    """'England · Center Forward · 635 min' — підзаголовок під іменем гравця.
+
+    pd.notna: у 3 гравців без жодної дії з позицією main_position = NaN —
+    пропускаємо, щоб не писати "nan" на графіку.
+    """
+    parts = [row["team"], row["main_position"], f"{row['minutes']:.0f} min"]
+    return " · ".join(str(p) for p in parts if pd.notna(p))
 
 
 def draw_header(ax, left: tuple[str, str], right: tuple[str, str],
                 left_color: str = TEXT, right_color: str = TEXT,
-                left_size: int = 22, right_size: int = 16) -> None:
-    """Заголовок у дві колонки: (назва, підзаголовок) зліва і справа."""
+                left_size: int = 22, right_size: int = 16, sub_size: float = 12) -> None:
+    """Заголовок у дві колонки: (назва, підзаголовок) зліва і справа.
+
+    sub_size менший для порівняння двох гравців: два довгі підзаголовки
+    ("Switzerland · Left Defensive Midfield · 511 min") інакше злипаються посередині.
+    """
     for (title, sub), x, ha, color, size in [
         (left, 0.01, "left", left_color, left_size),
         (right, 0.99, "right", right_color, right_size),
     ]:
         ax.text(x, 0.68, title, fontsize=size, fontweight="bold", color=color, ha=ha, va="center")
-        ax.text(x, 0.22, sub, fontsize=12, color=MUTED, ha=ha, va="center")
+        ax.text(x, 0.22, sub, fontsize=sub_size, color=MUTED, ha=ha, va="center")
 
 
 def draw_endnote(ax, lines: list[str]) -> None:

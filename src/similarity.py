@@ -93,6 +93,12 @@ def cosine_to(z: pd.DataFrame, player_id: int) -> pd.Series:
     return dots / norms
 
 
+def format_z(value: float) -> str:
+    """+1.6, -1.1 — але -0.04, а не "-0.0": інакше незрозуміло, чому метрика
+    вважається "по інший бік від середнього" (вона ледь нижче нуля)."""
+    return f"{value:+.2f}" if abs(value) < 0.05 else f"{value:+.1f}"
+
+
 def explain(z: pd.DataFrame, a: int, b: int, k: int = 2) -> tuple[str, str]:
     """Пояснення, ЧОМУ два гравці схожі і в чому головна різниця.
 
@@ -124,7 +130,7 @@ def explain(z: pd.DataFrame, a: int, b: int, k: int = 2) -> tuple[str, str]:
         # Тоді беремо найбільший розрив серед метрик, яких немає в "спільному".
         opposite = gaps.drop(both_strong.index)
     gap = opposite.idxmax()
-    difference = f"{LABELS[gap]} ({za[gap]:+.1f} vs {zb[gap]:+.1f})"
+    difference = f"{LABELS[gap]} ({format_z(za[gap])} vs {format_z(zb[gap])})"
     return shared, difference
 
 
@@ -154,6 +160,27 @@ def similar_players(per90: pd.DataFrame, player_id: int, n: int = 10,
     result["shared"] = [shared for shared, _ in reasons]
     result["difference"] = [diff for _, diff in reasons]
     return result.reset_index()
+
+
+def best_matches(per90: pd.DataFrame) -> pd.Series:
+    """Для кожного гравця — подібність з його найсхожішим колегою по пулу.
+
+    Навіщо: щоб число 0.6 мало сенс. Це "дуже схожі" чи "так собі"? Відповідь —
+    порівняти з розподілом найкращих збігів по всьому турніру (медіана ≈ 0.57).
+
+    Тут не цикл по гравцях з cosine_to, а матриця одразу для всього пулу:
+    якщо кожен вектор поділити на його довжину (отримати одиничні вектори),
+    то косинус = просто скалярний добуток, і unit @ unit.T дає всі пари разом.
+    """
+    z = standardize(per90)
+    best = []
+    for _, pool_z in z.groupby("pool"):
+        x = pool_z[FEATURES].to_numpy()
+        unit = x / np.linalg.norm(x, axis=1, keepdims=True)
+        cos = unit @ unit.T                  # матриця n×n: cos[i, j] — подібність гравців i та j
+        np.fill_diagonal(cos, -np.inf)       # сам із собою (1.0) не рахується
+        best.append(pd.Series(cos.max(axis=1), index=pool_z.index))
+    return pd.concat(best)
 
 
 def main() -> None:
