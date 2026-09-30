@@ -48,7 +48,7 @@ def app() -> AppTest:
 def test_default_page(app):
     assert not app.exception
     assert app.title[0].value.startswith("Lamine Yamal")   # title[0] — головна сторінка, [1] — сайдбар
-    assert len(app.get("image")) == 1                     # радар
+    assert len(app.main.get("image")) == 1                     # радар
 
 
 def test_every_profile_renders(app):
@@ -58,9 +58,9 @@ def test_every_profile_renders(app):
         app.selectbox(key="player").set_value(int(pid)).run()
         assert not app.exception, pid
         if group == "GK":
-            assert not app.get("image") and "Goalkeepers" in app.info[0].value
+            assert not app.main.get("image") and "Goalkeepers" in app.info[0].value
         else:
-            assert len(app.get("image")) == 1, pid
+            assert len(app.main.get("image")) == 1, pid
 
 
 def test_players_under_threshold(app):
@@ -101,7 +101,7 @@ def test_pitch_maps(app, name):
     for kind in ["Shots", "Passes", "Heatmap"]:
         switch(app, "Pitch maps", player=player_id(name), map=kind)
         assert not app.exception, kind
-        assert len(app.get("image")) == 1, kind
+        assert len(app.main.get("image")) == 1, kind
     switch(app, "Pitch maps", map="Passes", open_play=True)
     assert not app.exception
 
@@ -128,7 +128,7 @@ def test_select_row_and_open_profile(app):
     assert app.subheader[0].value.endswith(third)
 
     switch(app, "Similar players", compare_view="Radar")
-    assert not app.exception and len(app.get("image")) == 1
+    assert not app.exception and len(app.main.get("image")) == 1
 
     app.session_state["tab"] = "Similar players"
     app.button[0].click().run()

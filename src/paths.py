@@ -15,3 +15,4 @@ RAW = PROJECT_ROOT / "data" / "raw"              # сирі дані StatsBomb (
 PROCESSED = PROJECT_ROOT / "data" / "processed"  # таблиці метрик (не в git)
 APP_DATA = PROJECT_ROOT / "data" / "app"         # полегшені дані для застосунку (у git)
 FIGURES = PROJECT_ROOT / "reports" / "figures"   # PNG з CLI (не в git)
+ASSETS = PROJECT_ROOT / "assets"                 # статичні файли застосунку (логотип StatsBomb)

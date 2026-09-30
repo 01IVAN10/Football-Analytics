@@ -29,6 +29,7 @@ import streamlit as st  # noqa: E402
 
 from src import app_data  # noqa: E402
 from src.metrics import MIN_MINUTES, RATIO_COLS  # noqa: E402
+from src.paths import ASSETS  # noqa: E402
 from src.percentiles import (COMPARISON_POOLS, LABELS, POOL_NAMES,  # noqa: E402
                              RADAR_TEMPLATES, percentile_table)
 from src.pitch_maps import plot_heatmap, plot_pass_map, plot_shot_map, player_events  # noqa: E402
@@ -38,7 +39,10 @@ from src.style import figure_to_png  # noqa: E402
 from src.z_profile import plot_z_profile  # noqa: E402
 
 GITHUB_URL = "https://github.com/01IVAN10/Football-Analytics"
-STATSBOMB_URL = "https://github.com/statsbomb/open-data"
+STATSBOMB_URL = "https://github.com/hudl/open-data"   # репозиторій переїхав зі statsbomb/ у hudl/
+# Умова StatsBomb Open Data: вказувати джерело і ставити їхній логотип.
+# Файл — з їхнього репозиторію (img/), зменшений до 600 px.
+STATSBOMB_LOGO = ASSETS / "statsbomb_logo.png"
 
 TABS = ["Profile", "Pitch maps", "Similar players", "About"]
 POOL_ORDER = ["FW", "AM/W", "MF", "FB", "CB", "GK"]   # у фільтрі: від атаки до воріт
@@ -230,8 +234,11 @@ def sidebar(totals: pd.DataFrame) -> int:
                                  format_func=labels.get, key="player", bind="query-params")
 
         st.divider()
-        st.caption(f"Data: [StatsBomb Open Data]({STATSBOMB_URL}) · "
-                   f"Code: [GitHub]({GITHUB_URL})")
+        # Логотип — унизу як підпис "дані від", а не st.logo() угорі: st.logo — місце
+        # для бренду самого застосунку, і там він виглядав би так, ніби це застосунок StatsBomb
+        st.caption("Data provided by")
+        st.image(str(STATSBOMB_LOGO), width=170, link=STATSBOMB_URL)
+        st.caption(f"[StatsBomb Open Data]({STATSBOMB_URL}) · Code: [GitHub]({GITHUB_URL})")
     return player_id
 
 
