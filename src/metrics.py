@@ -1,27 +1,28 @@
-"""Метрики гравців за турнір: сумарні значення і значення на 90 хвилин.
+"""Player metrics for the tournament: totals and values per 90 minutes.
 
-Схема: події -> лічильники дій по гравцях (player_id) -> ділимо на хвилини -> * 90.
+Run from the project root (needs data/raw from src.data_loader):
+    python -m src.metrics
 """
 import numpy as np
 import pandas as pd
 
-# Поле StatsBomb: 120 x 80 ярдів, атака завжди зліва направо, ворота суперника в (120, 40)
+# StatsBomb pitch: 120 x 80 yards, attacking left to right, opponent's goal at (120, 40)
 GOAL_X, GOAL_Y = 120, 40
-BOX_X, BOX_Y_MIN, BOX_Y_MAX = 102, 18, 62     # штрафний майданчик суперника
+BOX_X, BOX_Y_MIN, BOX_Y_MAX = 102, 18, 62     # opponent's penalty area
 FINAL_THIRD_X = 80
 
-# Стандарти не рахуємо як "прогресію": кутовий завжди потрапляє в штрафний,
-# але це не заслуга гравця, а тип розіграшу.
+# Set pieces never count as progression: a corner always lands in the box, but that is
+# the type of restart, not the player's merit.
 SET_PIECES = ["Corner", "Free Kick", "Throw-in", "Goal Kick", "Kick Off"]
 
-# Поріг для метрик на 90: менше 3 повних матчів — на 90 хв виходить здебільшого шум
-# (один удар за 60 хв = 1.5 удару на 90). Використовують і per_90, і застосунок.
+# Per-90 threshold: below 3 full matches per-90 values are mostly noise
+# (one shot in 60 minutes = 1.5 shots per 90). Shared by per_90 and the app.
 MIN_MINUTES = 270
 
-# Метрики-частки (відсотки, xG за удар) не діляться на хвилини
+# Ratios are not divided by minutes
 RATIO_COLS = ["pass_completion", "dribble_success", "npxg_per_shot"]
 
-# Лічильники, які переводимо "на 90 хвилин"
+# Counting metrics converted to per 90
 COUNT_COLS = [
     "np_goals", "np_shots", "npxg",
     "assists", "key_passes", "xa",
@@ -31,18 +32,18 @@ COUNT_COLS = [
 ]
 
 
-# ---------- допоміжні функції ----------
+# ---------- helpers ----------
 
 def split_xy(points: pd.Series) -> pd.DataFrame:
-    """Колонку з парами [x, y] перетворює на дві колонки x і y."""
-    if points.empty:   # напр., у гравця немає жодного удару — повертаємо порожню таблицю x, y
+    """Column of [x, y] pairs -> two columns x and y."""
+    if points.empty:   # e.g. a player without a single shot
         return pd.DataFrame({"x": [], "y": []}, index=points.index, dtype=float)
     xy = pd.DataFrame(points.tolist(), index=points.index)
-    return xy.iloc[:, :2].set_axis(["x", "y"], axis=1)  # iloc: у кінця удару є ще z (висота)
+    return xy.iloc[:, :2].set_axis(["x", "y"], axis=1)  # shot end locations also have z
 
 
 def dist_to_goal(xy: pd.DataFrame) -> pd.Series:
-    """Відстань від точки до центру воріт суперника (теорема Піфагора)."""
+    """Distance from a point to the centre of the opponent's goal."""
     return np.hypot(GOAL_X - xy["x"], GOAL_Y - xy["y"])
 
 
@@ -51,32 +52,29 @@ def in_box(xy: pd.DataFrame) -> pd.Series:
 
 
 def is_progressive(start: pd.DataFrame, end: pd.DataFrame) -> pd.Series:
-    """Прогресивна дія: м'яч став щонайменше на 25% ближче до воріт.
+    """Progressive action: the ball ends up at least 25% closer to goal.
 
-    Відсоток, а не фіксовані метри, щоб пас з 60 до 40 ярдів від воріт
-    і пас з 20 до 12 ярдів обидва вважались "просуванням".
+    Relative rather than a fixed distance, so that both 60 -> 40 yards and
+    20 -> 12 yards from goal count as moving the ball forward.
     """
     return dist_to_goal(end) <= 0.75 * dist_to_goal(start)
 
 
 def count(mask: pd.Series, events: pd.DataFrame) -> pd.Series:
-    """Скільки рядків, що задовольняють умову, у кожного гравця."""
+    """Number of rows matching the mask, per player."""
     return events.loc[mask].groupby("player_id").size()
 
 
-# ---------- метрики за блоками ----------
+# ---------- metric blocks ----------
 
 def non_penalty_shots(ev: pd.DataFrame) -> pd.DataFrame:
-    """Удари без пенальті і без серії пенальті (пенальті — окрема навичка і спотворює xG).
-
-    Окрема функція, бо нею користуються і метрики, і карта ударів (src.pitch_maps):
-    визначення "який удар рахується" живе в одному місці.
-    """
+    """Shots excluding penalties and the shootout (a separate skill that inflates xG).
+    Shared by the metrics and the shot map, so the definition lives in one place."""
     return ev[(ev["type"] == "Shot") & (ev["shot_type"] != "Penalty") & (ev["period"] < 5)]
 
 
 def shooting(ev: pd.DataFrame) -> pd.DataFrame:
-    """Удари, голи та npxG без пенальті."""
+    """Shots, goals and npxG, penalties excluded."""
     shots = non_penalty_shots(ev)
     g = shots.groupby("player_id")
     return pd.DataFrame({
@@ -87,11 +85,11 @@ def shooting(ev: pd.DataFrame) -> pd.DataFrame:
 
 
 def creation(ev: pd.DataFrame) -> pd.DataFrame:
-    """Створення моментів: гольові, ключові паси та xA."""
+    """Chance creation: assists, key passes and xA."""
     passes = ev[ev["type"] == "Pass"]
 
-    # xA (expected assists): xG удару, який став наслідком пасу гравця.
-    # У пасу є pass_assisted_shot_id — id удару, до якого він привів.
+    # xA = xG of the shot that followed the player's pass
+    # (the pass carries the shot's id in pass_assisted_shot_id)
     shots_xg = ev.loc[ev["type"] == "Shot"].set_index("id")["shot_statsbomb_xg"]
     assisting = passes.dropna(subset=["pass_assisted_shot_id"])
     xa = (assisting["pass_assisted_shot_id"].map(shots_xg)
@@ -105,34 +103,30 @@ def creation(ev: pd.DataFrame) -> pd.DataFrame:
 
 
 def open_play(passes: pd.DataFrame) -> pd.Series:
-    """True для пасів з гри, False для стандартів (кутові, штрафні, вкидання, від воріт, з центру)."""
+    """True for open-play passes, False for set pieces."""
     return ~passes["pass_type"].isin(SET_PIECES)
 
 
 def classify_passes(passes: pd.DataFrame) -> pd.DataFrame:
-    """Для кожного пасу — прапорці True/False: які метрики він зараховує.
-
-    Так само, як non_penalty_shots, це спільне визначення для метрик і карти пасів.
-    Результат має той самий індекс, що й passes, тому прапорці можна
-    використовувати як маски: passes[flags["progressive"]].
-    """
-    completed = passes["pass_outcome"].isna()        # NaN у StatsBomb = пас точний
+    """Boolean flags per pass (same index): which metrics it counts towards.
+    Shared by the metrics and the pass map."""
+    completed = passes["pass_outcome"].isna()        # StatsBomb: no outcome = completed
 
     start = split_xy(passes["location"])
     end = split_xy(passes["pass_end_location"])
 
-    good = completed & open_play(passes)             # точні паси з гри
+    good = completed & open_play(passes)             # completed open-play passes
     return pd.DataFrame({
         "completed": completed,
         "progressive": good & is_progressive(start, end),
         "final_third": good & (start["x"] < FINAL_THIRD_X) & (end["x"] >= FINAL_THIRD_X),
         "into_box": good & ~in_box(start) & in_box(end),
-        "key": passes["pass_assisted_shot_id"].notna(),   # пас, після якого був удар
+        "key": passes["pass_assisted_shot_id"].notna(),   # pass followed by a shot
     }, index=passes.index)
 
 
 def passing(ev: pd.DataFrame) -> pd.DataFrame:
-    """Паси: обсяг, точність і просування м'яча вперед."""
+    """Passing: volume, accuracy, moving the ball forward."""
     passes = ev[ev["type"] == "Pass"]
     flags = classify_passes(passes)
     return pd.DataFrame({
@@ -145,11 +139,11 @@ def passing(ev: pd.DataFrame) -> pd.DataFrame:
 
 
 def carrying(ev: pd.DataFrame) -> pd.DataFrame:
-    """Ведення м'яча і обводки."""
+    """Carries and take-ons."""
     carries = ev[ev["type"] == "Carry"]
     start = split_xy(carries["location"])
     end = split_xy(carries["carry_end_location"])
-    # Мінімум 5 ярдів, щоб не рахувати дрібні "перекати" біля воріт
+    # At least 5 yards, so that small touches near the goal do not count
     long_enough = (dist_to_goal(start) - dist_to_goal(end)) >= 5
 
     dribbles = ev[ev["type"] == "Dribble"]
@@ -162,12 +156,12 @@ def carrying(ev: pd.DataFrame) -> pd.DataFrame:
 
 
 def defending(ev: pd.DataFrame) -> pd.DataFrame:
-    """Дії без м'яча."""
+    """Defensive actions."""
     tackles = ev[(ev["type"] == "Duel") & (ev["duel_type"] == "Tackle")]
     won = tackles["duel_outcome"].isin(["Won", "Success In Play", "Success Out"])
     recoveries = ev[ev["type"] == "Ball Recovery"]
 
-    # Виграні верхові: StatsBomb ставить *_aerial_won у подію, якою гравець зіграв головою
+    # StatsBomb puts *_aerial_won on the event the player played with his head
     aerial_cols = ["clearance_aerial_won", "pass_aerial_won",
                    "shot_aerial_won", "miscontrol_aerial_won"]
     aerial_won = ev[aerial_cols].eq(True).any(axis=1)
@@ -182,23 +176,22 @@ def defending(ev: pd.DataFrame) -> pd.DataFrame:
     })
 
 
-# ---------- збірка ----------
+# ---------- assembly ----------
 
 def player_totals(events: pd.DataFrame) -> pd.DataFrame:
-    """Сумарні значення всіх метрик за турнір (один рядок = гравець)."""
+    """Tournament totals of all metrics, one row per player."""
     ev = events.dropna(subset=["player_id"]).copy()
     ev["player_id"] = ev["player_id"].astype(int)
 
     blocks = [shooting(ev), creation(ev), passing(ev), carrying(ev), defending(ev)]
-    # axis=1 — склеюємо по колонках; індекс у всіх блоків = player_id.
-    # Якщо в гравця немає жодної дії якогось типу, там NaN -> це 0.
+    # A player without any action of some type gets NaN there, which means 0
     totals = pd.concat(blocks, axis=1).fillna(0)
     totals.index.name = "player_id"
     return totals
 
 
 def add_ratios(df: pd.DataFrame) -> pd.DataFrame:
-    """Частки. Ділення на 0 дає NaN — і це чесно: 'немає даних', а не 0%."""
+    """Ratios. Division by zero gives NaN on purpose: no attempts is "no data", not 0%."""
     df["pass_completion"] = df["passes_completed"] / df["passes"].replace(0, np.nan)
     df["dribble_success"] = df["dribbles_completed"] / df["dribbles"].replace(0, np.nan)
     df["npxg_per_shot"] = df["npxg"] / df["np_shots"].replace(0, np.nan)
@@ -206,9 +199,9 @@ def add_ratios(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_table(minutes: pd.DataFrame, totals: pd.DataFrame) -> pd.DataFrame:
-    """Хвилини + позиції + сумарні метрики + частки в одній таблиці (всі гравці).
+    """Minutes, positions, totals and ratios in one table (all players).
 
-    minutes — таблиця з src.minutes.player_minutes.
+    minutes: the table from src.minutes.player_minutes.
     """
     df = minutes.merge(totals, left_on="player_id", right_index=True, how="left")
     df[totals.columns] = df[totals.columns].fillna(0)
@@ -216,15 +209,13 @@ def build_table(minutes: pd.DataFrame, totals: pd.DataFrame) -> pd.DataFrame:
 
 
 def per_90(table: pd.DataFrame, min_minutes: float = MIN_MINUTES) -> pd.DataFrame:
-    """Лишає гравців з min_minutes+ і перераховує лічильники на 90 хвилин."""
+    """Keep players with min_minutes+ and convert counting metrics to per 90."""
     df = table[table["minutes"] >= min_minutes].copy()
-    # div(..., axis=0) ділить кожен РЯДОК на хвилини саме цього гравця
     df[COUNT_COLS] = df[COUNT_COLS].div(df["minutes"], axis=0) * 90
     return df.reset_index(drop=True)
 
 
 if __name__ == "__main__":
-    # Запуск з кореня проєкту:  python -m src.metrics
     from src.data_loader import load_events
     from src.paths import PROCESSED
     from src.minutes import player_minutes
@@ -239,4 +230,4 @@ if __name__ == "__main__":
 
     cols = ["player", "team", "position_group", "minutes", "npxg", "xa", "progressive_passes"]
     print(p90.sort_values("npxg", ascending=False)[cols].head(10).round(2).to_string())
-    print(f"\nГравців з ≥270 хв: {len(p90)}")
+    print(f"\nPlayers with 270+ minutes: {len(p90)}")

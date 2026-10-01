@@ -1,27 +1,19 @@
-"""Euro 2024 Scout — веб-застосунок на Streamlit.
+"""Euro 2024 Scout: Streamlit web app.
 
-Запуск з кореня проєкту:
+Run from the project root:
     streamlit run streamlit_app.py
 
-Як думати про Streamlit (без цього код нижче незрозумілий):
-  - Файл виконується ЗВЕРХУ ДОНИЗУ щоразу, коли користувач щось змінює
-    (вибрав гравця, фільтр, вкладку). Колбеків "при кліку" немає: є повторний
-    прогін скрипта, і кожен віджет просто повертає своє поточне значення.
-  - Тому все дороге (читання файлів, перцентилі, малювання) кешуємо.
-    Без кешу кожен клік перечитував би parquet і перемальовував графіки.
-  - Значення віджета з key=... живе в st.session_state. З bind="query-params"
-    воно ще й записується в URL: посиланням на профіль гравця можна поділитися.
-
-Інтерфейс англійською — як і підписи на графіках (портфоліо для міжнародної аудиторії).
+Streamlit reruns this file top to bottom on every interaction, so everything
+expensive (reading files, percentiles, drawing) is cached. Widgets with
+bind="query-params" are mirrored in the URL, so every view can be shared as a link.
 """
 import threading
 
 import matplotlib
 
-# Бекенд Agg малює лише в пам'ять, без вікон. На Mac бекенд за замовчуванням
-# відкриває вікна і може впасти, якщо малювати не з головного потоку, —
-# а Streamlit виконує скрипт саме в окремих потоках. Має стояти ДО імпорту pyplot
-# (його імпортують модулі src нижче), тому ці імпорти після нього.
+# Agg draws to memory only. The default macOS backend opens windows and can crash when
+# drawing outside the main thread, and Streamlit runs scripts in worker threads.
+# Must be set before pyplot is imported (by the src modules below).
 matplotlib.use("Agg")
 
 import pandas as pd  # noqa: E402
@@ -39,34 +31,28 @@ from src.style import figure_to_png  # noqa: E402
 from src.z_profile import plot_z_profile  # noqa: E402
 
 GITHUB_URL = "https://github.com/01IVAN10/Football-Analytics"
-STATSBOMB_URL = "https://github.com/hudl/open-data"   # репозиторій переїхав зі statsbomb/ у hudl/
-# Умова StatsBomb Open Data: вказувати джерело і ставити їхній логотип.
-# Файл — з їхнього репозиторію (img/), зменшений до 600 px.
+STATSBOMB_URL = "https://github.com/hudl/open-data"   # moved from statsbomb/ to hudl/
+# StatsBomb Open Data terms: credit the source and show their logo
+# (taken from img/ in their repository, resized to 600 px)
 STATSBOMB_LOGO = ASSETS / "statsbomb_logo.png"
 
 TABS = ["Profile", "Pitch maps", "Similar players", "About"]
-POOL_ORDER = ["FW", "AM/W", "MF", "FB", "CB", "GK"]   # у фільтрі: від атаки до воріт
-DEFAULT_PLAYER = "Lamine Yamal"                        # хто відкривається без параметрів в URL
-STRONG, WEAK = 80, 20                                  # межі "сильне / слабке місце" (перцентиль)
-UNIQUE = 0.3                                           # найкращий збіг нижче — профіль унікальний
+POOL_ORDER = ["FW", "AM/W", "MF", "FB", "CB", "GK"]   # filter order: from attack to goal
+DEFAULT_PLAYER = "Lamine Yamal"                        # shown when the URL names no player
+STRONG, WEAK = 80, 20                                  # percentile bounds for strengths / weak spots
+UNIQUE = 0.3                                           # best match below this = unique profile
 MAPS = {"Shots": plot_shot_map, "Passes": plot_pass_map, "Heatmap": plot_heatmap}
 
-# Має бути першою командою Streamlit у скрипті
+# Must be the first Streamlit command
 st.set_page_config(page_title="Euro 2024 Scout", page_icon=":material/sports_soccer:",
                    layout="wide")
 
 
-# ---------- дані й кеш ----------
+# ---------- data and caching ----------
 
 @st.cache_data
 def load_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """per90 (191 гравець з 270+ хв), totals (усі 493) і перцентилі.
-
-    st.cache_data запам'ятовує результат за аргументами функції (тут їх немає —
-    отже, один запис на весь сервер: файли читаються один раз, а не на кожен клік).
-    Кожен виклик повертає КОПІЮ, тож змінювати таблицю безпечно: кеш для інших
-    відвідувачів не зіпсується. Для таблиць у сотні рядків копія майже безкоштовна.
-    """
+    """per90 (191 players with 270+ minutes), totals (all 493) and percentiles."""
     per90 = app_data.load_per90()
     totals = app_data.load_totals()
     totals["pool"] = totals["position_group"].map(COMPARISON_POOLS)
@@ -75,20 +61,16 @@ def load_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 
 @st.cache_resource(show_spinner="Loading match events…")
 def load_events() -> pd.DataFrame:
-    """186 тис. подій (~73 МБ у пам'яті) — ОДИН спільний об'єкт на весь сервер.
+    """186k events (~73 MB): one shared object (cache_data would copy it on every call).
 
-    cache_resource, а не cache_data: cache_data на кожен виклик віддавав би копію,
-    тобто 73 МБ і помітну затримку на кожен клік кожного відвідувача.
-    cache_resource віддає всім той самий об'єкт — швидко, але його НЕ МОЖНА
-    змінювати (зміну побачать усі). Тому далі лише фільтруємо: фільтр повертає
-    новий DataFrame, а спільний лишається недоторканим.
+    Must never be modified; the app only filters it.
     """
     return app_data.load_events()
 
 
 @st.cache_data
 def best_match_median() -> float:
-    """Медіана найкращих збігів по турніру (~0.57) — орієнтир, щоб читати числа подібності."""
+    """Median best match across the tournament (~0.57): a scale for similarity numbers."""
     per90, _, _ = load_tables()
     return float(best_matches(per90).median())
 
@@ -99,22 +81,21 @@ def similar_table(player_id: int, other_teams: bool) -> pd.DataFrame:
     return similar_players(per90, player_id, n=10, other_teams=other_teams)
 
 
-# pyplot не розрахований на кілька потоків одночасно, а Streamlit обслуговує
-# кожного відвідувача в окремому потоці. Якщо двоє відкриють графік в ту саму мить,
-# фігури можуть "змішатися". Замок пускає малювати лише один потік за раз.
-# Гальмом це не стане: завдяки кешу кожен графік малюється лише один раз.
+# pyplot is not thread-safe and Streamlit serves each session in its own thread:
+# two charts drawn at the same moment could get mixed up. The lock lets one thread
+# draw at a time; with caching, each chart is drawn only once anyway.
 _draw_lock = threading.Lock()
 
 
 def render_png(plot, *args, **kwargs) -> bytes:
-    """Викликає функцію малювання під замком і повертає PNG-байти."""
+    """Call a plotting function under the lock and return PNG bytes."""
     with _draw_lock:
         return figure_to_png(plot(*args, **kwargs))
 
 
-# Кешуємо PNG-байти, а не Figure: байти легкі і їх можна віддавати будь-якому
-# відвідувачу. Ключ кешу — аргументи функції. max_entries — стеля пам'яті:
-# PNG важить 75–700 КБ (карта пасів найважча), а безкоштовний хостинг гарантує ~690 МБ.
+# Cache PNG bytes rather than Figures: bytes are light and can be served to any session.
+# max_entries caps memory: a PNG is 75-700 KB (the pass map is the heaviest), and the
+# free hosting guarantees ~690 MB.
 @st.cache_data(show_spinner="Drawing radar…", max_entries=300)
 def radar_png(player_id: int, compare_id: int | None = None) -> bytes:
     per90, _, pct = load_tables()
@@ -136,7 +117,7 @@ def z_profile_png(player_id: int, compare_id: int) -> bytes:
     return render_png(plot_z_profile, per90, player_id, compare_id)
 
 
-# ---------- допоміжне ----------
+# ---------- helpers ----------
 
 def ordinal(n: float) -> str:
     """97 -> '97th', 1 -> '1st', 22 -> '22nd', 13 -> '13th'."""
@@ -146,7 +127,7 @@ def ordinal(n: float) -> str:
 
 
 def value_text(metric: str, value: float) -> str:
-    """'8.10 per 90' або '90%' (частки не діляться на хвилини)."""
+    """'8.10 per 90', or '90%' for ratios (not divided by minutes)."""
     text = format_value(metric, value)
     return text if metric in RATIO_COLS or text == "n/a" else f"{text} per 90"
 
@@ -156,13 +137,13 @@ def pool_label(pool: str) -> str:
 
 
 def no_profile_reason(player_id: int, player: pd.Series, pct: pd.DataFrame) -> str | None:
-    """Чому в гравця немає профілю (радар, перцентилі, схожі) — або None, якщо він є."""
+    """Why the player has no profile (radar, percentiles, similar players), or None."""
     if player["pool"] == "GK":
         return ("Goalkeepers have no profile yet: goalkeeper-specific metrics "
                 "(saves, claims, distribution) are not computed in this project. "
                 "Pitch maps are available.")
     if not pct["player_id"].eq(player_id).any():
-        # .1f, а не .0f: 269.7 хв округлилось би до "270 min — below the 270-minute threshold"
+        # .1f: with .0f, 269.7 minutes would read "270 min — below the 270-minute threshold"
         return (f"{player['player']} played {player['minutes']:.1f} min — below the "
                 f"{MIN_MINUTES}-minute threshold. Per-90 numbers on such a small sample "
                 "are mostly noise, so there is no profile or similarity search. "
@@ -171,13 +152,8 @@ def no_profile_reason(player_id: int, player: pd.Series, pct: pd.DataFrame) -> s
 
 
 def open_player(player_id: int) -> None:
-    """Колбек кнопки "Open profile" на вкладці схожих гравців.
-
-    Колбек виконується ДО наступного прогону скрипта, тому тут можна змінити
-    значення віджетів через st.session_state. Посеред прогону, коли віджет уже
-    намальований, так робити не можна — Streamlit видасть помилку.
-    Скидаємо фільтри, щоб новий гравець точно був у списку, і відкриваємо Profile.
-    """
+    """Callback of the "Open profile" button. Runs before the rerun, when widget values
+    can still be changed; filters are reset so the new player is in the list."""
     st.session_state["role"] = "All"
     st.session_state["team"] = "All"
     st.session_state["min_minutes"] = min(st.session_state.get("min_minutes", MIN_MINUTES),
@@ -186,14 +162,10 @@ def open_player(player_id: int) -> None:
     st.session_state["tab"] = "Profile"
 
 
-# ---------- сайдбар ----------
+# ---------- sidebar ----------
 
 def sidebar(totals: pd.DataFrame) -> int:
-    """Фільтри + вибір гравця. Повертає player_id.
-
-    Усі чотири віджети прив'язані до URL (bind="query-params"): посилання
-    ...?role=Forwards&player=... відкриє застосунок у тому самому стані.
-    """
+    """Filters + player choice, all bound to the URL. Returns player_id."""
     with st.sidebar:
         st.title("Euro 2024 Scout")
         st.caption("Player profiles from StatsBomb event data: 51 matches, 24 teams, 493 players.")
@@ -209,7 +181,7 @@ def sidebar(totals: pd.DataFrame) -> int:
             help=f"Radar, percentiles and similar players need {MIN_MINUTES}+ minutes "
                  "(3 full matches). Lower it to find squad players.")
 
-        # Фільтри — звичайні булеві маски pandas, як у CLI-скриптах
+        # Filters are plain boolean masks, as in the CLI scripts
         players = totals[totals["minutes"] >= min_minutes]
         if pool != "All":
             players = players[players["pool"] == pool]
@@ -218,44 +190,43 @@ def sidebar(totals: pd.DataFrame) -> int:
 
         if players.empty:
             st.warning("No players match these filters. Try lowering the minimum minutes.")
-            st.stop()   # далі скрипт не виконується: показувати нічого
+            st.stop()
 
         players = players.sort_values("player")
         labels = dict(zip(players["player_id"], players["player"] + " (" + players["team"] + ")"))
-        options = players["player_id"].tolist()     # .tolist() -> звичайні int, не numpy.int64
+        options = players["player_id"].tolist()     # plain Python ints, not numpy.int64
 
-        # За замовчуванням — DEFAULT_PLAYER, якщо він пройшов фільтри, інакше перший у списку
+        # Default: DEFAULT_PLAYER if he passes the filters, otherwise the first in the list
         default = players["player"].str.startswith(DEFAULT_PLAYER)
         index = options.index(players.loc[default, "player_id"].iloc[0]) if default.any() else 0
 
-        # filter_mode="fuzzy" (за замовчуванням): можна друкувати "yamal" або навіть
-        # назву збірної — в підписі є команда, тож "ukraine" покаже всіх українців
+        # Fuzzy search matches the label, which includes the team: "ukraine" lists all Ukrainians
         player_id = st.selectbox(f"Player ({len(options)})", options, index=index,
                                  format_func=labels.get, key="player", bind="query-params")
 
         st.divider()
-        # Логотип — унизу як підпис "дані від", а не st.logo() угорі: st.logo — місце
-        # для бренду самого застосунку, і там він виглядав би так, ніби це застосунок StatsBomb
+        # Logo at the bottom as a "data provided by" credit, not in st.logo() at the top,
+        # where it would look as if this were a StatsBomb app
         st.caption("Data provided by")
         st.image(str(STATSBOMB_LOGO), width=170, link=STATSBOMB_URL)
         st.caption(f"[StatsBomb Open Data]({STATSBOMB_URL}) · Code: [GitHub]({GITHUB_URL})")
     return player_id
 
 
-# ---------- вкладки ----------
+# ---------- tabs ----------
 
 def header(player: pd.Series) -> None:
     st.title(player["player"])
     parts = [player["team"], player["main_position"],
              f"{player['minutes']:.0f} min",
              f"{player['matches']} match" + ("es" if player["matches"] != 1 else "")]
-    # pd.notna: у 3 гравців без жодної дії на полі позиція невідома (NaN)
+    # 3 players without a single on-pitch event have no known position (NaN)
     st.caption(" · ".join(str(p) for p in parts if pd.notna(p)))
 
 
 def metrics_table(raw: pd.Series, pct_row: pd.Series) -> pd.DataFrame:
-    """Усі 22 метрики: значення і перцентиль. Таблиця = доступна альтернатива радару:
-    точні числа, всі метрики, а не лише 10 на радарі."""
+    """All 22 metrics with value and percentile: exact numbers and every metric,
+    not just the 10 on the radar (also an accessible alternative to the chart)."""
     return pd.DataFrame({
         "Metric": [LABELS[m] for m in LABELS],
         "Value": [format_value(m, raw[m]) for m in LABELS],
@@ -267,7 +238,7 @@ def render_profile(player_id: int, player: pd.Series,
                    per90: pd.DataFrame, pct: pd.DataFrame) -> None:
     reason = no_profile_reason(player_id, player, pct)
     if reason:
-        st.info(reason)   # пояснюємо чому, а не показуємо порожнечу
+        st.info(reason)   # explain why instead of showing an empty page
         return
 
     pct_row = pct.set_index("player_id").loc[player_id]
@@ -280,8 +251,8 @@ def render_profile(player_id: int, player: pd.Series,
         st.image(radar_png(player_id), width="stretch")
 
     with right:
-        # Сильні й слабкі місця — лише серед 10 метрик радару для цієї ролі:
-        # 95-й перцентиль за виносами в нападника — не "сила", а дрібниця
+        # Strengths and weak spots only among the 10 radar metrics of the role:
+        # a forward's 95th percentile in clearances is not a strength
         ranks = pct_row[RADAR_TEMPLATES[pool]].astype(float).dropna().sort_values(ascending=False)
         strong = ranks[ranks >= STRONG].head(3)
         weak = ranks[ranks <= WEAK].sort_values().head(3)
@@ -305,7 +276,7 @@ def render_profile(player_id: int, player: pd.Series,
     table = metrics_table(raw, pct_row)
     st.dataframe(
         table, hide_index=True,
-        height=(len(table) + 1) * 35 + 3,   # усі рядки без прокрутки (35 px на рядок)
+        height=(len(table) + 1) * 35 + 3,   # all rows without scrolling (35 px per row)
         column_config={
             "Value": st.column_config.TextColumn(
                 help="Per 90 minutes, penalties excluded. Pass completion and "
@@ -318,8 +289,8 @@ def render_profile(player_id: int, player: pd.Series,
 
 
 def render_maps(player_id: int, player: pd.Series) -> None:
-    """Карти працюють для всіх 493 гравців: поріг хвилин тут не потрібен —
-    карта просто показує, що гравець зробив, без ділення на 90."""
+    """Pitch maps work for all 493 players: no minutes threshold, because a map shows
+    what the player did, without dividing by 90."""
     kind = st.segmented_control("Map", list(MAPS), default="Shots", required=True,
                                 key="map", bind="query-params", label_visibility="collapsed")
     open_play_only = False
@@ -329,7 +300,7 @@ def render_maps(player_id: int, player: pd.Series) -> None:
             help="Hide set pieces (corners, free kicks, throw-ins). Progressive passes are "
                  "open play anyway, so this changes key passes and the grey background.")
 
-    # Ширина в пікселях: вертикальна карта ударів вужча за горизонтальні
+    # Width in pixels: the vertical shot map is narrower than the horizontal maps
     st.image(map_png(player_id, kind, open_play_only), width=620 if kind == "Shots" else 980)
     st.caption(f"All {player['minutes']:.0f} minutes at Euro 2024. "
                "Pitch maps use every minute played — no minutes threshold.")
@@ -358,11 +329,11 @@ def render_similar(player_id: int, player: pd.Series,
                f"{pool_size} {POOL_NAMES[pool]}. For reference, the median best match across "
                f"the tournament is {best_match_median():.2f}. Select a row to compare.")
 
-    # on_select="rerun": клік по рядку перезапускає скрипт, а dataframe повертає,
-    # які рядки вибрано. key містить гравця, тож для нового гравця таблиця "нова"
-    # і знову стоїть вибір за замовчуванням — найсхожіший (рядок 0).
-    # Коротка позиція (DM, CM, W...) замість повної "Left Defensive Midfield":
-    # інакше таблиця не влазить і найважливіша колонка (різниця) ховається за прокруткою
+    # on_select="rerun": selecting a row reruns the script and returns the selection.
+    # The key includes the player, so a new player gets a fresh table with the default
+    # selection (row 0, the closest match).
+    # Short position (DM, CM, W...) instead of "Left Defensive Midfield": otherwise the
+    # table does not fit and the most useful column (difference) scrolls out of view
     similar["pos"] = similar["player_id"].map(per90.set_index("player_id")["position_group"])
     event = st.dataframe(
         similar[["player", "team", "pos", "similarity", "shared", "difference"]],
@@ -387,15 +358,15 @@ def render_similar(player_id: int, player: pd.Series,
         },
     )
     rows = event.selection.rows
-    if not rows:   # користувач зняв вибір
+    if not rows:   # the user cleared the selection
         st.info("Select a player in the table to compare.")
         return
     other = similar.iloc[rows[0]]
     compare_id = int(other["player_id"])
 
     st.subheader(f"{player['player']} vs {other['player']}")
-    # Те саме, що в колонках таблиці, але для вибраного гравця і завжди на виду:
-    # на екрані ~1200 px остання колонка таблиці ховається за горизонтальною прокруткою
+    # Same as the table columns, for the selected player and always visible:
+    # at ~1200 px the last column scrolls out of view
     st.markdown(f"**Shared strengths:** {other['shared']}  \n"
                 f"**Main difference:** {other['difference']}")
     view = st.segmented_control("View", ["Z-profile", "Radar"], default="Z-profile",
@@ -417,7 +388,7 @@ def render_about(per90: pd.DataFrame, pct: pd.DataFrame) -> None:
     sizes = pct["pool"].value_counts()
     pools = "\n".join(f"- {POOL_NAMES[p].capitalize()}: {sizes.get(p, 0)}"
                       + (" (no profile yet)" if p == "GK" else "") for p in POOL_ORDER)
-    # Приклад "чому всередині ролі" рахуємо з даних, а не пишемо з голови
+    # The "why within role" example is computed from the data
     clearances = per90.groupby(per90["position_group"].map(COMPARISON_POOLS))["clearances"].median()
     st.markdown(f"""
 ### What this is
@@ -480,7 +451,7 @@ Data: [StatsBomb Open Data]({STATSBOMB_URL}) · Code: [GitHub]({GITHUB_URL})
 """)
 
 
-# ---------- сторінка ----------
+# ---------- page ----------
 
 per90, totals, pct = load_tables()
 player_id = sidebar(totals)
@@ -488,17 +459,10 @@ player = totals.set_index("player_id").loc[player_id]
 
 header(player)
 
-# on_change="rerun" + .open = "ліниві" вкладки: виконується код лише відкритої.
-# Без цього Streamlit рахує вміст УСІХ вкладок на кожен прогін і лише ховає зайві:
-# радар + 3 карти + таблиця схожих на кожен клік.
-#
-# Вкладка в URL (?tab=Pitch+maps), щоб посилання вело одразу куди треба.
-# У st.tabs немає bind="query-params", як у selectbox, тому синхронізуємо вручну:
-# з URL читаємо лише стартову вкладку, а після кожного прогону записуємо активну.
-# Стартову вкладку запам'ятовуємо в session_state ОДИН раз на сесію: default входить
-# в "особу" віджета, і якби він мінявся разом з URL, Streamlit вважав би вкладки
-# новим віджетом і скидав вибір користувача (клік по Profile повертав би на Pitch maps).
-# Для першої вкладки параметр прибираємо, щоб звичайне посилання лишалось коротким.
+# Lazy tabs (on_change="rerun" + .open): only the open tab's code runs.
+# st.tabs has no bind="query-params", so ?tab= is synced by hand. The starting tab is
+# read from the URL once per session: `default` is part of the widget's identity, and
+# changing it on every run would reset the user's choice.
 if "start_tab" not in st.session_state:
     requested_tab = st.query_params.get("tab")
     st.session_state["start_tab"] = requested_tab if requested_tab in TABS else None

@@ -1,18 +1,10 @@
-"""Полегшені дані для веб-застосунку: збірка (CLI) і читання.
+"""Slim data for the web app: build (CLI) and load.
 
-Проблема: data/raw і data/processed не в git — це 21 МБ подій, які генеруються
-скриптами. А застосунок у хмарі (Streamlit Community Cloud) бачить лише те,
-що лежить у репозиторії.
+Streamlit Community Cloud only sees the repository, so the app gets its own committed
+set: per-90 table, totals, and events with only the 12 columns the pitch maps read
+(~75 MB in memory instead of ~590 MB; Community Cloud guarantees ~690 MB).
 
-Рішення: окремий набір data/app, який комітимо:
-  per90.parquet   — гравці з 270+ хв, метрики на 90 (для радару, перцентилів, схожих);
-  totals.parquet  — усі 493 гравці, сумарно (для карт і заголовків);
-  events.parquet  — події лише з тими 12 колонками, які читають карти.
-Події займають ~1 МБ на диску і ~75 МБ у пам'яті замість 21 МБ і ~590 МБ:
-зі 113 колонок StatsBomb картам потрібні 12. Це важливо: безкоштовний Streamlit
-Community Cloud гарантує застосунку лише ~690 МБ пам'яті (максимум 2.7 ГБ).
-
-Запуск з кореня проєкту (після python -m src.metrics):
+Run from the project root (after python -m src.metrics):
     python -m src.app_data
 """
 import numpy as np
@@ -25,9 +17,8 @@ PER90_PATH = APP_DATA / "per90.parquet"
 TOTALS_PATH = APP_DATA / "totals.parquet"
 EVENTS_PATH = APP_DATA / "events.parquet"
 
-# Колонки, які читають функції з src.pitch_maps (і src.metrics, яку вони викликають).
-# Додамо нову карту, якій треба ще щось (напр., carry_end_location) — додаємо сюди
-# і перезбираємо: python -m src.app_data.
+# Columns read by src.pitch_maps (and the src.metrics helpers it calls).
+# A new map that needs more (e.g. carry_end_location): add it here and rebuild.
 EVENT_COLS = [
     "match_id", "player_id", "type", "period", "location",
     "pass_end_location", "pass_outcome", "pass_type", "pass_assisted_shot_id",
@@ -35,14 +26,13 @@ EVENT_COLS = [
 ]
 
 
-# ---------- збірка ----------
+# ---------- build ----------
 
 def slim_events(events: pd.DataFrame) -> pd.DataFrame:
-    """Лише події гравців, з координатами, без серії пенальті, і лише потрібні колонки.
+    """Player events with a location, no shootout, only the columns the maps need.
 
-    Рядки без координат (заміни, тактичні зміни, початок/кінець тайму) картам
-    не потрібні: на полі їх не намалюєш. Серію пенальті (period 5) карти й так
-    відкидають — прибираємо одразу.
+    Rows without a location (substitutions, tactical shifts, half start/end)
+    cannot be drawn on a pitch.
     """
     keep = events["player_id"].notna() & (events["period"] < 5) & events["location"].notna()
     slim = events.loc[keep, EVENT_COLS].reset_index(drop=True)
@@ -51,12 +41,8 @@ def slim_events(events: pd.DataFrame) -> pd.DataFrame:
 
 
 def check_events(slim: pd.DataFrame, totals: pd.DataFrame) -> None:
-    """Перевірка: з полегшених подій виходять ті самі числа, що в таблиці метрик.
-
-    Рахуємо тими самими функціями, що й карти (non_penalty_shots, classify_passes),
-    і порівнюємо з player_totals для кожного гравця. Якщо колись приберемо з
-    EVENT_COLS потрібну колонку або відфільтруємо зайві рядки — тут впаде.
-    """
+    """The slim events must reproduce player_totals for every player (catches a column
+    missing from EVENT_COLS or rows filtered out by mistake)."""
     shots = non_penalty_shots(slim)
     passes = slim[slim["type"] == "Pass"]
     flags = classify_passes(passes)
@@ -69,20 +55,19 @@ def check_events(slim: pd.DataFrame, totals: pd.DataFrame) -> None:
         "key_passes": flags["key"].groupby(passes["player_id"]).sum(),
     })
     expected = totals.set_index("player_id")[from_slim.columns]
-    # reindex: гравці без жодного удару/пасу у from_slim відсутні — для них 0
+    # Players without a single shot/pass are missing from from_slim: that is 0
     from_slim = from_slim.reindex(expected.index).fillna(0)
 
-    # np.isclose, а не ==: npxG — сума дробових чисел, порядок додавання може
-    # дати різницю в останньому знаку після коми
+    # isclose: npxG is a sum of floats, the order of addition changes the last digit
     mismatch = ~np.isclose(from_slim, expected).all(axis=1)
     if mismatch.any():
-        raise AssertionError(f"Розбіжності з player_totals у {mismatch.sum()} гравців: "
+        raise AssertionError(f"Mismatch with player_totals for {mismatch.sum()} players: "
                              f"{list(expected.index[mismatch][:5])}")
 
 
 def build() -> None:
-    """Збирає data/app з data/raw і data/processed."""
-    from src.data_loader import load_events   # тягне statsbombpy — потрібен лише тут
+    """Build data/app from data/raw and data/processed."""
+    from src.data_loader import load_events   # imports statsbombpy, only needed here
 
     APP_DATA.mkdir(parents=True, exist_ok=True)
     per90 = pd.read_parquet(PROCESSED / "player_per90.parquet")
@@ -94,13 +79,13 @@ def build() -> None:
     for df, path in [(per90, PER90_PATH), (totals, TOTALS_PATH), (events, EVENTS_PATH)]:
         df.to_parquet(path, index=False)
         memory = df.memory_usage(deep=True).sum() / 1e6
-        print(f"{path.name:15} {len(df):>7} рядків · файл {path.stat().st_size / 1e6:.2f} МБ"
-              f" · у пам'яті {memory:.1f} МБ")
-    print(f"Перевірка пройдена: удари, голи, npxG, прогресивні й ключові паси "
-          f"= player_totals для всіх {len(totals)} гравців")
+        print(f"{path.name:15} {len(df):>7} rows · file {path.stat().st_size / 1e6:.2f} MB"
+              f" · in memory {memory:.1f} MB")
+    print(f"Check passed: shots, goals, npxG, progressive and key passes "
+          f"= player_totals for all {len(totals)} players")
 
 
-# ---------- читання (для застосунку) ----------
+# ---------- load (used by the app) ----------
 
 def load_per90() -> pd.DataFrame:
     return pd.read_parquet(PER90_PATH)

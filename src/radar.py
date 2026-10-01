@@ -1,9 +1,8 @@
-"""Радар гравця: перцентилі всередині групи порівняння (mplsoccer.Radar).
+"""Player radar: percentiles within the comparison pool (mplsoccer.Radar).
 
-Запуск з кореня проєкту:
+Run from the project root (PNG goes to reports/figures/):
     python -m src.radar "kane"
     python -m src.radar "lamine yamal" --vs "saka"
-PNG зберігається в reports/figures/.
 """
 import argparse
 import textwrap
@@ -20,18 +19,17 @@ from src.style import (BG, BLUE, LINES, ORANGE, RING_FILL, TEXT, draw_endnote, d
 
 
 def polygon_style(color: str) -> dict:
-    """Напівпрозора заливка + суцільний контур.
+    """Translucent fill with a solid outline.
 
-    Прозорість задаємо в самому кольорі (RGBA), а не через alpha=...,
-    бо alpha зробила б прозорим і контур. Контур потрібен, щоб при
-    порівнянні було видно форму обох гравців, навіть коли одна фігура
-    повністю всередині іншої.
+    Transparency goes into the RGBA fill colour, not alpha=..., which would also fade
+    the outline. The outline keeps both shapes visible when one polygon lies entirely
+    inside the other.
     """
     return {"facecolor": to_rgba(color, 0.3), "edgecolor": color, "lw": 2.5}
 
 
 def format_value(metric: str, value: float) -> str:
-    """Сире значення для підпису: точність пасу — у відсотках, решта — 2 знаки."""
+    """Raw value for the label: pass completion as a percentage, the rest with 2 decimals."""
     if pd.isna(value):
         return "n/a"
     if metric == "pass_completion":
@@ -41,35 +39,34 @@ def format_value(metric: str, value: float) -> str:
 
 def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
                compare_id: int | None = None) -> plt.Figure:
-    """Радар одного гравця або двох гравців одного пулу. Повертає Figure."""
+    """Radar of one player, or of two players from the same pool."""
     pct = pct.set_index("player_id")
     raw = per90.set_index("player_id")
 
     pool = pct.loc[player_id, "pool"]
     if pool not in RADAR_TEMPLATES:
-        raise ValueError(f"Для пулу {pool} радар не будуємо: немає воротарських метрик")
+        raise ValueError(f"No radar for pool {pool}: there are no goalkeeping metrics")
     if compare_id is not None and pct.loc[compare_id, "pool"] != pool:
-        raise ValueError("Порівнювати можна лише гравців одного пулу: "
-                         "перцентилі рахуються всередині пулу і між пулами не порівнюються")
+        raise ValueError("Only players from the same pool can be compared: "
+                         "percentiles are computed within a pool")
     metrics = RADAR_TEMPLATES[pool]
     pool_size = (pct["pool"] == pool).sum()
 
-    # --- підписи осей ---
-    # Для одного гравця під назвою метрики пишемо сире значення на 90:
-    # перцентиль каже "наскільки високо серед колег", сире число — "скільки саме".
+    # --- axis labels ---
+    # For a single player the raw per-90 value goes under the metric name:
+    # the percentile says "how high among peers", the raw number says "how much".
     names = [textwrap.fill(LABELS[m], 14) for m in metrics]
     if compare_id is None:
         params = [f"{name}\n{format_value(m, raw.loc[player_id, m])}" for name, m in zip(names, metrics)]
     else:
         params = names
 
-    # Усі осі мають однакову шкалу 0–100, бо значення — перцентилі.
-    # 4 кільця -> межі кілець на 25, 50, 75 і 100-му перцентилі.
+    # All axes are percentiles, 0-100; 4 rings = 25th, 50th, 75th, 100th percentile
     k = len(metrics)
     radar = Radar(params, min_range=[0] * k, max_range=[100] * k,
                   num_rings=4, ring_width=1, center_circle_radius=1)
 
-    # grid() від mplsoccer: три області — заголовок, радар, підпис знизу
+    # mplsoccer grid: title, radar and endnote areas
     fig, axs = grid(figheight=10, grid_height=0.78, title_height=0.1, endnote_height=0.04,
                     title_space=0.02, endnote_space=0.04, grid_key="radar", axis=False)
     fig.set_facecolor(BG)
@@ -77,7 +74,7 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
     radar.setup_axis(ax=ax, facecolor=BG)
     radar.draw_circles(ax=ax, facecolor=RING_FILL, edgecolor=LINES, lw=1)
 
-    # NaN (немає даних) малюємо як 0, але підписуємо "n/a"
+    # NaN (no data) is drawn as 0 but labelled "n/a"
     pct_values = pct.loc[player_id, metrics].astype(float)
     values = pct_values.fillna(0).tolist()
 
@@ -87,7 +84,7 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
             kwargs_radar=polygon_style(BLUE),
             kwargs_rings={"facecolor": to_rgba(BLUE, 0.12)},
         )
-        # Число перцентиля в кожній вершині — щоб не вгадувати "на око"
+        # Percentile in every vertex, so nobody has to estimate it by eye
         for (x, y), v in zip(vertices, pct_values):
             ax.text(x, y, "n/a" if pd.isna(v) else f"{v:.0f}", ha="center", va="center",
                     fontsize=9, fontweight="bold", color="white", zorder=5,
@@ -100,13 +97,13 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
             kwargs_compare=polygon_style(ORANGE),
         )
 
-    # wrap=None: переноси рядків робимо самі (textwrap.fill вище), бо вбудований
-    # wrap від mplsoccer склеїв би наш "\n" перед значенням у пробіл.
+    # wrap=None: lines are already wrapped with textwrap.fill above; mplsoccer's own
+    # wrapping would turn our "\n" before the value into a space
     labels = radar.draw_param_labels(ax=ax, wrap=None, offset=1.25, fontsize=11, color=TEXT)
     for label in labels:
-        label.set_rotation(0)   # горизонтальні підписи читати легше, ніж повернуті вздовж осі
+        label.set_rotation(0)   # horizontal labels are easier to read than rotated ones
 
-    # --- заголовок і підпис ---
+    # --- header and endnote ---
     p = raw.loc[player_id]
     if compare_id is None:
         draw_header(axs["title"], (p["player"], player_subtitle(p)),
@@ -126,9 +123,9 @@ def plot_radar(per90: pd.DataFrame, pct: pd.DataFrame, player_id: int,
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Радар гравця Євро 2024 (перцентилі всередині ролі)")
-    parser.add_argument("player", help="частина імені, напр. 'kane' або 'mbappe'")
-    parser.add_argument("--vs", help="гравець для порівняння (з того ж пулу)")
+    parser = argparse.ArgumentParser(description="Euro 2024 player radar (percentiles within role)")
+    parser.add_argument("player", help="part of the name, e.g. 'kane' or 'mbappe'")
+    parser.add_argument("--vs", help="player to compare with (same pool)")
     args = parser.parse_args()
 
     per90 = load_per90()
@@ -139,12 +136,12 @@ def main() -> None:
         fig = plot_radar(per90, pct, player["player_id"],
                          None if other is None else other["player_id"])
     except ValueError as e:
-        parser.error(str(e))   # коротке повідомлення замість traceback
+        parser.error(str(e))   # short message instead of a traceback
 
     name = slugify(player["player"])
     if other is not None:
         name += "_vs_" + slugify(other["player"])
-    print("Збережено:", save_figure(fig, f"radar_{name}"))
+    print("Saved:", save_figure(fig, f"radar_{name}"))
 
 
 if __name__ == "__main__":

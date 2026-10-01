@@ -1,17 +1,15 @@
-"""Z-профіль двох гравців: де кожен вище чи нижче середнього по ролі.
+"""Z-profile of two players: where each is above or below the average of his role.
 
-Навіщо, якщо є радар: радар показує 10 метрик у перцентилях, а схожість
-(src.similarity) рахується по 18 метриках у z-score. Тому пара з косинусом 0.7
-на радарі може виглядати не дуже схожою: радар показує інші числа.
-Z-профіль показує рівно те, що "бачить" алгоритм: той самий вектор з 18 чисел.
+The radar shows 10 metrics as percentiles, while the similarity search (src.similarity)
+uses 18 metrics as z-scores, so a pair with cosine 0.7 may not look alike on the radar.
+The z-profile shows exactly the vector the algorithm compares.
 
-Як читати: 0 — середній гравець пулу, +1 — на одне стандартне відхилення вище.
-Схожі гравці — ті, в кого точки по один бік від нуля в тих самих рядках
-(форма профілю), навіть якщо один із них "гучніший" (далі від нуля).
+Reading it: 0 = pool average, +1 = one standard deviation above. Similar players have
+dots on the same side of zero in the same rows, even if one is further from zero.
 
-Запуск з кореня проєкту:
+Run from the project root:
     python -m src.z_profile "rodri" --vs "xhaka"
-    python -m src.z_profile "yamal"               -> порівняння з найсхожішим
+    python -m src.z_profile "yamal"               -> vs the most similar player
 """
 import argparse
 import math
@@ -25,7 +23,7 @@ from src.similarity import FEATURES, cosine_to, similar_players, standardize
 from src.style import (BG, BLUE, CONTEXT, LINES, MUTED, ORANGE, RING_FILL, TEXT,
                        draw_endnote, draw_header, player_subtitle, save_figure, slugify)
 
-# Ті самі 18 метрик, що й FEATURES, згруповані за блоками (порядок збігається)
+# The 18 FEATURES grouped into blocks (same order)
 BLOCKS = {
     "Shooting": ["np_shots", "npxg"],
     "Creation": ["xa", "key_passes"],
@@ -35,16 +33,16 @@ BLOCKS = {
     "Defending": ["tackles_won", "interceptions", "ball_recoveries",
                   "pressures", "clearances", "aerials_won"],
 }
-# Страховка: якщо колись змінимо FEATURES і забудемо тут — впаде одразу, а не мовчки
+# Fail loudly if FEATURES changes and this grouping is not updated
 assert [m for ms in BLOCKS.values() for m in ms] == FEATURES
 
-BLOCK_GAP = 0.8   # додатковий відступ між блоками (в "рядках")
-OVERLAP_Z = 0.13  # ближче за це (в одиницях z) точки зливаються: діаметр точки ≈ 0.13 z
-DODGE = 0.16      # тоді розводимо їх по вертикалі на ±0.16 рядка
+BLOCK_GAP = 0.8   # extra space between blocks, in rows
+OVERLAP_Z = 0.13  # dots closer than this (in z) overlap: a dot is ≈0.13 z wide
+DODGE = 0.16      # ...so they are moved apart vertically by ±0.16 rows
 
 
 def row_positions() -> dict[str, float]:
-    """y-координата кожної метрики: зверху вниз, з проміжками між блоками."""
+    """y position of every metric: top to bottom, with gaps between blocks."""
     y, positions = 0.0, {}
     for metrics in BLOCKS.values():
         for m in metrics:
@@ -55,26 +53,26 @@ def row_positions() -> dict[str, float]:
 
 
 def plot_z_profile(per90: pd.DataFrame, player_id: int, compare_id: int) -> plt.Figure:
-    """Dumbbell-графік: 18 метрик, дві точки на рядок (синя — гравець, помаранчева — порівняння)."""
+    """Dumbbell chart: 18 metrics, two dots per row (blue = player, orange = comparison)."""
     z = standardize(per90)
     for pid in (player_id, compare_id):
         if pid not in z.index:
-            raise ValueError("Z-профіль будуємо лише для польових гравців з 270+ хв")
+            raise ValueError("Z-profiles are only built for outfield players with 270+ minutes")
     pool = z.loc[player_id, "pool"]
     if z.loc[compare_id, "pool"] != pool:
-        raise ValueError("Порівнювати можна лише гравців одного пулу: z-score рахується всередині пулу")
+        raise ValueError("Only players from the same pool can be compared: z-scores are computed within a pool")
 
     pool_z = z[z["pool"] == pool]
     similarity = cosine_to(pool_z, player_id)[compare_id]
     za, zb = z.loc[player_id, FEATURES].astype(float), z.loc[compare_id, FEATURES].astype(float)
 
-    # grid() як у радарі: заголовок / графік / підпис. ax_aspect — ширина до висоти області графіка
+    # Same layout as the radar: title / chart / endnote; ax_aspect = width / height of the chart
     fig, axs = grid(figheight=9, ax_aspect=1.45, grid_height=0.76, title_height=0.09,
                     endnote_height=0.05, title_space=0.02, endnote_space=0.06,
                     grid_key="plot", axis=False)
     fig.set_facecolor(BG)
     ax = axs["plot"]
-    # Звужуємо область графіка зліва: там стоятимуть назви метрик і блоків
+    # Narrow the chart from the left to make room for metric and block names
     left, bottom, width, height = ax.get_position().bounds
     ax.set_position([left + width * 0.3, bottom, width * 0.7, height])
     ax.axis("on")
@@ -82,12 +80,12 @@ def plot_z_profile(per90: pd.DataFrame, player_id: int, compare_id: int) -> plt.
     ys = row_positions()
     y = [ys[m] for m in FEATURES]
 
-    # Межі осі x симетричні: 0 (середнє) завжди посередині, мінімум ±3
+    # Symmetric x axis: 0 (average) always in the middle, at least ±3
     limit = max(3, math.ceil(max(za.abs().max(), zb.abs().max()) + 0.3))
     ax.set_xlim(-limit, limit)
     ax.set_ylim(min(y) - 0.8, max(y) + 0.8)
 
-    # Блоки: легка заливка через один + назва блоку ліворуч від назв метрик
+    # Blocks: shading on every other block + block name left of the metric names
     for i, (block, metrics) in enumerate(BLOCKS.items()):
         top, low = ys[metrics[0]] + 0.5, ys[metrics[-1]] - 0.5
         if i % 2 == 0:
@@ -95,16 +93,16 @@ def plot_z_profile(per90: pd.DataFrame, player_id: int, compare_id: int) -> plt.
         ax.text(-0.44, (top + low) / 2, block.upper(), transform=ax.get_yaxis_transform(),
                 rotation=90, ha="center", va="center", fontsize=9, color=MUTED)
 
-    # Сітка на цілих z: слабка, щоб не конкурувати з точками; нуль — темніший
+    # Light grid on whole z values; zero is darker
     for x in range(-limit, limit + 1):
         ax.axvline(x, color=TEXT if x == 0 else LINES, lw=1.2 if x == 0 else 0.8, zorder=1)
 
-    # "Гантель": сіра лінія між двома гравцями — довжина лінії і є різниця по метриці
+    # Grey line between the players: its length is the difference in that metric
     ax.hlines(y, za, zb, color=CONTEXT, lw=2.5, zorder=2)
-    # Якщо значення майже однакові, синя точка повністю закрила б помаранчеву
-    # (напр., виноси Родрі й Джаки: обидва +0.95). Тоді трохи розводимо їх по вертикалі.
+    # Nearly equal values: the blue dot would hide the orange one completely
+    # (e.g. Rodri and Xhaka clearances, both +0.95), so move them apart vertically
     dodge = ((za - zb).abs() < OVERLAP_Z).to_numpy() * DODGE
-    # Білий обідок навколо точок: при частковому перекритті видно межу обох
+    # White edge so both dots stay visible when they partly overlap
     ax.scatter(zb, y - dodge, s=110, color=ORANGE, edgecolor=BG, lw=1.5, zorder=3)
     ax.scatter(za, y + dodge, s=110, color=BLUE, edgecolor=BG, lw=1.5, zorder=4)
 
@@ -128,9 +126,9 @@ def plot_z_profile(per90: pd.DataFrame, player_id: int, compare_id: int) -> plt.
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Z-профіль двох гравців Євро 2024")
-    parser.add_argument("player", help="частина імені, напр. 'rodri' або 'kroos'")
-    parser.add_argument("--vs", help="з ким порівняти (той самий пул); без --vs — найсхожіший")
+    parser = argparse.ArgumentParser(description="Z-profile of two Euro 2024 players")
+    parser.add_argument("player", help="part of the name, e.g. 'rodri' or 'kroos'")
+    parser.add_argument("--vs", help="player to compare with (same pool); default: the most similar")
     args = parser.parse_args()
 
     per90 = load_per90()
@@ -145,7 +143,7 @@ def main() -> None:
         parser.error(str(e))
 
     other = per90.set_index("player_id").loc[other_id, "player"]
-    print("Збережено:", save_figure(fig, f"zprofile_{slugify(player['player'])}_vs_{slugify(other)}"))
+    print("Saved:", save_figure(fig, f"zprofile_{slugify(player['player'])}_vs_{slugify(other)}"))
 
 
 if __name__ == "__main__":

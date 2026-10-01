@@ -1,7 +1,7 @@
-# Залежності веб-застосунку — саме їх ставить Streamlit Community Cloud.
-# Лише те, що імпортує streamlit_app.py і модулі src/, які він використовує.
-# Для завантаження даних і ноутбуків: pip install -r requirements-dev.txt
-# Потрібен Python 3.11+ (pandas 3).
+# Runtime dependencies of the web app: what Streamlit Community Cloud installs.
+# Only what streamlit_app.py and the src/ modules it uses import.
+# For downloading data, notebooks and tests: pip install -r requirements-dev.txt
+# Requires Python 3.11+ (pandas 3).
 streamlit==1.64.0
 pandas==3.0.6
 numpy==2.5.3

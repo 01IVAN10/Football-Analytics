@@ -1,13 +1,11 @@
-"""Карти гравця на полі: удари, паси, теплова карта дій (mplsoccer).
+"""Pitch maps of a player: shots, passes, action heatmap (mplsoccer).
 
-Запуск з кореня проєкту:
-    python -m src.pitch_maps "kane"                  -> усі три карти
-    python -m src.pitch_maps "kroos" --only passes   -> лише одна
-PNG зберігаються в reports/figures/.
+Run from the project root (PNGs go to reports/figures/):
+    python -m src.pitch_maps "kane"                  -> all three maps
+    python -m src.pitch_maps "kroos" --only passes   -> one map
 
-Карти беруть визначення з src.metrics (non_penalty_shots, classify_passes),
-тож на карті рівно ті удари й паси, що пораховані в таблиці метрик.
-Змінимо визначення прогресивного пасу — зміниться і метрика, і карта.
+The maps use the definitions from src.metrics (non_penalty_shots, classify_passes),
+so they show exactly the shots and passes counted in the metric tables.
 """
 import argparse
 
@@ -26,27 +24,27 @@ from src.style import (BG, BLUE, CONTEXT, HEAT_CMAP, LINES, MUTED, ORANGE, TEXT,
 
 TOTALS_PATH = PROCESSED / "player_totals.parquet"
 
-# Поле StatsBomb 120x80 ярдів; усі команди атакують зліва направо
+# StatsBomb pitch, 120x80 yards; every team attacks left to right
 PITCH_STYLE = dict(pitch_type="statsbomb", pitch_color=BG, line_color=LINES, linewidth=1)
-# Одна розкладка для всіх карт: заголовок / поле / підпис
+# One layout for all maps: title / pitch / endnote
 GRID_STYLE = dict(title_height=0.1, title_space=0.02, grid_height=0.76,
                   endnote_height=0.06, endnote_space=0.05, axis=False)
 
-SIZE_PER_XG = 1500   # площа кружка на карті ударів (pt²) на 1.0 xG
+SIZE_PER_XG = 1500   # shot map marker area (pt²) per 1.0 xG
 
 
 def load_totals() -> pd.DataFrame:
-    """Усі гравці турніру (без порогу хвилин): карту ударів можна глянути й у запасного."""
+    """All players, no minutes threshold: a squad player's shot map is still useful."""
     return pd.read_parquet(TOTALS_PATH)
 
 
 def player_events(events: pd.DataFrame, player_id: int) -> pd.DataFrame:
-    """Усі події одного гравця за турнір, без серії пенальті."""
+    """All events of one player, shootout excluded."""
     return events[(events["player_id"] == player_id) & (events["period"] < 5)]
 
 
 def legend_below(ax, handles: list, ncol: int, **kwargs) -> None:
-    """Легенда одним рядком під полем."""
+    """One-row legend under the pitch."""
     style = dict(loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=ncol, frameon=False,
                  fontsize=10, labelcolor=TEXT, handletextpad=0.5, columnspacing=1.5)
     ax.legend(handles=handles, **(style | kwargs))
@@ -57,42 +55,41 @@ def plural(n: int, word: str) -> str:
     return f"{n} {word}" if n == 1 else f"{n} {word}s"
 
 
-# ---------- карта ударів ----------
+# ---------- shot map ----------
 
 def plot_shot_map(ev: pd.DataFrame, player: pd.Series) -> plt.Figure:
-    """Удари без пенальті на половині поля. Площа кружка = xG, заливка = гол."""
+    """Non-penalty shots on half a pitch. Marker area = xG, filled = goal."""
     shots = non_penalty_shots(ev)
     xy = split_xy(shots["location"])
     xg = shots["shot_statsbomb_xg"]
     goal = shots["shot_outcome"] == "Goal"
 
-    # VerticalPitch(half=True): ворота зверху, видно атакувальну половину (x від 56).
-    # Якщо гравець бив з власної половини (за турнір таких ударів 4, напр. Кіммих з x=48),
-    # розширюємо поле вниз, щоб жоден удар не "зник" за межами картинки.
+    # Half pitch, goal at the top. Four shots of the tournament came from the player's own
+    # half (e.g. Kimmich from x=48): extend the pitch down so no shot falls off the image.
     min_x = xy["x"].min() if not shots.empty else 60
     pitch = VerticalPitch(half=True, pad_bottom=max(4, 60 - min_x + 4), **PITCH_STYLE)
-    # Більший відступ під полем: у легенді є великий кружок "xG 0.5"
+    # More room under the pitch: the legend has a large "xG 0.5" marker
     fig, axs = pitch.grid(figheight=9, **(GRID_STYLE | dict(grid_height=0.73, endnote_space=0.08)))
     fig.set_facecolor(BG)
     ax = axs["pitch"]
 
-    # s — площа маркера, тому площа пропорційна xG (а не діаметр).
-    # Якби xG задавав діаметр, удар з xG 0.4 виглядав би в 4 рази "важчим" за 0.2, а не в 2.
+    # s is the marker AREA, so area is proportional to xG. Scaling the diameter would make
+    # an xG 0.4 shot look 4 times bigger than 0.2 instead of 2.
     pitch.scatter(xy.loc[~goal, "x"], xy.loc[~goal, "y"], s=xg[~goal] * SIZE_PER_XG,
                   facecolor=to_rgba(BLUE, 0.15), edgecolor=BLUE, lw=1.5, ax=ax, zorder=3)
-    # Голи — поверх, з білим обідком, щоб не зливались із сусідніми ударами
+    # Goals on top, with a white edge so they stand out from nearby shots
     pitch.scatter(xy.loc[goal, "x"], xy.loc[goal, "y"], s=xg[goal] * SIZE_PER_XG,
                   facecolor=ORANGE, edgecolor=BG, lw=2, ax=ax, zorder=4)
     if shots.empty:
         ax.text(40, 90, "No non-penalty shots", ha="center", va="center", fontsize=14, color=MUTED)
 
-    # Легенда: колір (гол / не гол) + розмір (шкала xG)
+    # Legend: colour (goal / no goal) + size (xG scale)
     handles = [
         Line2D([], [], ls="", marker="o", ms=10, mfc=ORANGE, mec=BG, label="Goal"),
         Line2D([], [], ls="", marker="o", ms=10, mfc=to_rgba(BLUE, 0.15), mec=BLUE, label="No goal"),
     ]
     for v in (0.05, 0.2, 0.5):
-        # ms у легенді — діаметр у pt, а s у scatter — площа, тому корінь
+        # Legend ms is a diameter in pt while scatter s is an area: hence the square root
         handles.append(Line2D([], [], ls="", marker="o", ms=(v * SIZE_PER_XG) ** 0.5,
                               mfc="none", mec=MUTED, label=f"xG {v}"))
     legend_below(ax, handles, ncol=5, handlelength=2.5, handletextpad=0.8)
@@ -106,14 +103,15 @@ def plot_shot_map(ev: pd.DataFrame, player: pd.Series) -> plt.Figure:
     return fig
 
 
-# ---------- карта пасів ----------
+# ---------- pass map ----------
 
 def plot_pass_map(ev: pd.DataFrame, player: pd.Series, open_play_only: bool = False) -> plt.Figure:
-    """Прогресивні та ключові паси стрілками, решта точних пасів — сірим фоном.
+    """Progressive and key passes as arrows, other completed passes as grey context.
 
-    open_play_only=True — без стандартів. Прогресивні паси й так рахуються лише з гри,
-    тож перемикач змінює ключові паси (у Кроса багато з кутових), сірий фон і точність.
-    Тоді число ключових у легенді може бути меншим за метрику key_passes: та рахує і стандарти.
+    open_play_only=True drops set pieces. Progressive passes are open play anyway, so this
+    changes key passes (Kroos has many from corners), the grey context and the completion.
+    The legend may then show fewer key passes than the key_passes metric, which includes
+    set pieces.
     """
     passes = ev[ev["type"] == "Pass"]
     if open_play_only:
@@ -122,11 +120,11 @@ def plot_pass_map(ev: pd.DataFrame, player: pd.Series, open_play_only: bool = Fa
     start = split_xy(passes["location"])
     end = split_xy(passes["pass_end_location"])
 
-    # Пас може бути і прогресивним, і ключовим одночасно. Малюємо обидва шари
-    # (ключові — зверху), а в легенді показуємо ті самі числа, що й у метриках.
+    # A pass can be both progressive and key: both layers are drawn (key on top) and the
+    # legend shows the same numbers as the metrics
     key = flags["key"]
     progressive = flags["progressive"]
-    other = flags["completed"] & ~progressive & ~key   # сірий фон — лише "звичайні" паси
+    other = flags["completed"] & ~progressive & ~key
 
     pitch = Pitch(**PITCH_STYLE)
     fig, axs = pitch.grid(figheight=8, **GRID_STYLE)
@@ -137,7 +135,7 @@ def plot_pass_map(ev: pd.DataFrame, player: pd.Series, open_play_only: bool = Fa
         pitch.arrows(start.loc[mask, "x"], start.loc[mask, "y"], end.loc[mask, "x"], end.loc[mask, "y"],
                      ax=ax, **kwargs)
 
-    # Контекст: де гравець взагалі віддає паси (тонкі лінії без стрілок — менше шуму)
+    # Context: where the player passes at all (thin lines without heads, less noise)
     pitch.lines(start.loc[other, "x"], start.loc[other, "y"], end.loc[other, "x"], end.loc[other, "y"],
                 color=CONTEXT, lw=0.6, ax=ax, zorder=1)
     draw(progressive, color=BLUE, width=1.5, headwidth=4, headlength=4, zorder=3)
@@ -163,30 +161,29 @@ def plot_pass_map(ev: pd.DataFrame, player: pd.Series, open_play_only: bool = Fa
     return fig
 
 
-# ---------- теплова карта ----------
+# ---------- heatmap ----------
 
 def plot_heatmap(ev: pd.DataFrame, player: pd.Series) -> plt.Figure:
-    """Де гравець діє: щільність усіх дій з координатами, згладжена."""
-    # Carry (ведення) не беремо: воно починається в точці прийому м'яча,
-    # і та сама точка порахувалась би двічі (Ball Receipt + Carry).
+    """Where the player acts: smoothed density of all actions with a location."""
+    # No carries: a carry starts at the reception point, which would count twice
+    # (Ball Receipt + Carry)
     actions = ev[ev["location"].notna() & (ev["type"] != "Carry")]
     xy = split_xy(actions["location"])
 
-    # line_zorder=2 — лінії поля поверх кольору; поля зверху/знизу — під підписи третин і шкалу
+    # Pitch lines above the colour; padding for the thirds labels and the colour bar
     pitch = Pitch(**PITCH_STYLE, line_zorder=2, pad_top=8, pad_bottom=8)
     fig, axs = pitch.grid(figheight=8, **GRID_STYLE)
     fig.set_facecolor(BG)
     ax = axs["pitch"]
 
-    # 1) Рахуємо дії в сітці 60x40 клітинок (кожна 2x2 ярди).
-    # 2) Згладжуємо фільтром Гауса (sigma=2.5 клітинки ≈ 5 ярдів): кожна дія "розтікається"
-    #    на сусідні клітинки, тож картина не залежить від того, де пройшла межа сітки,
-    #    і не виглядає як шахівниця.
+    # Count actions on a 60x40 grid (2x2-yard cells), then apply a Gaussian filter
+    # (sigma 2.5 cells ≈ 5 yards) so the picture does not depend on where the cell
+    # borders fall and does not look like a chessboard.
     stats = pitch.bin_statistic(xy["x"], xy["y"], statistic="count", bins=(60, 40))
     stats["statistic"] = gaussian_filter(stats["statistic"], sigma=2.5)
     mesh = pitch.heatmap(stats, ax=ax, cmap=HEAT_CMAP, zorder=1)
 
-    # Частка дій у кожній третині поля — число, яке легко порівнювати між гравцями
+    # Share of actions per third: a number that is easy to compare between players
     thirds = pd.cut(xy["x"], bins=[0, 40, FINAL_THIRD_X, 120], include_lowest=True,
                     labels=["Defensive third", "Middle third", "Final third"])
     shares = thirds.value_counts(normalize=True)
@@ -194,9 +191,9 @@ def plot_heatmap(ev: pd.DataFrame, player: pd.Series) -> plt.Figure:
         ax.text(x, -3, f"{label}  {shares.get(label, 0):.0%}", ha="center", va="center",
                 fontsize=11, color=TEXT)
 
-    # Шкала кольору: значення після згладжування не є "кількістю дій",
-    # тож показуємо лише напрямок (менше -> більше), без чисел
-    cax = ax.inset_axes([0.8, 0.025, 0.16, 0.022])   # у нижньому відступі під полем
+    # After smoothing the values are not "numbers of actions", so the colour bar
+    # only shows the direction (fewer -> more), without numbers
+    cax = ax.inset_axes([0.8, 0.025, 0.16, 0.022])   # in the padding under the pitch
     cbar = fig.colorbar(mesh, cax=cax, orientation="horizontal")
     cbar.set_ticks([])
     cbar.outline.set_visible(False)
@@ -218,13 +215,13 @@ MAPS = {"shots": plot_shot_map, "passes": plot_pass_map, "heatmap": plot_heatmap
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Карти гравця Євро 2024 на полі")
-    parser.add_argument("player", help="частина імені, напр. 'kane' або 'mbappe'")
-    parser.add_argument("--only", choices=list(MAPS), help="намалювати лише одну карту")
+    parser = argparse.ArgumentParser(description="Euro 2024 player pitch maps")
+    parser.add_argument("player", help="part of the name, e.g. 'kane' or 'mbappe'")
+    parser.add_argument("--only", choices=list(MAPS), help="draw only one map")
     args = parser.parse_args()
 
-    # Імпорт тут, а не вгорі: data_loader тягне statsbombpy (клієнт API), а функції
-    # малювання вище використовує і веб-застосунок, якому API не потрібен
+    # Imported here: data_loader pulls in statsbombpy, and the app that uses the
+    # plotting functions above does not need the API client
     from src.data_loader import load_events
 
     try:
@@ -237,7 +234,7 @@ def main() -> None:
         if args.only and name != args.only:
             continue
         fig = plot(ev, player)
-        print("Збережено:", save_figure(fig, f"{name}_{slugify(player['player'])}"))
+        print("Saved:", save_figure(fig, f"{name}_{slugify(player['player'])}"))
 
 
 if __name__ == "__main__":

@@ -1,16 +1,15 @@
-# Тема застосунку = палітра графіків (src/style.py).
-# Світла тема примусово: графіки — PNG на білому тлі, у темній темі вони
-# виглядали б як білі "картки" на чорному.
+# App theme = chart palette (src/style.py).
+# Light theme forced: the charts are PNGs on white and would look like white cards
+# on a dark background.
 [theme]
 base = "light"
-primaryColor = "#2A78D6"              # BLUE: активні віджети, смужки перцентилів
+primaryColor = "#2A78D6"              # BLUE: active widgets, percentile bars
 backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F2F2F2"  # сайдбар — як заливка кілець радару
+secondaryBackgroundColor = "#F2F2F2"  # sidebar, same as the radar ring fill
 textColor = "#1F1F1F"
 
 [global]
-# Кнопка "Open profile" (вкладка схожих) свідомо змінює значення віджетів
-# сайдбару через st.session_state. Streamlit у такому разі пише в лог попередження
-# "widget created with a default value but also had its value set via Session State".
-# Для нас це очікувана поведінка: значення з session_state має пріоритет над default.
+# The "Open profile" button sets sidebar widget values through st.session_state on
+# purpose, which makes Streamlit log "widget created with a default value but also had
+# its value set via Session State". Expected here: session_state wins over the default.
 disableWidgetStateDuplicationWarning = true

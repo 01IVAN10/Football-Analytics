@@ -1,7 +1,6 @@
-"""Спільний стиль графіків: кольори, заголовок, підпис, збереження у файл.
+"""Shared chart style: colours, header, footnote, saving.
 
-Навіщо окремий модуль: радар, карти на полі, а згодом Streamlit мають виглядати
-як одна система. Колір "основного гравця" міняємо в одному місці, а не в кожному файлі.
+The radar, the pitch maps and the app should look like one system.
 """
 import io
 import re
@@ -14,31 +13,27 @@ from src.paths import FIGURES, PROJECT_ROOT
 from src.percentiles import normalize_name
 
 
-# --- палітра ---
-# Синій і помаранчевий — пара, яку розрізняють і люди з дальтонізмом
-# (перевірено валідатором палітр: ΔE 24.7 при протанопії, поріг — 8).
-# Текст завжди нейтральний: колір несе лише "чиє це / яка категорія".
+# --- palette ---
+# Blue and orange stay distinguishable with colour blindness
+# (palette validator: ΔE 24.7 under protanopia, threshold 8).
+# Text is always neutral: colour only encodes "whose / which category".
 BG = "#FFFFFF"
 TEXT = "#1F1F1F"
 MUTED = "#52514E"
-LINES = "#D6D6D6"       # лінії поля, межі кілець радару
-RING_FILL = "#F2F2F2"   # заливка кілець радару
-CONTEXT = "#C9C9C6"     # "фонові" дані: інші паси тощо
-BLUE = "#2A78D6"        # основний гравець / основна категорія
-ORANGE = "#EB6834"      # гравець для порівняння / акцент (голи, ключові паси)
+LINES = "#D6D6D6"       # pitch lines, radar ring borders
+RING_FILL = "#F2F2F2"   # radar ring fill
+CONTEXT = "#C9C9C6"     # background data: other passes etc.
+BLUE = "#2A78D6"        # main player / main category
+ORANGE = "#EB6834"      # comparison player / highlight (goals, key passes)
 
-# Послідовна шкала для теплових карт: один тон, від кольору фону до темно-синього.
-# Нуль зливається з полем, тож "порожні" зони не привертають уваги.
+# Sequential single-hue scale for heatmaps, starting at the background colour:
+# empty zones blend into the pitch instead of drawing attention.
 HEAT_CMAP = LinearSegmentedColormap.from_list(
     "heat_blue", [BG, "#CDE2FB", "#86B6EF", "#3987E5", "#256ABF", "#104281"])
 
 
 def player_subtitle(row) -> str:
-    """'England · Center Forward · 635 min' — підзаголовок під іменем гравця.
-
-    pd.notna: у 3 гравців без жодної дії з позицією main_position = NaN —
-    пропускаємо, щоб не писати "nan" на графіку.
-    """
+    """'England · Center Forward · 635 min'; skips a missing position."""
     parts = [row["team"], row["main_position"], f"{row['minutes']:.0f} min"]
     return " · ".join(str(p) for p in parts if pd.notna(p))
 
@@ -46,11 +41,8 @@ def player_subtitle(row) -> str:
 def draw_header(ax, left: tuple[str, str], right: tuple[str, str],
                 left_color: str = TEXT, right_color: str = TEXT,
                 left_size: int = 22, right_size: int = 16, sub_size: float = 12) -> None:
-    """Заголовок у дві колонки: (назва, підзаголовок) зліва і справа.
-
-    sub_size менший для порівняння двох гравців: два довгі підзаголовки
-    ("Switzerland · Left Defensive Midfield · 511 min") інакше злипаються посередині.
-    """
+    """Two-column header: (title, subtitle) on the left and on the right.
+    Use a smaller sub_size for two players, so long subtitles do not collide."""
     for (title, sub), x, ha, color, size in [
         (left, 0.01, "left", left_color, left_size),
         (right, 0.99, "right", right_color, right_size),
@@ -60,27 +52,24 @@ def draw_header(ax, left: tuple[str, str], right: tuple[str, str],
 
 
 def draw_endnote(ax, lines: list[str]) -> None:
-    """Підпис знизу: як читати графік + джерело даних."""
+    """Footnote: how to read the chart + data source."""
     ax.text(0.01, 0.9, "\n".join(lines), fontsize=9, color=MUTED, ha="left", va="top")
     ax.text(0.99, 0.9, "Data: StatsBomb Open Data", fontsize=9, color=MUTED, ha="right", va="top")
 
 
 def slugify(name: str) -> str:
-    """'Kylian Mbappé Lottin' -> 'kylian_mbappe_lottin' (для імені файлу)."""
+    """'Kylian Mbappé Lottin' -> 'kylian_mbappe_lottin' (file names)."""
     return re.sub(r"[^a-z0-9]+", "_", normalize_name(name)).strip("_")
 
 
 def _savefig(fig: plt.Figure, target) -> None:
-    """Однакові параметри збереження для файлу і для веб-застосунку.
-
-    target — шлях до файлу або буфер у пам'яті (BytesIO): savefig приймає обидва.
-    """
+    """Same save settings for files and for the app. target: a path or a BytesIO."""
     fig.savefig(target, format="png", dpi=150, facecolor=fig.get_facecolor(), bbox_inches="tight")
-    plt.close(fig)   # звільняємо пам'ять: у циклі по гравцях фігури накопичуються
+    plt.close(fig)   # figures pile up in memory when looping over players
 
 
 def save_figure(fig: plt.Figure, name: str) -> str:
-    """Зберігає PNG у reports/figures і закриває фігуру."""
+    """Save a PNG to reports/figures and close the figure."""
     FIGURES.mkdir(parents=True, exist_ok=True)
     path = FIGURES / f"{name}.png"
     _savefig(fig, path)
@@ -88,12 +77,7 @@ def save_figure(fig: plt.Figure, name: str) -> str:
 
 
 def figure_to_png(fig: plt.Figure) -> bytes:
-    """PNG у пам'яті, без файлу на диску — для Streamlit.
-
-    Байти легко кешувати (st.cache_data) і показати через st.image.
-    Сам об'єкт Figure кешувати погано: він важкий і його не можна
-    безпечно ділити між кількома користувачами застосунку.
-    """
+    """PNG bytes for Streamlit: cheap to cache, unlike a Figure."""
     buffer = io.BytesIO()
     _savefig(fig, buffer)
     return buffer.getvalue()

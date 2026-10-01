@@ -6,7 +6,7 @@ data/raw/
 data/processed/
 reports/figures/
 .pytest_cache/
-# Секрети Streamlit (ключі API тощо) ніколи не комітимо; зараз їх немає
+# Streamlit secrets (API keys etc.) are never committed; there are none yet
 .streamlit/secrets.toml
-# Файли, які Claude зберігає в папку проєкту (скріншоти тощо)
+# Scratch files (screenshots etc.) saved into the project folder by Claude
 Claude outputs/

@@ -1,16 +1,11 @@
-"""Пошук схожих гравців: z-score всередині пулу + косинусна подібність.
+"""Similar players: z-scores within the pool + cosine similarity.
 
-Ідея: кожен гравець — це вектор із 18 чисел (метрики на 90 хв).
-Схожі гравці — ті, чиї вектори "дивляться в той самий бік".
+Each player is a vector of 18 per-90 metrics (FEATURES), standardised within his
+comparison pool. Similar players are those whose vectors point in the same direction:
+1 = same profile shape, 0 = unrelated, -1 = opposite.
+Validation of the method: src.validate_similarity.
 
-Кроки:
-  1. Беремо 18 метрик стилю (FEATURES) для гравців з 270+ хв.
-  2. Нормалізуємо всередині пулу (z-score): скільки стандартних відхилень
-     гравець вище/нижче середнього серед колег по ролі.
-  3. Рахуємо косинусну подібність між вектором цільового гравця і всіма іншими
-     з того ж пулу. 1 = профіль тієї ж форми, 0 = не пов'язані, -1 = протилежні.
-
-Запуск з кореня проєкту:
+Run from the project root:
     python -m src.similarity "kane"
     python -m src.similarity "rodri" -n 5 --other-teams --radar
 """
@@ -22,15 +17,15 @@ import pandas as pd
 from src.percentiles import (COMPARISON_POOLS, LABELS, POOL_NAMES,
                              find_player, load_per90, percentile_table)
 
-# 18 метрик "стилю": що гравець робить і як часто.
-# Порядок: удари -> створення -> паси -> ведення -> оборона.
-# Чого тут НЕМАЄ і чому:
-#   - голи та асисти: результат, а не стиль; на 3–7 матчах це здебільшого удача.
-#     Натомість беремо npxG і xA — якість моментів, які гравець отримує/створює.
-#   - dribbles_completed: кореляція з dribbles 0.92 — фактично та сама інформація
-#     двічі, тобто подвійна вага. Лишаємо спроби (dribbles): це і є стиль.
-#   - npxg_per_shot, dribble_success: частки з NaN (немає ударів/обводок = немає даних).
-#   - passes_completed: це passes × pass_completion, обидві вже є.
+# 18 style metrics: what a player does and how often.
+# Order: shooting -> creation -> passing -> carrying -> defending.
+# Left out on purpose:
+#   - goals and assists: outcomes, mostly luck over 3-7 matches; npxG and xA describe
+#     the chances a player gets and creates instead.
+#   - dribbles_completed: correlates 0.92 with dribbles, i.e. the same information
+#     with double weight. Attempts are the style.
+#   - npxg_per_shot, dribble_success: ratios with NaN (no shots / take-ons = no data).
+#   - passes_completed: passes × pass_completion, both already included.
 FEATURES = [
     "np_shots", "npxg",
     "xa", "key_passes",
@@ -43,91 +38,67 @@ INFO_COLS = ["player", "team", "main_position", "minutes"]
 
 
 def standardize(per90: pd.DataFrame) -> pd.DataFrame:
-    """Z-score кожної метрики всередині пулу. Індекс — player_id, плюс колонка pool.
+    """Z-score of every metric within the pool. Index: player_id, plus a pool column.
 
-    z = (значення - середнє по пулу) / стандартне відхилення по пулу
-
-    Навіщо нормалізувати: метрики мають різні шкали (≈50 пасів проти ≈0.3 npxG).
-    Без нормалізації подібність визначали б майже лише паси — найбільші числа.
-    Після z-score кожна метрика в однакових "одиницях": +1 = на одне стандартне
-    відхилення вище за середнього колегу по ролі.
-
-    Чому всередині пулу: 5 відборів — це багато для вінгера і мало для опорника.
-    Нас цікавить "чим гравець виділяється серед своєї ролі", а не "чим CB
-    відрізняється від FW" — це й так очевидно.
+    Without scaling, pass volume (≈50 vs ≈0.3 npxG) would decide the similarity.
+    Within the pool, because 5 tackles is a lot for a winger and little for a holding
+    midfielder.
     """
     df = per90.set_index("player_id")
     pool = df["position_group"].map(COMPARISON_POOLS)
-    df = df[pool != "GK"]              # воротарських метрик немає (як і для радару)
+    df = df[pool != "GK"]              # no goalkeeping metrics (same as the radar)
     pool = pool[pool != "GK"]
 
-    # transform повертає таблицю того ж розміру: кожне значення замінюється
-    # на z-score, порахований по його пулу. std — вибіркове (ddof=1, як у pandas за замовчуванням).
     z = df[FEATURES].groupby(pool).transform(lambda col: (col - col.mean()) / col.std())
-    # Якщо в пулі всі однакові (std = 0), ділення дасть NaN. Така метрика нікого
-    # не розрізняє, тож 0 ("як усі") — чесне значення. На наших даних цього немає.
+    # std = 0 (everyone equal) gives NaN; such a metric separates nobody, so 0 = "average".
+    # Does not happen on this data.
     z = z.fillna(0)
     z["pool"] = pool
     return z
 
 
 def cosine_to(z: pd.DataFrame, player_id: int) -> pd.Series:
-    """Косинусна подібність гравця player_id з кожним рядком z.
+    """Cosine similarity of player_id with every row of z.
 
-    cos(a, b) = (a · b) / (|a| · |b|)
-    a · b — скалярний добуток (сума попарних добутків), |a| — довжина вектора.
-
-    Чому косинус, а не відстань: косинус порівнює НАПРЯМОК вектора — "в яких
-    метриках гравець вище/нижче середнього" — і не залежить від довжини, тобто від
-    того, наскільки різко виражений профіль. Молодий вінгер, який робить те саме, що
-    й зірка, але трохи менше, буде схожим. Для скаутингу це якраз те, що треба:
-    шукаємо тип гравця, а не його копію за рівнем.
-    Зворотний бік: у гравця, близького до середнього по всіх метриках, вектор
-    короткий і його напрямок "хиткий" — схожість для нього менш надійна.
+    Cosine compares the direction of the profile, not its length: a player who does the
+    same things less often still counts as similar (a type of player, not his level).
+    For a player close to average everywhere the direction is unstable.
     """
     features = z[FEATURES]
     target = features.loc[player_id]
-    # features @ target — скалярний добуток кожного рядка з target (одна операція на всю таблицю)
     dots = features @ target
     norms = np.linalg.norm(features, axis=1) * np.linalg.norm(target)
     return dots / norms
 
 
 def format_z(value: float) -> str:
-    """+1.6, -1.1 — але -0.04, а не "-0.0": інакше незрозуміло, чому метрика
-    вважається "по інший бік від середнього" (вона ледь нижче нуля)."""
+    """+1.6, -1.1, but -0.04 rather than "-0.0": otherwise it is unclear why the metric
+    counts as being on the other side of the average."""
     return f"{value:+.2f}" if abs(value) < 0.05 else f"{value:+.1f}"
 
 
 def explain(z: pd.DataFrame, a: int, b: int, k: int = 2) -> tuple[str, str]:
-    """Пояснення, ЧОМУ два гравці схожі і в чому головна різниця.
+    """Why two players are similar, and their main difference.
 
-    Спільне: косинус розкладається на внески метрик: внесок = z_a · z_b / (|a|·|b|),
-    і сума всіх внесків = косинус. Найбільші внески, де обидва вище середнього, —
-    це спільні сильні сторони.
-
-    Різниця: метрика, де гравці по РІЗНІ боки від середнього (у одного z > 0,
-    у іншого z < 0), з найбільшим розривом. Це різниця у стилі ("один робить це
-    багато, інший — середньо або мало"), а не у ступені ("обидва багато, один більше").
-    Такі метрики ніколи не перетинаються зі спільними (там обидва z > 0).
+    Shared strengths: the largest per-metric contributions to the cosine (z_a·z_b)
+    where both players are above average.
+    Main difference: the largest gap among metrics where the players are on opposite
+    sides of the average, i.e. a difference in style rather than in degree.
     """
-    # z[FEATURES] спершу, потім .loc: так рядок лишається float. z.loc[a] дав би
-    # тип object, бо в рядку є ще й текстова колонка pool.
+    # Select FEATURES before .loc so the row stays float (the pool column is text)
     features = z[FEATURES]
     za, zb = features.loc[a], features.loc[b]
-    contrib = za * zb      # знаменник однаковий для всіх метрик, для сортування не потрібен
+    contrib = za * zb      # the denominator is the same for every metric: not needed to rank
 
     both_strong = contrib[(za > 0) & (zb > 0)].nlargest(k)
     shared = ", ".join(LABELS[m] for m in both_strong.index) or "—"
 
     gaps = (za - zb).abs()
-    # contrib < 0 <=> знаки різні. Саме ці метрики дають від'ємний внесок
-    # у косинус, тобто "тягнуть" схожість донизу.
+    # Opposite signs <=> negative contribution: these metrics pull the similarity down
     opposite = gaps[contrib < 0]
     if opposite.empty:
-        # Усі 18 метрик з одного боку від середнього — на наших даних такого немає
-        # (у всіх 850 парах топ-5 є протилежні), але код не має падати.
-        # Тоді беремо найбільший розрив серед метрик, яких немає в "спільному".
+        # All 18 metrics on the same side of the average (never happens in the top-5 of
+        # any player here): fall back to the largest gap outside the shared strengths
         opposite = gaps.drop(both_strong.index)
     gap = opposite.idxmax()
     difference = f"{LABELS[gap]} ({format_z(za[gap])} vs {format_z(zb[gap])})"
@@ -136,21 +107,18 @@ def explain(z: pd.DataFrame, a: int, b: int, k: int = 2) -> tuple[str, str]:
 
 def similar_players(per90: pd.DataFrame, player_id: int, n: int = 10,
                     other_teams: bool = False) -> pd.DataFrame:
-    """Топ-n найсхожіших гравців з того ж пулу.
+    """The n most similar players from the same pool.
 
-    other_teams=True — лише з інших збірних. Типове скаутське питання: "хто може
-    замінити нашого гравця" — партнери по команді тут не відповідь.
-    Ми перевіряли, чи не "склеює" метод партнерів через стиль команди: частка
-    партнерів у топ-5 — 5.1% проти 2.9% випадково, тобто ефект є, але слабкий.
+    other_teams=True: "who could replace our player" is not answered by his teammates.
     """
     z = standardize(per90)
     if player_id not in z.index:
-        raise ValueError("Для воротарів пошук схожих не працює: немає воротарських метрик")
+        raise ValueError("No similar players for goalkeepers: there are no goalkeeping metrics")
 
     info = per90.set_index("player_id")[INFO_COLS]
     pool_z = z[z["pool"] == z.loc[player_id, "pool"]]
 
-    sim = cosine_to(pool_z, player_id).drop(player_id)   # сам із собою завжди 1.0
+    sim = cosine_to(pool_z, player_id).drop(player_id)   # always 1.0 with himself
     result = info.loc[sim.index].assign(similarity=sim)
     if other_teams:
         result = result[result["team"] != info.loc[player_id, "team"]]
@@ -163,33 +131,28 @@ def similar_players(per90: pd.DataFrame, player_id: int, n: int = 10,
 
 
 def best_matches(per90: pd.DataFrame) -> pd.Series:
-    """Для кожного гравця — подібність з його найсхожішим колегою по пулу.
+    """Each player's similarity to his closest match in the pool (median ≈0.57).
 
-    Навіщо: щоб число 0.6 мало сенс. Це "дуже схожі" чи "так собі"? Відповідь —
-    порівняти з розподілом найкращих збігів по всьому турніру (медіана ≈ 0.57).
-
-    Тут не цикл по гравцях з cosine_to, а матриця одразу для всього пулу:
-    якщо кожен вектор поділити на його довжину (отримати одиничні вектори),
-    то косинус = просто скалярний добуток, і unit @ unit.T дає всі пари разом.
+    A scale for reading the numbers: is 0.6 very similar or so-so?
     """
     z = standardize(per90)
     best = []
     for _, pool_z in z.groupby("pool"):
         x = pool_z[FEATURES].to_numpy()
         unit = x / np.linalg.norm(x, axis=1, keepdims=True)
-        cos = unit @ unit.T                  # матриця n×n: cos[i, j] — подібність гравців i та j
-        np.fill_diagonal(cos, -np.inf)       # сам із собою (1.0) не рахується
+        cos = unit @ unit.T                  # cos[i, j] = similarity of players i and j
+        np.fill_diagonal(cos, -np.inf)       # ignore each player's 1.0 with himself
         best.append(pd.Series(cos.max(axis=1), index=pool_z.index))
     return pd.concat(best)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Схожі гравці Євро 2024 (всередині ролі)")
-    parser.add_argument("player", help="частина імені, напр. 'kane' або 'rodri'")
-    parser.add_argument("-n", type=int, default=10, help="скільки гравців показати (10)")
-    parser.add_argument("--other-teams", action="store_true", help="лише з інших збірних")
+    parser = argparse.ArgumentParser(description="Similar Euro 2024 players (within role)")
+    parser.add_argument("player", help="part of the name, e.g. 'kane' or 'rodri'")
+    parser.add_argument("-n", type=int, default=10, help="how many players to show (10)")
+    parser.add_argument("--other-teams", action="store_true", help="only other national teams")
     parser.add_argument("--radar", action="store_true",
-                        help="зберегти радар-порівняння з найсхожішим гравцем")
+                        help="save a radar comparison with the most similar player")
     args = parser.parse_args()
 
     per90 = load_per90()
@@ -201,10 +164,10 @@ def main() -> None:
 
     pool = COMPARISON_POOLS[player["position_group"]]
     pool_size = (per90["position_group"].map(COMPARISON_POOLS) == pool).sum()
-    print(f"\nСхожі на {player['player']} ({player['team']}, {player['main_position']}, "
-          f"{player['minutes']:.0f} хв)")
-    print(f"Пул: {pool_size} {POOL_NAMES[pool]}, {len(FEATURES)} метрик на 90, "
-          f"z-score + косинусна подібність\n")
+    print(f"\nSimilar to {player['player']} ({player['team']}, {player['main_position']}, "
+          f"{player['minutes']:.0f} min)")
+    print(f"Pool: {pool_size} {POOL_NAMES[pool]}, {len(FEATURES)} metrics per 90, "
+          f"z-score + cosine similarity\n")
 
     table = result.assign(minutes=result["minutes"].round(0).astype(int),
                           similarity=result["similarity"].round(2))
@@ -212,17 +175,17 @@ def main() -> None:
     print(table[["player", "team", "main_position", "minutes", "similarity",
                  "shared", "difference"]].to_string())
 
-    # Орієнтир: у половини гравців турніру найкращий збіг ≥ 0.57 (див. stage4-decisions)
+    # For reference: half of the players have a best match of 0.57 or more
     if not result.empty and result["similarity"].iloc[0] < 0.3:
-        print("\nНавіть найкращий збіг слабкий (< 0.3): профіль гравця унікальний для цього пулу.")
+        print("\nEven the best match is weak (< 0.3): a unique profile in this pool.")
 
     if args.radar and not result.empty:
-        from src.radar import plot_radar           # імпорт тут: matplotlib потрібен лише з --radar
+        from src.radar import plot_radar           # matplotlib is only needed with --radar
         from src.style import save_figure, slugify
         best = result.iloc[0]
         fig = plot_radar(per90, percentile_table(per90), player["player_id"], best["player_id"])
         name = f"radar_{slugify(player['player'])}_vs_{slugify(best['player'])}"
-        print("\nЗбережено:", save_figure(fig, name))
+        print("\nSaved:", save_figure(fig, name))
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-# Усе для розробки: застосунок + завантаження даних з API + ноутбуки.
+# Development: the app + downloading data from the API + notebooks + tests.
 # pip install -r requirements-dev.txt
 -r requirements.txt
 statsbombpy==1.22.0

@@ -1,21 +1,19 @@
-"""Зіграні хвилини та основні позиції гравців.
+"""Minutes played and main position of every player, derived from the events.
 
-Хвилини рахуємо з подій:
-  вийшов на поле  -> Starting XI (0-ва хвилина) або Substitution (як заміна);
-  пішов з поля    -> Substitution (його замінили), червона/друга жовта
-                     або фінальний свисток.
-Хвилини = час виходу з поля - час виходу на поле.
+A player comes on with the Starting XI (minute 0) or as a substitute, and goes off
+when substituted, sent off, or at the final whistle.
+Lineups from the StatsBomb API are not used: their position timeline is broken
+in extra-time matches.
 """
 import pandas as pd
 
-# Годинник StatsBomb у кожному таймі стартує з фіксованої хвилини
+# StatsBomb's clock restarts at a fixed minute in every period
 PERIOD_START = {1: 0, 2: 45, 3: 90, 4: 105}
 
 RED_CARDS = ["Red Card", "Second Yellow"]
 
-# 25 позицій StatsBomb -> 8 груп для порівняння гравців.
-# Порівнювати центрального захисника з вінгером за однаковими метриками немає сенсу,
-# тому перцентилі й пошук схожих гравців рахуватимемо всередині групи.
+# 25 StatsBomb positions -> 8 groups. Metrics are only comparable within a role:
+# percentiles and similar players are computed within (merged) groups.
 POSITION_GROUPS = {
     "Goalkeeper": "GK",
     "Center Back": "CB", "Left Center Back": "CB", "Right Center Back": "CB",
@@ -30,20 +28,18 @@ POSITION_GROUPS = {
 
 
 def add_elapsed(events: pd.DataFrame) -> pd.DataFrame:
-    """Додає колонку elapsed — реальний час від початку матчу в хвилинах.
+    """Add `elapsed`: real time since kick-off, in minutes.
 
-    Навіщо: поле minute у StatsBomb "скидається" на початку кожного тайму.
-    Компенсація 1-го тайму йде як 45, 46, 47..., а 2-й тайм знову стартує з 45.
-    Тобто minute=46 може бути і в 1-му, і в 2-му таймі. Тому рахуємо:
-    elapsed = тривалість усіх попередніх таймів + час від початку поточного.
-    Серію пенальті (period 5) відкидаємо — це не ігровий час.
+    StatsBomb's `minute` restarts every period: first-half stoppage time runs
+    45, 46, 47... and the second half starts at 45 again. So elapsed = length of all
+    previous periods + time into the current one. The penalty shootout (period 5)
+    is not playing time and is dropped.
     """
     ev = events[events["period"] < 5].copy()
     ev["in_period"] = ev["minute"] + ev["second"] / 60 - ev["period"].map(PERIOD_START)
 
-    # Тривалість кожного тайму = час останньої події в ньому
+    # A period lasts until its last event
     duration = ev.groupby(["match_id", "period"])["in_period"].max()
-    # Зсув = сума тривалостей попередніх таймів (для 1-го тайму 0)
     offset = (duration.groupby(level="match_id").cumsum() - duration).rename("offset")
 
     ev = ev.join(offset, on=["match_id", "period"])
@@ -52,11 +48,11 @@ def add_elapsed(events: pd.DataFrame) -> pd.DataFrame:
 
 
 def player_match_minutes(events: pd.DataFrame) -> pd.DataFrame:
-    """Один рядок = один гравець в одному матчі: коли вийшов, коли пішов, скільки зіграв."""
+    """One row per player per match: when he came on, went off, minutes played."""
     ev = add_elapsed(events)
     match_end = ev.groupby("match_id")["elapsed"].max().rename("match_end")
 
-    # 1) Старт: розгортаємо склад з події Starting XI (поле tactics -> lineup)
+    # Starters are listed in the Starting XI event (tactics -> lineup)
     starters = [
         {"match_id": row.match_id, "team": row.team,
          "player_id": p["player"]["id"], "player": p["player"]["name"], "on": 0.0}
@@ -66,22 +62,22 @@ def player_match_minutes(events: pd.DataFrame) -> pd.DataFrame:
 
     subs = ev[ev["type"] == "Substitution"]
 
-    # 2) Вихід на заміну: гравець із substitution_replacement виходить на поле
+    # The player in substitution_replacement comes on
     subs_on = subs[["match_id", "team", "substitution_replacement_id",
                     "substitution_replacement", "elapsed"]]
     subs_on.columns = ["match_id", "team", "player_id", "player", "on"]
 
     on = pd.concat([pd.DataFrame(starters), subs_on], ignore_index=True)
 
-    # 3) Уходи з поля: замінили або вилучили
+    # Going off: substituted or sent off
     is_red = (ev["foul_committed_card"].isin(RED_CARDS)
               | ev["bad_behaviour_card"].isin(RED_CARDS))
     off = pd.concat([subs, ev[is_red]])[["match_id", "player_id", "elapsed"]]
-    # Якщо подій уходу кілька (напр., вилучили вже після заміни) — беремо найранішу
+    # Several exit events (e.g. a red card on the bench after being substituted): take the first
     off = off.groupby(["match_id", "player_id"], as_index=False)["elapsed"].min()
     off = off.rename(columns={"elapsed": "off"})
 
-    # 4) Зводимо: хто не пішов з поля — грав до фінального свистка
+    # Nobody took him off -> played until the final whistle
     pm = on.merge(off, on=["match_id", "player_id"], how="left")
     pm = pm.join(match_end, on="match_id")
     pm["off"] = pm["off"].fillna(pm["match_end"])
@@ -91,14 +87,14 @@ def player_match_minutes(events: pd.DataFrame) -> pd.DataFrame:
 
 
 def main_positions(events: pd.DataFrame) -> pd.DataFrame:
-    """Основна позиція = позиція, на якій у гравця найбільше подій за турнір.
+    """Main position = the position with most of the player's events.
 
-    Кожна подія StatsBomb має поле position — де гравець грав у той момент.
-    Це враховує і зміни позицій по ходу матчу (Tactical Shift).
+    Every StatsBomb event carries the player's position at that moment,
+    so in-game tactical shifts are taken into account.
     """
     counts = (events.dropna(subset=["player_id", "position"])
               .groupby(["player_id", "position"]).size().rename("n").reset_index())
-    # Сортуємо за кількістю подій і лишаємо перший (найчастіший) рядок кожного гравця
+    # Most frequent position per player
     main = counts.sort_values("n", ascending=False).drop_duplicates("player_id")
     main = main.rename(columns={"position": "main_position"})
     main["player_id"] = main["player_id"].astype(int)
@@ -107,7 +103,7 @@ def main_positions(events: pd.DataFrame) -> pd.DataFrame:
 
 
 def player_minutes(events: pd.DataFrame) -> pd.DataFrame:
-    """Підсумкова таблиця за турнір: один рядок = один гравець."""
+    """Tournament totals: one row per player."""
     pm = player_match_minutes(events)
     totals = pm.groupby(["player_id", "player", "team"], as_index=False).agg(
         minutes=("minutes", "sum"),
@@ -119,7 +115,6 @@ def player_minutes(events: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    # Запуск з кореня проєкту:  python -m src.minutes
     from src.data_loader import load_events
     from src.paths import PROCESSED
 
@@ -128,4 +123,4 @@ if __name__ == "__main__":
     out.parent.mkdir(parents=True, exist_ok=True)
     table.to_parquet(out)
     print(table.head(10).to_string())
-    print(f"\nГравців: {len(table)}. Збережено: {out}")
+    print(f"\nPlayers: {len(table)}. Saved: {out}")

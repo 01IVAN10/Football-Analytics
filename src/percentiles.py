@@ -1,12 +1,12 @@
-"""Перцентилі гравців всередині групи порівняння.
+"""Percentiles within the comparison pool.
 
-Перцентиль = яку частку гравців тієї ж ролі цей гравець випереджає за метрикою.
-80 за npxG серед нападників = більше npxG на 90, ніж у ~80% нападників турніру.
+Percentile = the share of players in the same role this player is ahead of:
+80 for npxG among forwards = more npxG per 90 than ~80% of the tournament's forwards.
+Percentiles put metrics with different scales on one 0-100 radar, and "good" is
+defined relative to the role: a good number of tackles differs for a CB and a winger.
 
-Навіщо перцентилі, а не сирі значення на 90:
-  - метрики мають різні шкали (0.3 xG проти 45 пасів) — перцентиль зводить усе до 0–100,
-    тому їх можна показати на одному радарі;
-  - "добре" для центрбека і для вінгера — різні числа, тому рахуємо всередині ролі.
+Run from the project root:
+    python -m src.percentiles
 """
 import unicodedata
 
@@ -16,10 +16,10 @@ from src.paths import PROCESSED
 
 PER90_PATH = PROCESSED / "player_per90.parquet"
 
-# 8 позиційних груп -> 6 груп порівняння (так само ділять скаутські звіти FBref).
-# Причина: з 270+ хв у CM лише 8 гравців, в AM — 15. На 8 гравцях перцентиль
-# стрибає кроками по 12.5 і нічого не означає. DM і CM, AM і W виконують схожу
-# роботу, тож зливаємо їх у пули по ~35 гравців.
+# 8 position groups -> 6 comparison pools (the split FBref scouting reports use).
+# With 270+ minutes there are only 8 CMs and 15 AMs: on 8 players a percentile moves
+# in steps of 12.5 and means little. DM/CM and AM/W do similar jobs, so they are merged
+# into pools of ~35 players.
 COMPARISON_POOLS = {
     "GK": "GK",
     "CB": "CB",
@@ -38,7 +38,7 @@ POOL_NAMES = {
     "FW": "forwards",
 }
 
-# Метрика -> підпис на графіку. Підписи англійською: портфоліо для міжнародної аудиторії.
+# Metric -> chart label
 LABELS = {
     "np_goals": "Non-penalty goals",
     "npxg": "npxG",
@@ -64,10 +64,10 @@ LABELS = {
     "aerials_won": "Aerials won",
 }
 
-# Які 10 метрик показувати на радарі кожної ролі.
-# Порядок: атака -> робота з м'ячем -> оборона, щоб блоки стояли поруч на колі.
-# Навмисно не беремо dribble_success: 1 з 1 = 100%, на малій вибірці це шум.
-# Воротарів немає: спецметрик для них ми не рахували (відоме обмеження етапу 2).
+# The 10 radar metrics of each pool, ordered attack -> on the ball -> defending
+# so that related metrics sit next to each other on the circle.
+# No dribble_success: 1 of 1 = 100%, pure noise on small samples.
+# No goalkeepers: there are no goalkeeping metrics.
 RADAR_TEMPLATES = {
     "FW": ["np_goals", "npxg", "np_shots", "npxg_per_shot", "xa", "key_passes",
            "dribbles_completed", "carries_into_box", "aerials_won", "pressures"],
@@ -85,58 +85,53 @@ ID_COLS = ["player_id", "player", "team", "minutes", "position_group"]
 
 
 def load_per90() -> pd.DataFrame:
-    """Таблиця з src.metrics: гравці з 270+ хв, лічильники на 90."""
+    """The src.metrics table: players with 270+ minutes, per 90."""
     return pd.read_parquet(PER90_PATH)
 
 
 def percentile_table(per90: pd.DataFrame) -> pd.DataFrame:
-    """Перцентилі (0–100) усіх метрик для кожного гравця всередині його пулу.
+    """Percentiles (0-100) of all metrics, each player within his pool.
 
-    Повертає ту саму кількість рядків, що й per90: ID-колонки + pool + метрики,
-    але замість значень на 90 — перцентилі.
+    Same rows as per90: ID columns + pool + metrics, with percentiles as values.
     """
     df = per90.copy()
     df["pool"] = df["position_group"].map(COMPARISON_POOLS)
     metrics = list(LABELS)
 
-    # groupby("pool") + rank: ранг рахується ОКРЕМО всередині кожного пулу.
-    # pct=True ділить ранг на кількість гравців у пулі -> частка від 0 до 1.
-    # method="average": однакові значення отримують однаковий (середній) ранг.
-    # Напр., 40 з 49 центрбеків без голів — усі 40 отримують ~42, а не 2..82
-    # залежно від випадкового порядку рядків.
-    # NaN (напр., npxG за удар без ударів) лишається NaN — "немає даних", а не 0.
+    # Ties share the average rank: 40 of 49 centre-backs without a goal all get ~42,
+    # instead of 2..82 depending on row order.
+    # NaN (e.g. npxG per shot without shots) stays NaN: no data, not zero.
     pct = df.groupby("pool")[metrics].rank(pct=True, method="average") * 100
 
     return df[ID_COLS + ["pool"]].join(pct)
 
 
 def normalize_name(text: str) -> str:
-    """'Mbappé' -> 'mbappe': прибираємо діакритику і регістр для пошуку."""
+    """'Mbappé' -> 'mbappe': strip accents and case for search."""
     return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower()
 
 
 def find_player(df: pd.DataFrame, query: str) -> pd.Series:
-    """Знаходить одного гравця за частиною імені ('kane', 'mbappe', 'lamine')."""
+    """Find exactly one player by part of the name ('kane', 'mbappe', 'lamine')."""
     mask = df["player"].map(normalize_name).str.contains(normalize_name(query), regex=False)
     found = df[mask]
     if found.empty:
-        raise ValueError(f"'{query}' не знайдено серед {len(df)} гравців таблиці")
+        raise ValueError(f"'{query}' not found among {len(df)} players")
     if len(found) > 1:
         names = ", ".join(found["player"])
-        raise ValueError(f"'{query}' підходить кільком гравцям: {names}. Уточни запит.")
+        raise ValueError(f"'{query}' matches several players: {names}. Be more specific.")
     return found.iloc[0]
 
 
 if __name__ == "__main__":
-    # Запуск з кореня проєкту:  python -m src.percentiles
     pct = percentile_table(load_per90())
 
-    print("Розмір пулів:")
+    print("Pool sizes:")
     print(pct["pool"].value_counts().to_string(), "\n")
 
-    # Перевірка здоровим глуздом: хто лідер свого пулу за ключовою метрикою
+    # Sanity check: the leaders of each pool in a key metric
     for pool, metric in [("FW", "npxg"), ("AM/W", "xa"), ("MF", "progressive_passes"),
                          ("FB", "progressive_carries"), ("CB", "progressive_passes")]:
         top = pct[pct["pool"] == pool].nlargest(3, metric)
-        print(f"{pool:5} топ-3 за {metric}: " + ", ".join(
+        print(f"{pool:5} top 3 by {metric}: " + ", ".join(
             f"{r.player} ({getattr(r, metric):.0f})" for r in top.itertuples()))
