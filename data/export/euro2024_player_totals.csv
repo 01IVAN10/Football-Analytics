@@ -1,0 +1,494 @@
+player_id,player,team,position_group,main_position,matches,minutes,np_goals,np_shots,npxg,assists,key_passes,xa,passes,passes_completed,progressive_passes,passes_final_third,passes_into_box,progressive_carries,carries_into_box,dribbles,dribbles_completed,tackles_won,interceptions,ball_recoveries,pressures,clearances,aerials_won,pass_completion,dribble_success,npxg_per_shot
+133698,Arbër Hoxha,Albania,W,Left Wing,3,66.5,0,2,0.093,0,1,0.031,20,15,3,0,1,9,3,1,0,1,0,3,17,0,0,0.75,0.0,0.046
+8291,Arlind Afrim Ajeti,Albania,CB,Right Center Back,3,293.8,0,0,0.0,0,0,0.0,107,90,4,2,0,0,0,1,1,1,7,3,16,11,5,0.841,1.0,
+36885,Armando Broja,Albania,FW,Center Forward,2,115.1,0,2,0.229,0,2,0.041,17,11,0,2,1,2,0,2,0,0,1,2,11,1,2,0.647,0.0,0.114
+7108,Berat Djimsiti,Albania,CB,Left Center Back,3,293.8,0,2,0.104,0,1,0.023,143,129,4,1,0,2,0,1,1,1,2,2,19,16,7,0.902,1.0,0.052
+7031,Elseid Hysaj,Albania,FB,Right Back,2,198.2,0,2,0.098,0,1,0.043,58,47,3,3,0,1,0,1,0,0,2,9,26,2,1,0.81,0.0,0.049
+92611,Ernest Muçi,Albania,AM,Center Attacking Midfield,2,23.1,0,0,0.0,0,0,0.0,8,7,0,0,0,0,0,0,0,0,0,1,2,0,1,0.875,,
+3378,Iván Balliu Campeny,Albania,FB,Right Back,1,95.6,0,0,0.0,0,0,0.0,42,33,2,3,0,1,0,0,0,0,0,2,13,2,0,0.786,,
+41186,Jasir Asani,Albania,W,Right Wing,3,217.4,0,4,0.06,1,2,0.198,39,29,5,3,2,6,0,4,3,2,5,6,54,2,1,0.744,0.75,0.015
+9893,Klaus Gjasula,Albania,DM,Right Defensive Midfield,1,26.6,1,2,0.177,0,0,0.0,10,7,1,0,1,0,0,0,0,1,0,2,9,0,1,0.7,,0.089
+57303,Kristjan Asllani,Albania,DM,Left Defensive Midfield,3,293.8,0,8,0.629,0,8,0.491,193,160,12,11,2,3,0,1,1,1,6,12,37,5,1,0.829,1.0,0.079
+49097,Mario Mitaj,Albania,FB,Left Back,3,293.8,0,1,0.031,0,0,0.0,148,131,6,3,2,1,0,1,1,3,7,10,46,9,1,0.885,1.0,0.031
+142800,Medon Berisha,Albania,AM,Center Attacking Midfield,1,24.9,0,1,0.032,0,0,0.0,9,6,0,0,0,1,0,0,0,0,1,1,6,0,1,0.667,,0.032
+54140,Mirlind Daku,Albania,FW,Center Forward,1,13.9,0,1,0.133,0,2,0.097,5,4,1,1,0,1,0,0,0,0,0,0,3,0,0,0.8,,0.133
+32030,Nedim Bajrami,Albania,W,Left Wing,3,259.6,1,3,0.196,0,0,0.0,79,61,1,4,0,13,4,3,2,1,2,5,32,0,2,0.772,0.667,0.065
+7531,Qazim Laçi,Albania,AM,Center Attacking Midfield,3,171.4,1,1,0.153,0,3,0.172,52,36,4,2,2,1,1,2,1,2,2,10,37,3,1,0.692,0.5,0.153
+23987,Rey Manaj,Albania,FW,Center Forward,3,164.8,0,2,0.216,0,0,0.0,26,16,0,0,0,1,0,0,0,0,1,4,38,2,6,0.615,,0.108
+29531,Taulant Sulejmanov,Albania,W,Left Wing,2,105.9,0,1,0.034,0,1,0.133,26,16,2,0,0,1,0,0,0,2,2,3,22,1,0,0.615,,0.034
+7789,Thomas Strakosha,Albania,GK,Goalkeeper,3,293.8,0,0,0.0,0,0,0.0,89,60,10,0,0,0,0,0,0,0,0,7,0,0,0,0.674,,
+24438,Ylber Ramadani,Albania,DM,Right Defensive Midfield,3,279.9,0,0,0.0,0,1,0.031,108,97,3,5,0,2,1,1,1,6,3,13,52,2,1,0.898,1.0,
+39545,Alexander Prass,Austria,FB,Left Back,4,192.3,0,0,0.0,0,1,0.232,92,72,8,7,4,4,1,3,1,5,2,7,28,2,1,0.783,0.333,
+4813,Andreas Weimann,Austria,W,Right Wing,1,5.9,0,0,0.0,0,0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,,,
+24977,Christoph Baumgartner,Austria,AM,Center Attacking Midfield,4,312.2,1,8,1.551,1,6,0.479,108,77,6,5,7,23,6,15,8,2,2,13,109,2,5,0.713,0.533,0.194
+11396,Florian Grillitsch,Austria,DM,Left Defensive Midfield,4,202.9,0,5,0.196,1,2,0.238,163,140,8,21,2,8,0,0,0,0,4,11,37,1,2,0.859,,0.039
+8778,Gernot Trauner,Austria,CB,Right Center Back,2,100.2,1,1,0.126,0,0,0.0,77,75,6,9,0,0,0,0,0,2,1,2,13,1,2,0.974,,0.126
+11820,Kevin Danso,Austria,CB,Right Center Back,3,232.1,0,1,0.037,0,0,0.0,169,149,7,16,0,4,0,0,0,2,2,12,18,11,8,0.882,,0.037
+8506,Konrad Laimer,Austria,DM,Left Defensive Midfield,4,286.4,0,2,0.269,0,2,0.225,128,111,11,12,3,6,2,3,2,3,2,11,71,2,1,0.867,0.667,0.135
+152512,Leopold Querfeld,Austria,CB,Right Center Back,1,35.6,0,0,0.0,0,0,0.0,10,8,1,1,0,0,0,0,0,1,0,0,5,1,0,0.8,,
+8518,Marcel Sabitzer,Austria,W,Left Wing,4,390.9,1,11,0.666,0,7,0.856,172,112,6,2,0,9,5,5,3,0,3,18,42,0,0,0.651,0.6,0.061
+3325,Marko Arnautović,Austria,FW,Center Forward,4,297.9,0,3,0.79,1,1,0.142,56,39,2,0,0,2,0,2,1,1,0,12,55,2,3,0.696,0.5,0.263
+8068,Maximilian Wöber,Austria,CB,Left Center Back,3,189.9,0,0,0.0,0,2,0.132,120,101,6,7,2,5,0,1,0,2,4,6,24,5,6,0.842,0.0,
+8309,Michael Gregoritsch,Austria,FW,Center Forward,4,143.0,1,4,0.82,0,0,0.0,32,22,3,2,1,1,1,1,0,1,0,3,29,0,3,0.688,0.0,0.205
+39460,Nicolas Seiwald,Austria,DM,Right Defensive Midfield,4,390.9,0,1,0.034,0,5,0.276,233,204,13,16,3,2,0,1,0,6,9,24,98,6,3,0.876,0.0,0.034
+9731,Patrick Pentz,Austria,GK,Goalkeeper,4,390.9,0,0,0.0,0,0,0.0,145,119,19,1,0,0,0,0,0,0,0,14,1,0,0,0.821,,
+33297,Patrick Wimmer,Austria,W,Right Wing,3,153.4,0,3,0.141,0,1,0.062,48,34,3,5,1,7,1,4,2,3,1,8,44,0,2,0.708,0.5,0.047
+8931,Philipp Lienhart,Austria,CB,Left Center Back,3,224.0,0,2,0.181,0,0,0.0,129,117,10,11,0,2,0,2,2,2,8,5,13,6,5,0.907,1.0,0.091
+13315,Philipp Mwene,Austria,FB,Left Back,3,198.6,0,0,0.0,1,2,0.134,109,92,10,4,3,4,0,3,1,4,1,11,27,4,2,0.844,0.333,
+8784,Romano Schmid,Austria,W,Right Wing,4,162.0,1,1,0.18,0,4,0.363,72,55,4,1,3,3,0,4,1,1,0,11,40,1,0,0.764,0.25,0.18
+11821,Stefan Posch,Austria,FB,Right Back,4,390.9,0,7,0.339,0,6,0.879,210,160,22,7,10,9,0,4,1,6,6,13,67,8,7,0.762,0.25,0.048
+48347,Amadou Onana,Belgium,DM,Right Defensive Midfield,4,386.2,0,3,0.168,0,1,0.008,236,215,10,12,4,5,0,4,4,5,2,10,63,5,5,0.911,1.0,0.056
+43913,Arthur Theate,Belgium,FB,Left Back,3,267.4,0,2,0.014,0,2,0.033,195,166,11,20,0,1,0,0,0,2,3,11,18,9,8,0.851,,0.007
+32688,Charles De Ketelaere,Belgium,FW,Right Center Forward,1,5.6,0,0,0.0,0,0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,,,
+12306,Dodi Lukebakio,Belgium,W,Right Wing,3,76.9,0,3,0.123,0,2,0.119,30,25,4,0,2,7,3,6,2,1,0,6,13,0,0,0.833,0.333,0.041
+16275,Ikoma Loïs Openda,Belgium,FW,Left Center Forward,3,83.4,0,0,0.0,0,1,0.123,7,3,1,1,1,1,1,0,0,0,1,0,21,1,1,0.429,,
+3077,Jan Vertonghen,Belgium,CB,Left Center Back,3,285.5,0,1,0.105,0,0,0.0,208,194,12,7,0,0,0,0,0,3,1,6,16,7,7,0.933,,0.105
+23650,Jeremy Doku,Belgium,W,Left Wing,4,331.6,0,5,0.255,0,8,0.625,117,94,14,2,2,37,22,28,16,1,1,18,49,0,0,0.803,0.571,0.051
+52218,Johan Bakayoko,Belgium,W,Right Wing,2,59.1,0,3,0.289,0,2,0.081,21,18,2,0,1,1,0,0,0,0,0,5,13,0,0,0.857,,0.096
+3089,Kevin De Bruyne,Belgium,AM,Center Attacking Midfield,4,386.2,1,11,0.878,0,10,0.998,228,171,22,20,6,15,4,8,5,1,0,17,63,2,6,0.75,0.625,0.08
+8240,Koen Casteels,Belgium,GK,Goalkeeper,4,386.2,0,0,0.0,0,0,0.0,144,118,3,1,1,0,0,0,0,0,0,11,0,0,0,0.819,,
+16559,Leandro Trossard,Belgium,W,Right Wing,3,178.7,0,4,0.201,0,3,0.165,73,59,4,3,3,4,3,2,0,0,0,10,25,0,0,0.808,0.0,0.05
+8950,Orel Mangala,Belgium,DM,Left Defensive Midfield,4,145.4,0,0,0.0,0,1,0.038,68,65,2,3,2,1,0,1,0,4,3,2,17,0,0,0.956,0.0,
+3289,Romelu Lukaku Menama,Belgium,FW,Center Forward,4,381.4,0,11,1.751,1,4,0.351,56,37,2,1,1,6,3,3,2,0,1,12,14,2,7,0.661,0.667,0.159
+6989,Timothy Castagne,Belgium,FB,Right Back,4,380.6,0,0,0.0,0,0,0.0,219,183,11,9,1,5,1,3,2,2,1,11,32,10,5,0.836,0.667,
+8854,Wout Faes,Belgium,CB,Right Center Back,4,386.2,0,0,0.0,0,0,0.0,287,252,9,15,2,3,0,1,1,5,3,9,40,9,6,0.878,1.0,
+5633,Yannick Ferreira Carrasco,Belgium,FB,Left Back,4,229.4,0,6,0.456,0,0,0.0,96,83,7,5,4,8,5,3,2,2,1,8,27,2,1,0.865,0.667,0.076
+2954,Youri Tielemans,Belgium,DM,Right Defensive Midfield,3,159.5,1,4,0.153,0,1,0.032,117,101,11,11,0,2,0,0,0,2,1,7,17,0,0,0.863,,0.038
+114832,Zeno Debast,Belgium,CB,Left Center Back,2,118.8,0,0,0.0,0,1,0.034,106,95,10,8,0,0,0,0,0,2,1,3,10,8,1,0.896,,
+5460,Andrej Kramarić,Croatia,W,Left Wing,3,249.8,1,4,0.928,0,6,0.169,90,71,4,1,4,8,6,8,6,0,0,9,44,0,1,0.789,0.75,0.232
+8654,Ante Budimir,Croatia,FW,Center Forward,3,142.0,0,4,0.518,1,2,0.418,15,7,0,0,2,1,0,2,1,1,1,4,49,2,9,0.467,0.5,0.129
+12625,Borna Sosa,Croatia,FB,Left Back,1,14.9,0,0,0.0,0,0,0.0,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0.5,,
+7693,Bruno Petković,Croatia,FW,Center Forward,2,93.6,0,3,0.354,0,2,0.094,21,17,2,1,1,1,0,2,1,0,0,1,14,1,5,0.81,0.5,0.118
+16531,Dominik Livaković,Croatia,GK,Goalkeeper,3,297.8,0,0,0.0,0,0,0.0,89,66,5,0,0,0,0,0,0,0,0,8,0,0,0,0.742,,
+5474,Ivan Perišić,Croatia,FB,Left Back,3,154.2,0,4,0.08,0,3,0.279,63,43,8,2,6,8,2,3,2,0,2,3,26,3,4,0.683,0.667,0.02
+29163,Josip Juranović,Croatia,FB,Right Back,2,109.6,0,0,0.0,0,2,0.202,63,52,5,2,4,2,0,1,0,2,1,2,17,3,2,0.825,0.0,
+49337,Josip Stanišić,Croatia,FB,Right Back,2,198.1,0,1,0.223,0,1,0.049,134,110,5,1,2,1,0,3,3,7,3,4,28,2,4,0.821,1.0,0.223
+37148,Josip Šutalo,Croatia,CB,Right Center Back,3,297.8,0,1,0.278,0,0,0.0,199,189,4,10,0,0,0,3,3,2,12,5,33,8,4,0.95,1.0,0.278
+33018,Joško Gvardiol,Croatia,FB,Left Back,3,297.8,0,2,0.069,0,0,0.0,160,149,9,16,2,3,0,5,4,1,4,11,32,2,0,0.931,0.8,0.034
+28914,Lovro Majer,Croatia,W,Right Wing,3,163.7,0,2,0.16,0,3,0.266,101,92,8,2,2,4,0,2,1,3,1,8,45,0,2,0.911,0.5,0.08
+28368,Luka Ivanušec,Croatia,CM,Left Center Midfield,1,29.1,0,0,0.0,0,0,0.0,11,8,0,0,0,0,0,1,0,0,0,2,2,1,1,0.727,0.0,
+5463,Luka Modrić,Croatia,CM,Right Center Midfield,3,248.2,1,4,0.58,0,3,0.312,225,192,14,29,2,7,1,4,3,1,1,20,49,0,2,0.853,0.75,0.145
+39490,Luka Sučić,Croatia,W,Right Wing,3,153.8,0,3,0.318,0,3,0.24,84,78,8,8,3,7,0,4,2,0,0,6,35,0,1,0.929,0.5,0.106
+5469,Marcelo Brozović,Croatia,DM,Center Defensive Midfield,3,244.7,0,3,0.127,0,2,0.043,188,171,3,20,2,2,0,0,0,1,3,7,62,6,2,0.91,,0.042
+8773,Marin Pongracic,Croatia,CB,Left Center Back,2,198.1,0,0,0.0,0,0,0.0,125,113,4,2,0,2,0,1,1,2,3,4,29,8,3,0.904,1.0,
+11603,Mario Pašalić,Croatia,W,Right Wing,3,129.6,0,3,0.279,0,0,0.0,42,36,2,1,1,3,0,2,0,0,0,8,20,2,6,0.857,0.0,0.093
+63505,Martin Baturina,Croatia,W,Left Wing,1,14.4,0,1,0.018,0,0,0.0,3,2,0,0,0,2,1,2,2,1,0,0,4,1,0,0.667,1.0,0.018
+5456,Mateo Kovačić,Croatia,CM,Left Center Midfield,3,238.4,0,6,0.325,0,4,0.117,168,157,11,20,2,16,2,4,2,5,2,13,57,0,1,0.935,0.5,0.054
+28239,Adam Hložek,Czech Republic,AM,Left Attacking Midfield,2,118.0,0,4,0.49,0,0,0.0,16,16,1,1,0,2,0,4,0,1,0,2,26,1,0,1.0,0.0,0.122
+7801,Antonín Barák,Czech Republic,AM,Right Attacking Midfield,3,49.9,0,0,0.0,0,1,0.032,25,20,2,0,2,2,0,3,2,1,0,3,17,0,0,0.8,0.667,
+35441,David Doudera,Czech Republic,FB,Left Wing Back,1,96.1,0,0,0.0,0,0,0.0,26,18,3,1,0,1,0,2,1,1,1,4,16,1,0,0.692,0.5,
+134272,David Jurásek,Czech Republic,FB,Left Wing Back,2,169.9,0,4,0.142,0,3,0.198,75,46,11,3,5,2,0,5,1,1,0,14,24,2,3,0.613,0.2,0.036
+29484,Jan Kuchta,Czech Republic,FW,Left Center Forward,2,103.8,0,0,0.0,0,0,0.0,13,9,0,1,0,1,0,0,0,1,0,2,14,3,1,0.692,,
+28040,Jindřich Staněk,Czech Republic,GK,Goalkeeper,3,254.4,0,0,0.0,0,0,0.0,74,47,5,1,0,0,0,0,0,0,0,8,0,0,0,0.635,,
+28272,Ladislav Krejčí,Czech Republic,CB,Left Center Back,3,297.6,0,5,0.197,0,2,0.049,139,116,5,13,1,2,0,1,1,6,6,8,28,6,9,0.835,1.0,0.039
+28034,Lukáš Provod,Czech Republic,DM,Left Defensive Midfield,3,243.8,1,3,0.097,0,2,0.124,88,72,2,9,1,7,0,5,2,2,3,16,38,1,5,0.818,0.4,0.032
+39143,Matěj Jurásek,Czech Republic,FB,Left Wing Back,2,57.8,0,4,0.099,0,1,0.022,27,14,2,0,2,4,2,6,4,1,0,4,7,1,0,0.519,0.667,0.025
+46046,Matěj Kovář,Czech Republic,GK,Goalkeeper,1,43.2,0,0,0.0,0,0,0.0,18,8,2,0,0,1,0,0,0,0,0,3,0,0,0,0.444,,
+32985,Mojmír Chytil,Czech Republic,FW,Center Forward,3,120.6,0,2,0.107,0,1,0.113,14,6,0,1,0,3,0,2,1,0,0,2,17,1,3,0.429,0.5,0.053
+27826,Ondřej Lingr,Czech Republic,AM,Left Attacking Midfield,3,98.8,0,5,0.438,0,0,0.0,27,21,1,1,0,1,1,0,0,4,0,2,11,0,2,0.778,,0.088
+7044,Patrik Schick,Czech Republic,FW,Center Forward,2,134.1,1,7,1.193,0,2,0.09,36,26,2,0,0,3,3,2,1,2,1,6,25,4,8,0.722,0.5,0.17
+28227,Pavel Šulc,Czech Republic,CM,Left Center Midfield,1,79.9,0,1,0.061,0,0,0.0,15,12,0,1,0,1,1,0,0,0,0,4,19,1,2,0.8,,0.061
+23454,Petr Ševčík,Czech Republic,DM,Left Defensive Midfield,2,30.7,0,1,0.113,0,0,0.0,26,20,1,4,0,2,0,0,0,0,0,0,3,0,0,0.769,,0.113
+81330,Robin Hranáč,Czech Republic,CB,Center Back,3,297.6,0,2,0.337,0,1,0.067,92,80,6,11,0,2,0,0,0,1,0,7,33,9,4,0.87,,0.169
+21226,Tomáš Chorý,Czech Republic,FW,Center Forward,2,45.3,0,1,0.551,0,0,0.0,9,3,0,0,0,0,0,2,2,1,0,1,11,0,3,0.333,1.0,0.551
+16469,Tomáš Holeš,Czech Republic,CB,Right Center Back,3,295.3,0,1,0.019,0,1,0.047,115,90,12,10,2,2,0,0,0,8,4,9,38,12,10,0.783,,0.019
+4870,Tomáš Souček,Czech Republic,DM,Right Defensive Midfield,3,297.6,1,2,0.185,0,5,0.496,88,71,8,10,0,0,0,0,0,4,2,12,50,7,7,0.807,,0.093
+16570,Vladimír Coufal,Czech Republic,FB,Right Wing Back,3,297.6,0,0,0.0,1,8,0.545,150,106,11,10,3,7,0,5,0,4,8,12,32,11,5,0.707,0.0,
+8116,Václav Černý,Czech Republic,AM,Right Attacking Midfield,1,60.0,0,2,0.562,0,1,0.085,34,26,4,1,3,0,0,2,1,0,1,5,6,0,0,0.765,0.5,0.281
+24547,Alexander Hartmann Bah,Denmark,FB,Right Wing Back,4,296.3,0,2,0.241,0,2,0.055,165,130,19,7,4,3,1,2,2,3,3,11,46,5,8,0.788,1.0,0.121
+3959,Andreas Christensen,Denmark,CB,Left Center Back,4,372.7,0,4,0.366,0,0,0.0,234,221,5,7,1,3,0,0,0,3,6,10,21,9,9,0.944,,0.091
+17042,Andreas Skov Olsen,Denmark,AM,Right Attacking Midfield,3,136.0,0,1,0.04,0,1,0.293,40,29,2,1,0,4,2,3,1,1,0,2,16,0,1,0.725,0.333,0.04
+3043,Christian Dannemann Eriksen,Denmark,AM,Left Attacking Midfield,4,368.8,1,12,0.835,0,17,0.798,221,166,16,10,3,5,3,1,0,3,1,16,46,0,0,0.751,0.0,0.07
+7097,Christian Nørgaard,Denmark,DM,Right Defensive Midfield,3,49.4,0,0,0.0,0,1,0.036,42,35,4,5,1,0,0,0,0,1,0,1,8,2,2,0.833,,
+8961,Jacob Bruun Larsen,Denmark,W,Right Wing,1,15.1,0,0,0.0,0,0,0.0,6,3,1,0,1,1,0,0,0,0,0,0,2,0,0,0.5,,
+8815,Jannik Vestergaard,Denmark,CB,Center Back,4,387.8,0,4,0.224,0,0,0.0,266,246,13,16,0,4,1,0,0,3,1,11,24,18,17,0.925,,0.056
+8247,Joachim Andersen,Denmark,CB,Right Center Back,4,387.8,0,3,0.144,0,2,0.183,294,252,24,21,2,3,0,1,0,2,1,11,47,12,21,0.857,0.0,0.048
+16554,Joakim Mæhle,Denmark,FB,Left Wing Back,4,309.8,0,1,0.092,0,2,0.222,161,131,11,7,4,7,2,7,5,1,4,9,40,1,3,0.814,0.714,0.092
+21261,Jonas Older Wind,Denmark,FW,Right Center Forward,4,202.8,0,5,0.383,1,5,0.466,77,64,4,2,1,2,2,1,0,0,0,7,17,0,5,0.831,0.0,0.077
+6302,Kasper Dolberg,Denmark,FW,Center Forward,2,48.8,0,0,0.0,0,0,0.0,10,7,0,0,0,0,0,0,0,1,0,2,23,0,1,0.7,,
+3815,Kasper Schmeichel,Denmark,GK,Goalkeeper,4,387.8,0,0,0.0,0,0,0.0,113,91,6,1,0,0,0,0,0,0,0,14,0,0,0,0.805,,
+24443,Mikkel Damsgaard,Denmark,W,Left Wing,1,36.8,0,1,0.018,0,0,0.0,16,11,1,1,1,0,0,0,0,0,0,1,4,0,1,0.688,,0.018
+8621,Morten Hjulmand,Denmark,DM,Right Defensive Midfield,3,250.5,1,5,0.144,0,4,0.081,215,192,5,11,0,2,0,3,2,1,1,12,40,2,0,0.893,0.667,0.029
+3570,Pierre-Emile Højbjerg,Denmark,DM,Left Defensive Midfield,4,376.7,0,7,0.229,0,3,0.162,298,265,20,26,5,6,3,5,2,6,7,23,76,6,5,0.889,0.4,0.033
+51672,Rasmus Winther Højlund,Denmark,FW,Center Forward,4,296.7,0,6,1.104,0,3,0.106,54,43,1,2,3,4,4,4,1,0,0,5,81,1,3,0.796,0.25,0.184
+5527,Thomas Delaney,Denmark,DM,Left Defensive Midfield,3,99.0,0,0,0.0,0,1,0.481,36,23,2,2,1,1,0,0,0,0,3,5,13,1,3,0.639,,
+60343,Victor Bernth Kristansen,Denmark,FB,Left Wing Back,4,169.5,0,1,0.05,1,2,0.467,93,72,7,4,0,5,0,1,1,4,0,8,32,2,2,0.774,1.0,0.05
+5536,Yussuf Yurary Poulsen,Denmark,FW,Center Forward,4,73.5,0,0,0.0,0,1,0.046,20,12,0,0,0,0,0,1,0,0,0,2,25,0,6,0.6,0.0,
+28104,Anthony Gordon,England,W,Left Wing,1,5.1,0,0,0.0,0,1,0.022,3,3,1,1,0,0,0,0,0,0,0,0,0,0,0,1.0,,
+22084,Bukayo Saka,England,W,Right Wing,7,666.8,1,8,0.517,0,8,0.365,267,223,35,8,13,37,14,19,11,4,0,27,67,7,4,0.835,0.579,0.065
+39461,Cole Palmer,England,W,Right Wing,5,173.7,1,3,0.137,1,2,0.093,77,59,9,7,6,9,2,6,0,2,0,10,19,1,0,0.766,0.0,0.046
+29399,Conor Gallagher,England,DM,Right Defensive Midfield,5,129.6,0,0,0.0,0,0,0.0,55,47,1,3,0,0,0,1,1,0,1,3,35,1,2,0.855,1.0,
+3943,Declan Rice,England,DM,Left Defensive Midfield,7,736.7,0,9,0.393,1,4,0.113,534,486,17,36,4,8,0,6,5,9,8,34,82,9,12,0.91,0.833,0.044
+9000,Eberechi Eze,England,FB,Left Wing Back,3,117.1,0,2,0.04,0,0,0.0,38,28,4,2,0,4,2,2,1,0,1,5,18,3,2,0.737,0.5,0.02
+3822,Ezri Konsa Ngoyo,England,CB,Left Center Back,3,97.6,0,0,0.0,0,0,0.0,51,48,0,3,0,0,0,0,0,0,0,3,15,6,0,0.941,,
+10955,Harry Kane,England,FW,Center Forward,7,635.0,2,17,2.27,0,5,0.239,104,67,13,7,8,5,1,2,1,1,0,18,91,0,14,0.644,0.5,0.134
+3834,Ivan Toney,England,FW,Center Forward,3,52.5,0,1,0.123,1,1,0.497,15,9,1,1,0,0,0,0,0,0,2,3,8,1,6,0.6,,0.123
+9640,Jarrod Bowen,England,W,Right Wing,2,43.9,0,0,0.0,0,1,0.167,16,10,2,0,1,2,0,2,0,0,0,2,6,1,2,0.625,0.0,
+3244,John Stones,England,CB,Right Center Back,7,736.7,0,1,0.072,0,1,0.023,558,524,13,35,0,7,0,0,0,2,0,16,30,24,16,0.939,,0.072
+3468,Jordan Pickford,England,GK,Goalkeeper,7,736.7,0,0,0.0,0,0,0.0,306,225,31,7,1,0,0,0,0,0,0,22,1,0,0,0.735,,
+30714,Jude Bellingham,England,AM,Center Attacking Midfield,7,711.7,2,6,0.664,1,6,0.343,373,316,21,25,5,27,8,22,14,9,4,31,156,5,8,0.847,0.636,0.111
+3308,Kieran Trippier,England,FB,Left Back,6,469.3,0,1,0.089,0,9,0.726,353,313,19,20,7,1,0,2,1,3,2,23,45,6,9,0.887,0.5,0.089
+99174,Kobbie Mainoo,England,DM,Right Defensive Midfield,6,389.6,0,5,0.25,0,3,0.083,203,184,5,9,4,11,1,5,1,5,4,14,47,3,2,0.906,0.2,0.05
+3205,Kyle Walker,England,FB,Right Back,7,736.7,0,0,0.0,0,1,0.101,562,497,23,46,1,10,3,6,4,2,7,21,61,8,7,0.884,0.667,
+3382,Luke Shaw,England,FB,Left Wing Back,3,193.0,0,0,0.0,0,1,0.051,88,78,4,6,1,1,2,2,1,1,2,1,17,6,3,0.886,0.5,
+34526,Marc Guehi,England,CB,Left Center Back,6,612.5,0,2,0.139,1,1,0.103,452,422,14,18,0,2,0,1,0,4,2,19,47,12,21,0.934,0.0,0.069
+4760,Ollie Watkins,England,FW,Center Forward,3,73.3,1,3,0.225,0,0,0.0,5,3,0,0,0,0,0,1,0,0,1,1,13,0,2,0.6,0.0,0.075
+4354,Phil Foden,England,W,Left Wing,7,643.4,0,13,0.747,0,6,0.415,373,310,5,14,5,13,1,14,8,3,2,19,112,2,2,0.831,0.571,0.057
+3664,Trent Alexander-Arnold,England,DM,Right Defensive Midfield,4,142.7,0,4,0.125,0,3,0.109,102,87,10,11,2,2,2,1,0,1,2,3,14,2,1,0.853,0.0,0.031
+3026,Adrien Rabiot,France,CM,Left Center Midfield,5,388.1,0,3,0.262,0,10,0.604,235,214,18,23,3,8,1,4,3,5,1,18,48,1,3,0.911,0.75,0.087
+5487,Antoine Griezmann,France,AM,Center Attacking Midfield,6,417.3,0,12,1.519,0,9,0.403,197,152,12,12,7,7,3,1,1,2,1,11,75,3,2,0.772,1.0,0.127
+10481,Aurélien Djani Tchouaméni,France,DM,Center Defensive Midfield,5,495.0,0,12,0.405,0,5,0.203,381,354,21,54,4,5,0,0,0,4,6,8,60,8,5,0.929,,0.034
+39420,Bradley Barcola,France,W,Left Wing,3,112.0,0,2,0.079,0,4,0.178,33,29,3,4,3,14,7,6,4,3,1,0,21,0,0,0.879,0.667,0.04
+8519,Dayotchanculle Upamecano,France,CB,Right Center Back,6,610.2,0,3,0.228,0,3,0.076,363,335,16,27,0,5,0,1,0,5,8,15,49,21,13,0.923,0.0,0.076
+24778,Eduardo Camavinga,France,CM,Left Center Midfield,4,191.8,0,2,0.258,0,3,0.339,87,79,7,13,2,4,0,1,0,0,1,10,47,4,4,0.908,0.0,0.129
+4445,Jules Koundé,France,FB,Right Back,6,610.2,0,1,0.071,0,11,0.994,400,335,23,22,9,7,1,4,2,10,7,17,60,15,9,0.838,0.5,0.071
+8217,Kingsley Coman,France,W,Right Midfield,1,20.8,0,0,0.0,0,0,0.0,10,9,1,0,1,1,0,0,0,0,0,0,2,0,0,0.9,,
+3009,Kylian Mbappé Lottin,France,W,Left Wing,5,489.2,0,23,1.723,1,3,0.467,184,160,18,13,12,44,22,27,17,1,1,14,40,0,1,0.87,0.63,0.075
+2972,Marcus Thuram,France,FW,Center Forward,4,276.6,0,12,1.179,0,1,0.021,56,46,4,2,3,9,4,3,1,0,2,6,42,2,9,0.821,0.333,0.098
+3761,Mike Maignan,France,GK,Goalkeeper,6,610.2,0,0,0.0,0,0,0.0,165,134,10,1,0,0,0,0,0,0,0,16,1,1,0,0.812,,
+3961,N'Golo Kanté,France,CM,Right Center Midfield,6,540.8,0,5,0.24,0,10,1.015,324,291,26,30,8,17,4,6,3,8,7,27,119,5,2,0.898,0.5,0.048
+3604,Olivier Giroud,France,FW,Center Forward,4,83.3,0,2,0.157,0,2,0.058,13,9,1,0,0,0,0,0,0,0,0,1,13,1,4,0.692,,0.078
+5477,Ousmane Dembélé,France,W,Right Wing,5,371.4,0,8,0.459,0,14,0.967,179,123,12,4,10,47,18,22,13,5,1,15,58,1,2,0.687,0.591,0.057
+22097,Randal Kolo Muani,France,FW,Center Forward,5,220.6,1,3,0.451,0,1,0.011,41,30,3,2,0,4,2,4,1,2,1,3,66,3,2,0.732,0.25,0.15
+6704,Theo Bernard François Hernández,France,FB,Left Back,6,610.2,0,4,0.243,0,6,0.983,391,357,19,21,5,19,3,11,7,5,4,24,46,10,3,0.913,0.636,0.061
+17592,William Saliba,France,CB,Left Center Back,6,610.2,0,2,0.114,0,1,0.006,365,349,9,11,0,5,2,2,2,4,6,15,51,24,7,0.956,1.0,0.057
+11990,Youssouf Fofana,France,CM,Right Center Midfield,3,54.5,0,1,0.023,0,0,0.0,30,25,3,2,0,2,0,0,0,0,1,0,11,0,0,0.833,,0.023
+264017,Anzor Mekvabishvili,Georgia,DM,Right Defensive Midfield,3,204.2,0,2,0.081,0,0,0.0,88,74,3,4,0,3,1,0,0,1,4,5,33,5,0,0.841,,0.04
+102372,Budu Zivzivadze,Georgia,FW,Right Center Forward,2,27.2,0,1,0.057,0,0,0.0,3,3,0,0,0,0,0,0,0,0,0,0,4,0,0,1.0,,0.057
+33234,Georges Mikautadze,Georgia,FW,Right Center Forward,4,369.3,1,4,0.458,1,5,0.623,72,55,6,4,2,10,2,18,7,1,0,15,60,0,2,0.764,0.389,0.115
+23646,Giorgi Chakvetadze,Georgia,CM,Right Center Midfield,4,255.6,0,2,0.078,0,3,0.336,94,77,4,4,3,8,2,3,2,8,1,11,61,1,3,0.819,0.667,0.039
+398886,Giorgi Gvelesiani,Georgia,CB,Right Center Back,3,173.3,0,0,0.0,0,0,0.0,40,26,0,1,0,0,0,0,0,2,1,3,5,11,1,0.65,,
+41202,Giorgi Kochorashvili,Georgia,CM,Left Center Midfield,4,391.5,0,5,0.816,1,2,0.207,176,160,11,10,0,6,2,7,5,6,6,20,70,5,2,0.909,0.714,0.163
+24284,Giorgi Kvilitaia,Georgia,FW,Center Forward,1,7.7,0,0,0.0,0,0,0.0,3,2,0,0,0,0,0,0,0,0,0,1,0,0,0,0.667,,
+102371,Giorgi Mamardashvili,Georgia,GK,Goalkeeper,4,391.5,0,0,0.0,0,0,0.0,123,67,4,0,0,0,0,0,0,0,0,16,0,0,0,0.545,,
+7839,Guram Kashia,Georgia,CB,Center Back,4,391.5,0,0,0.0,0,0,0.0,118,101,6,4,1,0,0,0,0,3,3,9,19,28,13,0.856,,
+22242,Heorhii Tsitaishvili,Georgia,FB,Left Wing Back,4,203.1,0,3,0.072,0,1,0.128,67,49,3,1,2,6,2,6,2,1,1,4,12,2,0,0.731,0.333,0.024
+38229,Khvicha Kvaratskhelia,Georgia,FW,Left Center Forward,4,363.8,1,6,0.552,0,8,0.368,89,71,9,3,5,29,4,28,14,2,0,13,46,1,1,0.798,0.5,0.092
+7655,Lasha Dvali,Georgia,CB,Left Center Back,4,391.5,0,0,0.0,0,0,0.0,143,122,10,7,0,2,0,0,0,3,0,6,30,21,7,0.853,,
+48178,Luka Lochoshvili,Georgia,FB,Left Wing Back,4,188.4,0,1,0.051,0,0,0.0,53,36,1,2,0,2,0,0,0,0,3,3,17,12,2,0.679,,0.051
+46802,Nika Kvekveskiri,Georgia,DM,Center Defensive Midfield,1,14.8,0,0,0.0,0,0,0.0,16,14,0,0,0,0,0,0,0,0,1,0,5,0,0,0.875,,
+25036,Otar Kakabadze,Georgia,FB,Right Wing Back,4,391.5,0,1,0.013,0,2,0.401,172,125,14,1,4,2,0,7,1,5,4,18,40,4,6,0.727,0.143,0.013
+11335,Otar Kiteishvili,Georgia,DM,Center Defensive Midfield,2,136.9,0,0,0.0,0,1,0.07,51,44,3,1,1,0,0,2,1,7,4,4,49,1,1,0.863,0.5,
+7087,Saba Lobzhanidze,Georgia,W,Right Wing,1,14.5,0,1,0.306,0,0,0.0,1,0,0,0,0,1,1,0,0,0,0,0,4,3,0,0.0,,0.306
+135844,Sandro Altunashvili,Georgia,CM,Right Center Midfield,2,64.1,0,0,0.0,0,0,0.0,15,13,0,1,0,1,0,1,0,0,0,3,12,2,0,0.867,0.0,
+16005,Solomon Kverkvelia,Georgia,CB,Right Center Back,3,190.7,0,0,0.0,0,0,0.0,62,54,5,3,0,0,0,0,0,3,0,5,15,15,7,0.871,,
+44183,Zuriko Davitashvili,Georgia,W,Right Wing,4,135.4,0,2,0.165,0,0,0.0,39,35,0,0,0,5,1,2,0,3,1,3,32,0,1,0.897,0.0,0.083
+3167,Antonio Rüdiger,Germany,CB,Right Center Back,5,524.4,0,4,0.163,0,4,0.483,409,373,29,50,7,2,0,0,0,3,4,24,32,17,6,0.912,,0.041
+8211,Benjamin Henrichs,Germany,FB,Left Wing Back,1,15.8,0,1,0.019,0,0,0.0,5,4,2,0,0,1,0,0,0,0,0,0,0,0,0,0.8,,0.019
+23614,Chris Führich,Germany,W,Left Wing,1,21.9,0,1,0.027,0,0,0.0,14,13,3,1,1,4,1,1,1,0,0,2,9,0,0,0.929,1.0,0.027
+12034,David Raum,Germany,FB,Left Back,3,177.8,0,1,0.024,1,4,0.954,102,78,7,6,3,0,0,2,2,4,0,10,19,2,2,0.765,1.0,0.024
+131243,Deniz Undav,Germany,AM,Center Attacking Midfield,1,10.0,0,0,0.0,0,0,0.0,2,1,0,0,0,0,0,0,0,1,0,0,5,0,0,0.5,,
+3493,Emre Can,Germany,DM,Right Defensive Midfield,4,115.2,1,1,0.05,0,1,0.027,72,66,2,7,0,1,0,0,0,3,0,3,18,2,1,0.917,,0.05
+40724,Florian Wirtz,Germany,W,Left Wing,5,305.0,2,8,0.575,0,7,0.612,189,169,13,11,5,16,5,11,7,4,2,17,83,0,1,0.894,0.636,0.072
+39565,Jamal Musiala,Germany,W,Right Wing,5,447.5,3,10,0.901,0,5,0.281,172,150,11,9,8,32,17,21,10,4,5,17,79,0,2,0.872,0.476,0.09
+8221,Jonathan Tah,Germany,CB,Left Center Back,4,337.5,0,1,0.022,0,2,0.043,277,263,9,20,0,0,0,0,0,1,4,4,28,8,8,0.949,,0.022
+5579,Joshua Kimmich,Germany,FB,Right Back,5,524.4,0,7,0.31,2,15,1.169,411,367,36,19,13,13,0,1,0,6,5,20,52,4,3,0.893,0.0,0.044
+8966,Kai Havertz,Germany,FW,Center Forward,5,420.3,0,17,2.211,1,2,0.205,113,95,7,2,3,13,9,5,3,1,1,7,57,7,12,0.841,0.6,0.13
+3053,Leroy Sané,Germany,W,Right Wing,5,226.4,0,7,0.282,0,2,0.127,68,58,3,1,4,11,5,13,6,0,0,6,38,0,0,0.853,0.462,0.04
+5570,Manuel Neuer,Germany,GK,Goalkeeper,5,524.4,0,0,0.0,0,0,0.0,143,123,6,1,0,0,0,0,0,0,0,17,0,0,0,0.86,,
+35242,Maximilian Beier,Germany,W,Left Wing,1,28.8,0,0,0.0,0,0,0.0,7,4,0,0,0,0,0,1,1,0,0,0,3,0,0,0.571,1.0,
+12407,Maximilian Mittelstädt,Germany,FB,Left Back,4,330.8,0,5,0.145,1,4,0.5,221,186,20,11,8,9,1,2,1,1,2,23,33,5,2,0.842,0.5,0.029
+8546,Niclas Füllkrug,Germany,FW,Center Forward,5,192.1,2,9,0.915,0,7,0.352,41,30,2,3,2,2,1,1,0,0,0,4,31,3,11,0.732,0.0,0.102
+24118,Nico Schlotterbeck,Germany,CB,Left Center Back,2,135.4,0,2,0.07,1,2,0.281,88,81,5,9,0,3,0,1,0,1,4,5,9,7,6,0.92,0.0,0.035
+3097,Pascal Groß,Germany,DM,Right Defensive Midfield,1,48.7,0,1,0.031,0,0,0.0,70,66,2,7,1,0,0,0,0,1,0,1,8,0,0,0.943,,0.031
+9195,Robert Andrich,Germany,DM,Right Defensive Midfield,5,345.3,0,7,0.276,0,3,0.111,234,209,17,23,3,0,1,0,0,6,2,13,65,10,7,0.893,,0.039
+5562,Thomas Müller,Germany,FW,Left Center Forward,2,71.9,0,1,0.237,1,2,0.136,28,18,2,0,2,2,0,1,0,1,0,2,10,0,0,0.643,0.0,0.237
+5574,Toni Kroos,Germany,DM,Left Defensive Midfield,5,510.8,0,3,0.155,0,15,0.796,545,489,36,58,6,2,1,1,0,7,7,10,66,3,1,0.897,0.0,0.052
+8538,Waldemar Anton,Germany,CB,Left Center Back,2,46.0,0,0,0.0,0,0,0.0,22,18,0,0,0,0,0,0,0,0,0,1,5,1,2,0.818,,
+10287,İlkay Gündoğan,Germany,AM,Center Attacking Midfield,5,407.9,1,7,0.746,1,2,0.208,168,145,8,13,2,3,1,2,1,3,1,14,57,0,3,0.863,0.5,0.107
+42822,András Schäfer,Hungary,DM,Left Defensive Midfield,3,297.4,0,2,0.066,0,0,0.0,131,114,7,4,0,4,4,9,5,3,0,10,62,4,5,0.87,0.556,0.033
+11268,Attila Fiola,Hungary,CB,Right Center Back,2,194.9,0,0,0.0,0,1,0.045,68,53,4,3,0,0,0,2,1,2,0,2,27,8,0,0.779,0.5,
+46376,Attila Szalai,Hungary,CB,Left Center Back,2,108.6,0,1,0.096,0,0,0.0,62,50,9,3,0,0,0,0,0,1,3,3,17,3,3,0.806,,0.096
+12921,Barnabás Varga,Hungary,FW,Center Forward,3,263.0,1,4,0.939,0,1,0.058,51,26,2,3,0,1,0,2,0,1,1,7,48,4,15,0.51,0.0,0.235
+46789,Bendegúz Bolla,Hungary,FB,Right Wing Back,3,216.2,0,3,0.085,0,2,0.117,69,51,6,2,4,4,1,4,0,3,2,9,44,5,2,0.739,0.0,0.028
+4286,Callum Styles,Hungary,DM,Left Defensive Midfield,1,61.6,0,0,0.0,0,2,0.059,26,19,1,1,0,1,0,0,0,0,0,3,16,1,1,0.731,,
+21209,Dominik Szoboszlai,Hungary,AM,Right Attacking Midfield,3,297.4,0,6,0.22,1,6,0.968,156,115,8,7,4,8,2,11,3,0,2,13,69,4,0,0.737,0.273,0.037
+50329,Dániel Gazdag,Hungary,FW,Left Center Forward,1,6.7,0,0,0.0,0,0,0.0,3,3,1,0,0,0,0,0,0,1,0,0,3,0,0,1.0,,
+31887,Endre Botka,Hungary,CB,Right Center Back,1,102.6,0,0,0.0,0,0,0.0,41,35,2,1,0,0,0,0,0,3,0,1,12,9,7,0.854,,
+389882,Kevin Csoboth,Hungary,FB,Right Wing Back,2,22.2,1,2,0.448,0,0,0.0,9,7,2,2,0,0,0,0,0,0,0,0,5,0,0,0.778,,0.224
+16502,László Kleinheisler,Hungary,DM,Right Defensive Midfield,2,60.4,0,0,0.0,0,0,0.0,17,16,0,0,0,0,0,1,0,0,2,2,18,0,1,0.941,0.0,
+264277,Martin Ádám,Hungary,FW,Center Forward,3,64.4,0,0,0.0,0,1,0.061,18,11,0,0,1,1,0,0,0,0,0,1,11,0,2,0.611,,
+89635,Milos Kerkez,Hungary,FB,Left Wing Back,3,245.0,0,0,0.0,0,1,0.062,79,48,5,2,1,5,0,1,1,2,1,9,31,7,4,0.608,1.0,
+40920,Márton Dárdai,Hungary,CB,Left Center Back,3,188.8,0,1,0.057,0,0,0.0,92,68,9,5,2,0,0,0,0,1,3,0,36,5,4,0.739,,0.057
+8524,Péter Gulácsi,Hungary,GK,Goalkeeper,3,297.4,0,0,0.0,0,0,0.0,95,74,8,3,1,0,0,0,0,0,0,11,0,1,0,0.779,,
+19316,Roland Sallai,Hungary,AM,Left Attacking Midfield,3,291.1,0,8,0.825,1,4,0.79,80,63,6,5,3,9,5,4,4,1,0,11,50,1,2,0.788,1.0,0.103
+8509,Willi Orban,Hungary,CB,Center Back,3,297.4,0,3,0.568,0,2,0.18,131,112,10,3,1,1,0,1,1,5,3,10,29,16,9,0.855,1.0,0.189
+73886,Zsolt Nagy,Hungary,FB,Left Wing Back,2,34.2,0,0,0.0,0,0,0.0,8,4,1,0,0,1,0,1,1,0,0,0,12,2,1,0.5,1.0,
+3153,Ádám Lang,Hungary,CB,Right Center Back,1,47.0,0,0,0.0,0,0,0.0,19,13,2,2,0,0,0,0,0,0,2,1,5,2,1,0.684,,
+7162,Ádám Nagy,Hungary,DM,Right Defensive Midfield,3,175.6,0,1,0.029,0,0,0.0,70,56,3,5,0,1,0,0,0,0,5,4,34,4,2,0.8,,0.029
+7480,Alessandro Bastoni,Italy,CB,Right Center Back,4,391.8,1,3,0.45,0,1,0.014,335,309,18,31,1,6,0,0,0,2,2,14,36,15,6,0.922,,0.15
+50729,Andrea Cambiaso,Italy,W,Right Wing,3,88.1,0,0,0.0,0,0,0.0,48,38,2,0,1,1,0,0,0,1,0,5,15,0,0,0.792,,
+6993,Bryan Cristante,Italy,CM,Right Center Midfield,3,147.2,0,2,0.067,0,2,0.179,115,103,5,7,2,3,1,0,0,1,3,5,22,1,3,0.896,,0.034
+30926,Davide Frattesi,Italy,CM,Right Center Midfield,4,205.7,0,2,0.273,0,0,0.0,60,43,3,1,1,1,1,6,3,0,0,7,32,0,1,0.717,0.5,0.136
+7156,Federico Chiesa,Italy,W,Right Wing,4,282.0,0,8,0.248,0,2,0.17,106,69,8,2,7,15,6,14,7,4,1,17,51,2,0,0.651,0.5,0.031
+12255,Federico Dimarco,Italy,FB,Left Back,3,241.1,0,2,0.026,0,3,0.297,123,100,5,3,2,7,2,0,0,3,1,5,28,2,2,0.813,,0.013
+25048,Giacomo Raspadori,Italy,FW,Right Center Forward,2,90.5,0,1,0.066,0,4,0.383,47,38,10,3,3,1,0,1,0,2,0,2,13,0,0,0.809,0.0,0.066
+7004,Gianluca Mancini,Italy,CB,Right Center Back,1,95.0,0,0,0.0,0,0,0.0,67,60,1,4,0,3,0,0,0,0,0,5,11,0,3,0.896,,
+10992,Gianluca Scamacca,Italy,FW,Center Forward,4,270.1,0,6,0.533,0,3,0.254,52,35,2,0,1,1,1,2,1,0,2,7,32,1,3,0.673,0.5,0.089
+7036,Gianluigi Donnarumma,Italy,GK,Goalkeeper,4,391.8,0,0,0.0,0,0,0.0,101,85,7,0,0,0,0,0,0,0,0,11,1,1,0,0.842,,
+11514,Giovanni Di Lorenzo,Italy,FB,Right Back,4,391.8,0,2,0.191,0,0,0.0,321,283,17,19,0,1,0,0,0,7,5,8,66,6,6,0.882,,0.096
+7024,Jorge Luiz Frello Filho,Italy,DM,Center Defensive Midfield,3,227.3,0,0,0.0,0,2,0.071,240,221,16,13,8,0,0,0,0,2,2,4,35,2,2,0.921,,
+6963,Lorenzo Pellegrini,Italy,W,Left Wing,4,226.6,0,7,0.503,1,5,0.384,106,92,5,7,2,7,2,2,1,1,3,7,49,2,3,0.868,0.5,0.072
+31093,Mateo Retegui,Italy,FW,Right Center Forward,4,175.0,0,4,0.258,0,0,0.0,17,9,0,0,1,0,0,1,0,1,0,2,40,0,8,0.529,0.0,0.064
+4587,Matteo Darmian,Italy,FB,Left Back,3,172.2,0,1,0.055,0,0,0.0,105,97,3,6,1,1,0,1,0,1,1,2,23,5,3,0.924,0.0,0.055
+8792,Mattia Zaccagni,Italy,W,Left Wing,3,98.4,1,2,0.222,0,1,0.022,37,29,4,0,2,1,0,2,1,0,2,7,13,1,2,0.784,0.5,0.111
+49445,Michael Ijemuan Folorunsho,Italy,W,Left Wing,1,3.9,0,0,0.0,0,0,0.0,2,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0.5,,
+8181,Nicolò Barella,Italy,CM,Left Center Midfield,4,359.2,1,1,0.085,0,4,0.213,267,243,16,21,5,6,1,4,1,6,3,15,67,1,1,0.91,0.25,0.085
+38909,Nicolò Fagioli,Italy,DM,Left Defensive Midfield,2,107.0,0,1,0.018,0,1,0.022,104,88,4,7,1,3,0,1,1,2,0,8,18,0,0,0.846,1.0,0.018
+41768,Riccardo Calafiori,Italy,CB,Left Center Back,3,296.7,0,3,0.309,0,2,0.142,238,220,11,13,2,6,0,0,0,1,2,15,30,8,9,0.924,,0.103
+6979,Stephan El Shaarawy,Italy,W,Left Wing,1,48.0,0,0,0.0,0,0,0.0,11,8,0,0,0,1,0,1,0,0,0,0,6,2,1,0.727,0.0,
+37274,Bart Verbruggen,Netherlands,GK,Goalkeeper,6,586.4,0,0,0.0,0,0,0.0,210,178,25,5,0,0,0,0,0,0,0,24,0,0,0,0.848,,
+21880,Brian Brobbey,Netherlands,,,1,2.5,0,0,0.0,0,0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,
+20750,Cody Mathès Gakpo,Netherlands,W,Left Wing,6,560.6,3,13,0.885,1,12,1.76,135,94,20,2,10,34,12,11,9,8,4,12,74,6,6,0.696,0.818,0.068
+3311,Daley Blind,Netherlands,,,1,3.4,0,0,0.0,0,0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,
+8125,Denzel Dumfries,Netherlands,FB,Right Back,5,484.7,0,4,0.269,0,5,0.554,273,225,16,8,5,2,1,5,2,5,2,13,57,5,8,0.824,0.4,0.067
+15582,Donyell Malen,Netherlands,W,Right Wing,4,204.0,2,6,1.509,0,4,0.241,56,43,7,2,3,13,8,12,8,0,3,3,13,3,2,0.768,0.667,0.252
+3567,Georginio Wijnaldum,Netherlands,AM,Center Attacking Midfield,3,88.9,0,0,0.0,0,0,0.0,15,10,1,1,0,0,0,0,0,1,0,2,8,1,3,0.667,,
+15503,Jerdy Schouten,Netherlands,DM,Right Defensive Midfield,6,537.2,0,1,0.072,0,3,0.233,328,304,27,25,2,3,2,4,4,2,6,28,66,5,5,0.927,1.0,0.072
+32712,Jeremie Frimpong,Netherlands,W,Right Wing,3,97.7,0,2,0.17,0,1,0.072,26,22,1,0,2,4,2,1,0,0,1,4,14,0,1,0.846,0.0,0.085
+21633,Joey Veerman,Netherlands,DM,Left Defensive Midfield,6,233.4,0,2,0.141,0,6,0.225,169,134,7,15,3,1,0,1,1,1,2,8,35,2,2,0.793,1.0,0.071
+33281,Joshua Zirkzee,Netherlands,AM,Center Attacking Midfield,2,11.8,0,0,0.0,0,0,0.0,3,2,0,1,0,0,0,0,0,1,0,0,2,0,0,0.667,,
+22352,Lutsharel Geertruida,Netherlands,FB,Right Back,2,122.2,0,0,0.0,0,1,0.08,84,77,3,2,1,1,0,1,0,2,0,3,11,0,1,0.917,0.0,
+2988,Memphis Depay,Netherlands,FW,Center Forward,6,478.0,1,18,1.951,1,11,0.862,166,112,8,9,4,11,3,11,5,3,1,10,75,0,3,0.675,0.455,0.108
+32547,Micky van de Ven,Netherlands,FB,Left Back,4,89.9,0,0,0.0,0,0,0.0,42,31,0,5,0,1,0,1,0,1,1,3,8,2,0,0.738,0.0,
+3306,Nathan Aké,Netherlands,FB,Left Back,6,496.5,0,2,0.107,1,4,0.326,271,246,14,19,2,5,0,1,1,6,11,10,40,9,6,0.908,1.0,0.053
+7787,Stefan de Vrij,Netherlands,CB,Right Center Back,6,586.4,1,4,0.275,0,0,0.0,416,384,22,28,3,4,0,1,0,10,8,12,46,19,20,0.923,0.0,0.069
+8259,Steven Bergwijn,Netherlands,W,Right Wing,2,95.8,0,1,0.025,0,0,0.0,51,41,3,2,1,5,1,3,2,0,1,4,10,0,1,0.804,0.667,0.025
+21582,Tijjani Reijnders,Netherlands,DM,Left Defensive Midfield,6,530.6,0,10,0.633,0,2,0.4,270,249,19,22,8,16,4,7,2,3,3,21,50,6,2,0.922,0.286,0.063
+3669,Virgil van Dijk,Netherlands,CB,Left Center Back,6,586.4,0,5,0.347,0,3,0.14,385,351,18,20,2,2,0,0,0,4,3,8,39,33,20,0.912,,0.069
+7829,Wout Weghorst,Netherlands,FW,Center Forward,6,169.9,1,4,0.389,1,2,0.201,31,23,3,0,0,0,0,2,0,0,0,2,38,3,12,0.742,0.0,0.097
+39167,Xavi Simons,Netherlands,AM,Center Attacking Midfield,6,484.0,1,11,0.545,3,12,1.005,185,155,15,19,10,21,4,11,2,5,7,22,60,0,2,0.838,0.182,0.05
+7663,Adam Buksa,Poland,FW,Left Center Forward,2,156.7,1,3,0.148,0,2,0.132,11,10,1,0,0,1,1,2,0,0,0,1,35,2,3,0.909,0.0,0.049
+5673,Bartosz Bereszyński,Poland,CB,Right Center Back,1,9.3,0,0,0.0,0,0,0.0,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0.5,,
+8289,Bartosz Salamon,Poland,CB,Center Back,1,86.9,0,1,0.003,0,0,0.0,31,26,1,0,0,0,0,0,0,1,1,2,8,7,1,0.839,,0.003
+15859,Bartosz Slisz,Poland,DM,Center Defensive Midfield,2,116.6,0,0,0.0,0,1,0.074,43,37,2,4,0,0,0,0,0,2,1,6,21,4,5,0.86,,
+29480,Jakub Moder,Poland,DM,Center Defensive Midfield,3,196.8,0,4,0.505,0,0,0.0,117,94,6,4,1,2,0,1,1,0,1,15,23,7,3,0.803,1.0,0.126
+44166,Jakub Piotr Kiwior,Poland,CB,Left Center Back,3,289.2,0,2,0.079,0,3,0.256,150,128,7,8,0,3,0,4,4,8,4,7,46,7,5,0.853,1.0,0.04
+20841,Jakub Piotrowski,Poland,CM,Left Center Midfield,2,64.1,0,2,0.069,0,1,0.131,24,17,1,0,0,2,1,1,1,0,0,4,11,1,1,0.708,1.0,0.035
+4626,Jan Bednarek,Poland,CB,Right Center Back,3,289.2,0,1,0.204,0,0,0.0,103,90,4,1,1,1,0,1,1,2,3,5,24,10,2,0.874,1.0,0.204
+33680,Kacper Urbanski,Poland,FW,Right Center Forward,3,161.0,0,2,0.097,0,2,0.072,50,44,4,3,1,4,0,6,3,3,1,7,58,3,1,0.88,0.5,0.049
+5667,Kamil Grosicki,Poland,W,Left Midfield,1,19.0,0,1,0.12,0,0,0.0,5,1,0,0,0,0,0,0,0,0,0,1,7,0,0,0.2,,0.12
+8836,Karol Świderski,Poland,FW,Right Center Forward,3,104.1,0,2,0.204,0,2,0.468,16,11,1,0,1,1,0,1,0,0,0,1,16,0,0,0.688,0.0,0.102
+12493,Krzysztof Piątek,Poland,FW,Right Center Forward,1,60.3,1,2,0.49,0,0,0.0,11,7,0,0,0,0,0,0,0,0,0,2,14,0,0,0.636,,0.245
+28453,Michał Skóraś,Poland,FB,Right Wing Back,1,28.3,0,0,0.0,0,0,0.0,9,6,1,0,0,0,0,0,0,1,1,1,6,1,0,0.667,,
+50502,Nicola Zalewski,Poland,FB,Left Wing Back,3,261.0,0,2,0.118,0,1,0.061,103,73,8,5,3,13,1,10,6,2,2,17,21,2,1,0.709,0.6,0.059
+30739,Paweł Dawidowicz,Poland,CB,Center Back,2,193.1,0,1,0.068,0,0,0.0,75,73,4,2,0,1,0,0,0,0,0,6,25,12,6,0.973,,0.068
+5660,Piotr Zieliński,Poland,CM,Right Center Midfield,3,263.6,0,8,0.377,1,6,0.385,149,124,10,7,2,13,3,5,3,0,2,8,26,2,0,0.832,0.6,0.047
+7979,Przemysław Frankowski,Poland,FB,Right Wing Back,3,289.2,0,0,0.0,0,4,0.308,128,94,15,4,2,4,1,3,2,5,3,10,56,5,1,0.734,0.667,
+5668,Robert Lewandowski,Poland,FW,Left Center Forward,2,132.5,0,4,0.206,0,1,0.073,26,22,1,0,1,2,0,3,2,1,0,6,24,3,2,0.846,0.667,0.051
+4664,Sebastian Szymański,Poland,CM,Right Center Midfield,2,115.7,0,1,0.054,0,0,0.0,35,28,1,4,0,2,0,1,0,3,4,3,42,0,0,0.8,0.0,0.054
+7982,Taras Wiktorowicz Romanczuk,Poland,DM,Center Defensive Midfield,1,55.8,0,0,0.0,0,0,0.0,11,10,0,0,0,0,0,0,0,1,0,1,8,2,0,0.909,,
+5669,Wojciech Szczęsny,Poland,GK,Goalkeeper,2,191.4,0,0,0.0,0,0,0.0,65,41,7,2,0,0,0,0,0,0,0,4,0,0,0,0.631,,
+11508,Łukasz Skorupski,Poland,GK,Goalkeeper,1,97.8,0,0,0.0,0,0,0.0,29,23,1,0,0,0,0,0,0,0,0,3,0,0,0,0.793,,
+143854,António João Pereira Albuquerque Tavares Silva,Portugal,CB,Right Center Back,2,80.1,0,1,0.187,0,1,0.049,68,60,3,11,0,0,0,0,0,2,0,2,6,1,3,0.882,,0.187
+3193,Bernardo Mota Veiga de Carvalho e Silva,Portugal,AM,Center Attacking Midfield,4,444.0,1,7,0.745,0,10,0.616,266,239,15,7,8,21,3,6,2,3,0,22,64,2,1,0.898,0.333,0.106
+5204,Bruno Miguel Borges Fernandes,Portugal,AM,Center Attacking Midfield,4,394.2,1,10,1.222,0,8,0.812,297,222,27,27,11,18,6,5,2,6,2,13,79,3,6,0.747,0.4,0.122
+5207,Cristiano Ronaldo dos Santos Aveiro,Portugal,FW,Center Forward,5,511.1,0,22,2.186,1,6,1.292,101,84,2,5,1,5,2,8,4,0,0,13,33,1,10,0.832,0.5,0.099
+13621,Danilo Luís Hélio Pereira,Portugal,CB,Center Back,1,96.3,0,1,0.23,0,0,0.0,88,85,3,11,0,1,0,0,0,0,1,8,2,1,2,0.966,,0.23
+9929,Diogo José Teixeira da Silva,Portugal,FW,Left Center Forward,3,113.7,0,2,0.778,0,2,0.113,36,24,3,0,2,7,3,5,2,2,0,2,25,0,5,0.667,0.4,0.389
+32975,Diogo Meireles Costa,Portugal,GK,Goalkeeper,5,540.3,0,0,0.0,0,0,0.0,154,139,6,0,0,0,0,0,0,0,0,18,0,0,0,0.903,,
+39624,Francisco Fernandes Conceição,Portugal,AM,Right Attacking Midfield,4,202.2,1,5,0.75,0,6,1.368,126,102,13,2,5,19,8,10,5,1,1,11,31,0,0,0.81,0.5,0.15
+42106,Gonçalo Bernardo Inácio,Portugal,CB,Left Center Back,2,128.5,0,1,0.049,0,0,0.0,149,133,6,34,0,1,0,4,4,2,1,8,22,5,6,0.893,1.0,0.049
+38803,Gonçalo Matias Ramos,Portugal,FW,Center Forward,1,29.2,0,1,0.102,0,0,0.0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,1.0,,0.102
+16028,José Diogo Dalot Teixeira,Portugal,FB,Right Wing Back,2,160.2,0,3,0.072,0,2,0.045,99,92,4,10,0,2,1,4,2,2,0,10,12,1,2,0.929,0.5,0.024
+12041,João Félix Sequeira,Portugal,AM,Left Attacking Midfield,2,111.6,0,4,0.181,0,4,0.457,76,66,6,2,3,5,0,6,2,0,0,3,23,0,0,0.868,0.333,0.045
+12169,João Maria Lobo Alves Palhinha Gonçalves,Portugal,DM,Left Defensive Midfield,4,312.6,0,5,0.21,0,1,0.059,185,166,9,21,3,0,0,1,0,8,5,13,79,8,9,0.897,0.0,0.042
+143859,João Neves,Portugal,DM,Right Defensive Midfield,2,84.0,0,1,0.044,0,0,0.0,74,70,2,6,0,0,0,2,1,0,3,8,8,0,1,0.946,0.5,0.044
+7005,João Pedro Cavaco Cancelo,Portugal,FB,Right Back,4,357.6,0,2,0.081,0,5,0.419,256,222,18,20,8,17,8,17,10,6,5,18,35,7,4,0.867,0.588,0.04
+20016,Kléper Laveran Lima Ferreira,Portugal,CB,Left Center Back,4,426.8,0,1,0.051,0,1,0.028,403,377,10,10,0,2,0,2,1,6,7,22,37,24,13,0.935,0.5,0.051
+40874,Matheus Luiz Nunes,Portugal,DM,Right Defensive Midfield,2,21.8,0,1,0.194,0,1,0.023,17,15,0,0,1,0,0,0,0,0,0,3,1,1,0,0.882,,0.194
+41092,Nuno Mendes,Portugal,FB,Left Back,4,438.5,0,3,0.185,0,3,0.034,365,324,17,35,1,13,4,18,8,2,8,16,51,10,9,0.888,0.444,0.062
+6374,Nélson Cabral Semedo,Portugal,FB,Right Back,5,115.6,0,2,0.234,0,0,0.0,56,48,1,2,0,6,0,4,2,2,0,3,12,0,1,0.857,0.5,0.117
+23256,Pedro Lomba Neto,Portugal,FB,Left Wing Back,3,131.9,0,0,0.0,0,1,0.026,89,73,7,2,3,8,3,8,4,3,0,9,18,1,1,0.82,0.5,
+18360,Rafael Alexandre Conceição Leão,Portugal,W,Left Wing,4,295.9,0,3,0.182,0,5,0.452,113,87,14,11,7,36,14,14,5,2,0,8,16,1,2,0.77,0.357,0.061
+9927,Rúben Diogo Da Silva Neves,Portugal,DM,Left Defensive Midfield,4,135.8,0,2,0.036,0,1,0.102,118,99,4,18,0,2,0,1,1,2,0,7,23,0,0,0.839,1.0,0.018
+5206,Rúben Santos Gato Alves Dias,Portugal,CB,Right Center Back,4,444.0,0,2,0.081,0,1,0.091,406,379,9,24,1,5,0,1,1,2,1,8,26,16,14,0.933,1.0,0.04
+34639,Vitor Machado Ferreira,Portugal,DM,Right Defensive Midfield,4,367.5,0,8,0.641,0,4,0.151,326,293,11,25,4,15,3,3,2,3,1,31,42,0,0,0.899,0.667,0.08
+34602,Adrián Rus,Romania,DM,Center Defensive Midfield,2,27.9,0,0,0.0,0,0,0.0,5,1,0,1,0,0,0,0,0,0,0,0,3,1,1,0.2,,
+45125,Alexandru Cicâldău,Romania,CM,Left Center Midfield,1,23.1,0,0,0.0,0,0,0.0,5,2,0,0,0,0,0,0,0,1,0,1,4,0,0,0.4,,
+31908,Andrei Burcă Andonie,Romania,CB,Left Center Back,4,386.7,0,1,0.111,0,0,0.0,148,113,9,6,0,3,0,0,0,3,0,10,41,18,9,0.764,,0.111
+24861,Andrei Florin Ratiu,Romania,FB,Right Back,4,381.5,0,3,0.135,0,2,0.043,124,102,5,2,1,9,1,5,1,5,5,9,49,7,2,0.823,0.2,0.045
+45023,Bogdan Racovițan,Romania,CB,Left Center Back,2,68.1,0,0,0.0,0,0,0.0,26,24,1,1,0,1,0,0,0,0,1,1,11,2,2,0.923,,
+101821,Darius Dumitru Olaru,Romania,CM,Right Center Midfield,2,33.8,0,0,0.0,0,0,0.0,17,14,1,3,1,0,0,0,0,0,0,1,3,0,0,0.824,,
+130984,Deian Cristian Sorescu,Romania,W,Left Midfield,2,41.6,0,0,0.0,0,0,0.0,15,11,1,1,0,1,0,0,0,0,1,1,4,0,0,0.733,,
+10915,Denis Alibec,Romania,FW,Center Forward,2,37.2,0,1,0.363,0,0,0.0,3,3,0,0,0,0,0,0,0,0,0,1,4,0,0,1.0,,0.363
+31193,Denis Mihai Drăguş,Romania,FW,Center Forward,4,302.4,1,5,1.1,0,2,0.04,56,36,2,1,1,7,3,6,4,3,1,8,87,6,5,0.643,0.667,0.22
+56905,Dennis Man,Romania,W,Right Midfield,4,285.0,0,6,0.547,2,4,0.963,80,52,10,3,3,16,4,8,3,2,2,16,28,0,2,0.65,0.375,0.091
+28242,Florin Constantin Niţă,Romania,GK,Goalkeeper,4,386.7,0,0,0.0,0,0,0.0,149,84,14,1,0,0,0,0,0,0,0,21,0,0,0,0.564,,
+34599,Florinel Teodor Coman,Romania,W,Left Midfield,2,125.0,0,2,0.058,0,2,0.094,31,23,1,1,0,4,1,1,1,2,1,4,11,1,2,0.742,1.0,0.029
+8660,George Alexandru Puşcaş,Romania,FW,Center Forward,2,47.2,0,0,0.0,0,0,0.0,13,4,0,0,0,0,0,0,0,0,0,1,9,1,6,0.308,,
+28565,Ianis Hagi,Romania,W,Left Midfield,4,203.3,0,2,0.049,0,3,0.134,63,41,2,1,2,6,2,2,1,4,0,9,34,2,2,0.651,0.5,0.025
+30913,Marius Mihai Marin,Romania,DM,Center Defensive Midfield,4,317.3,0,0,0.0,0,1,0.104,102,83,7,9,1,1,0,1,1,5,2,8,67,7,2,0.814,1.0,
+10916,Nicolae Claudiu Stanciu,Romania,CM,Left Center Midfield,4,372.2,1,5,0.135,0,5,0.305,115,85,8,6,4,2,0,3,2,0,4,8,67,4,0,0.739,0.667,0.027
+34600,Nicușor Silviu Bancu,Romania,FB,Left Back,3,288.7,0,0,0.0,0,2,0.104,139,104,10,5,2,5,0,3,3,1,2,17,42,9,1,0.748,1.0,
+39615,Radu Drăgușin,Romania,CB,Right Center Back,4,386.7,0,3,0.144,0,0,0.0,111,92,7,2,0,3,0,1,1,0,9,9,24,26,5,0.829,1.0,0.048
+16344,Răzvan Gabriel Marin,Romania,CM,Right Center Midfield,4,377.9,1,5,0.107,0,2,0.058,110,89,4,10,0,2,0,4,2,2,0,12,43,6,2,0.809,0.5,0.021
+72512,Valentin Mihai Mihăilă,Romania,W,Left Midfield,3,123.6,0,4,0.224,0,0,0.0,30,25,2,1,1,3,1,1,0,1,3,8,17,3,1,0.833,0.0,0.056
+30839,Vasile Mogoș,Romania,FB,Left Back,1,37.8,0,0,0.0,0,0,0.0,7,6,0,0,0,0,0,0,0,0,0,0,2,0,1,0.857,,
+3655,Andrew Robertson,Scotland,FB,Left Wing Back,3,283.6,0,0,0.0,0,4,0.295,122,93,10,7,2,5,0,1,0,5,2,6,31,6,2,0.762,0.0,
+22379,Angus Gunn,Scotland,GK,Goalkeeper,3,296.9,0,0,0.0,0,0,0.0,115,69,15,2,0,0,0,0,0,0,0,11,0,1,0,0.6,,
+22308,Anthony Ralston,Scotland,FB,Right Wing Back,3,278.3,0,0,0.0,0,2,0.079,92,68,7,3,3,0,0,2,0,0,1,8,30,6,5,0.739,0.0,
+31067,Billy Gilmour,Scotland,DM,Right Defensive Midfield,3,192.7,0,2,0.088,0,0,0.0,109,93,7,5,0,2,0,2,2,2,0,5,36,3,5,0.853,1.0,0.044
+10534,Callum McGregor,Scotland,DM,Left Defensive Midfield,3,269.7,0,3,0.14,1,2,0.088,114,107,2,6,1,0,1,0,0,0,1,9,42,6,3,0.939,,0.047
+9466,Che Adams,Scotland,FW,Center Forward,3,218.2,0,2,0.124,0,1,0.062,32,27,0,2,0,2,0,1,0,1,1,4,49,0,4,0.844,0.0,0.062
+9481,Grant Campbell Hanley,Scotland,CB,Center Back,3,248.4,0,1,0.199,0,1,0.081,137,114,4,2,0,1,0,0,0,2,2,8,14,12,13,0.832,,0.199
+11116,Jack Hendry,Scotland,CB,Right Center Back,3,296.9,0,1,0.066,0,0,0.0,129,105,11,9,0,0,0,0,0,1,3,3,26,11,10,0.814,,0.066
+9974,John McGinn,Scotland,AM,Right Attacking Midfield,3,239.6,0,0,0.0,0,0,0.0,44,28,1,0,1,3,1,5,4,0,1,3,37,0,5,0.636,0.8,
+9478,Kenneth McLean,Scotland,DM,Right Defensive Midfield,3,61.0,0,1,0.011,0,0,0.0,26,19,1,0,1,0,0,0,0,0,0,6,8,0,1,0.731,,0.011
+10540,Kieran Tierney,Scotland,CB,Left Center Back,2,143.8,0,0,0.0,0,0,0.0,92,70,4,4,1,1,0,0,0,2,0,5,20,3,3,0.761,,
+38169,Lawrence Shankland,Scotland,FW,Center Forward,3,42.7,0,0,0.0,0,1,0.056,10,6,3,0,2,2,0,0,0,0,0,3,15,1,2,0.6,,
+16931,Lewis Morgan,Scotland,FW,Right Center Forward,1,13.3,0,1,0.056,0,0,0.0,2,1,0,0,0,1,1,0,0,0,1,0,2,0,0,0.5,,0.056
+12510,Ryan Christie,Scotland,W,Left Wing,3,107.8,0,0,0.0,0,0,0.0,21,17,2,1,1,1,0,4,2,0,1,6,35,1,3,0.81,0.5,
+18797,Ryan Porteous,Scotland,CB,Right Center Back,1,41.1,0,0,0.0,0,0,0.0,26,20,2,1,0,0,0,0,0,2,1,1,3,0,1,0.769,,
+10002,Scott McKenna,Scotland,CB,Left Center Back,3,153.1,0,2,0.086,0,0,0.0,91,76,2,4,0,1,0,0,0,0,2,6,11,4,12,0.835,,0.043
+3620,Scott McTominay,Scotland,AM,Center Attacking Midfield,3,296.9,1,4,0.246,0,2,0.17,60,42,2,1,0,3,0,1,0,2,2,7,50,8,6,0.7,0.0,0.061
+10285,Stuart Armstrong,Scotland,CM,Left Center Midfield,1,25.8,0,0,0.0,0,0,0.0,10,6,1,0,0,1,1,1,1,0,0,1,2,0,1,0.6,1.0,
+4269,Aleksandar Mitrović,Serbia,FW,Center Forward,3,255.8,0,10,1.154,0,0,0.0,51,39,3,3,1,2,1,3,1,0,0,6,39,3,16,0.765,0.333,0.115
+6318,Andrija Živković,Serbia,FB,Right Wing Back,3,254.0,0,0,0.0,0,5,0.69,144,117,20,7,8,7,1,5,2,1,1,8,38,2,0,0.812,0.4,
+3831,Dušan Tadić,Serbia,AM,Right Attacking Midfield,3,166.4,0,0,0.0,0,5,0.573,87,65,9,4,4,4,1,1,1,1,1,4,16,3,1,0.747,1.0,
+18015,Dušan Vlahović,Serbia,AM,Left Attacking Midfield,3,188.6,0,6,0.27,0,0,0.0,30,17,0,0,0,0,1,1,1,1,0,9,35,1,3,0.567,1.0,0.045
+5591,Filip Kostić,Serbia,FB,Left Wing Back,1,43.0,0,0,0.0,0,0,0.0,15,8,0,0,0,0,0,0,0,1,0,2,4,1,0,0.533,,
+7993,Filip Mladenović,Serbia,FB,Left Wing Back,3,121.4,0,0,0.0,0,1,0.015,65,46,3,1,0,0,1,1,1,2,2,5,20,0,1,0.708,1.0,
+30179,Ivan Ilić,Serbia,DM,Right Defensive Midfield,3,214.4,0,2,0.051,1,3,0.259,152,141,10,14,1,1,0,1,0,5,2,10,24,1,3,0.928,0.0,0.025
+40735,Lazar Samardžić,Serbia,W,Right Wing,2,61.1,0,1,0.049,0,0,0.0,20,15,1,1,0,2,0,1,0,0,0,3,9,0,0,0.75,0.0,0.049
+6319,Luka Jović,Serbia,W,Left Wing,3,116.9,1,1,0.142,0,1,0.058,20,15,0,0,1,0,0,1,1,1,0,1,19,0,2,0.75,1.0,0.142
+8669,Mijat Gaćinović,Serbia,FB,Left Wing Back,1,51.4,0,1,0.033,0,0,0.0,24,17,2,1,0,0,0,1,0,1,1,3,5,0,2,0.708,0.0,0.033
+6321,Milos Veljkovic,Serbia,CB,Right Center Back,3,289.8,0,0,0.0,0,0,0.0,226,208,20,27,1,5,0,0,0,1,1,8,16,7,5,0.92,,
+16489,Nemanja Gudelj,Serbia,DM,Left Defensive Midfield,2,93.2,0,0,0.0,0,0,0.0,62,59,2,3,0,1,0,1,1,1,1,1,13,1,0,0.952,1.0,
+5603,Nikola Milenković,Serbia,CB,Center Back,3,289.8,0,0,0.0,0,1,0.023,229,213,4,5,0,4,0,0,0,1,1,14,15,11,10,0.93,,
+15731,Predrag Rajković,Serbia,GK,Goalkeeper,3,289.8,0,0,0.0,0,0,0.0,104,72,14,2,0,0,0,1,1,0,0,12,0,0,0,0.692,1.0,
+6687,Saša Lukić,Serbia,DM,Left Defensive Midfield,3,215.2,0,1,0.088,0,0,0.0,150,142,6,4,0,9,0,1,0,6,1,11,51,4,1,0.947,0.0,0.088
+5589,Sergej Milinković-Savić,Serbia,DM,Left Defensive Midfield,3,137.4,0,3,0.215,0,2,0.098,75,62,8,8,3,2,0,1,0,2,0,5,16,4,3,0.827,0.0,0.072
+52089,Srđan Mijailović,Serbia,FB,Right Wing Back,1,74.0,0,0,0.0,0,0,0.0,27,16,2,0,1,0,0,0,0,0,0,0,12,4,1,0.593,,
+27719,Strahinja Pavlović,Serbia,CB,Left Center Back,3,289.8,0,0,0.0,0,1,0.033,178,135,8,11,0,8,0,4,4,5,5,8,47,12,7,0.758,1.0,
+28075,Veljko Birmančević,Serbia,FB,Right Wing Back,2,35.8,0,1,0.033,0,0,0.0,17,11,3,3,1,2,1,1,1,0,2,3,8,0,0,0.647,1.0,0.033
+85063,Adam Obert,Slovakia,FB,Left Back,2,32.8,0,0,0.0,0,0,0.0,27,23,4,0,1,2,0,1,1,0,0,3,4,1,0,0.852,1.0,
+43976,David Strelec,Slovakia,FW,Center Forward,4,202.2,0,7,0.629,1,3,0.661,41,26,2,3,1,1,0,4,3,0,2,7,27,2,10,0.634,0.75,0.09
+16298,Denis Vavro,Slovakia,CB,Right Center Back,4,427.9,0,3,0.055,0,0,0.0,263,211,24,13,1,1,0,0,0,4,2,10,18,15,10,0.802,,0.018
+16879,Dávid Hancko,Slovakia,FB,Left Back,4,399.3,0,4,0.253,0,1,0.028,188,136,20,10,5,2,1,4,1,5,3,10,55,8,8,0.723,0.25,0.063
+44167,Dávid Ďuriš,Slovakia,W,Right Wing,2,35.2,0,0,0.0,0,0,0.0,2,1,1,1,0,0,0,0,0,0,0,0,5,0,0,0.5,,
+28032,Ivan Schranz,Slovakia,W,Right Wing,4,346.0,3,5,0.877,0,3,0.333,90,69,10,3,2,3,0,3,0,2,2,8,53,4,4,0.767,0.0,0.175
+10919,Juraj Kucka,Slovakia,CM,Right Center Midfield,4,379.4,0,8,0.439,1,4,0.3,125,95,9,5,4,5,1,3,0,1,2,14,60,3,9,0.76,0.0,0.055
+163610,Leo Sauer,Slovakia,W,Left Wing,1,9.6,0,0,0.0,0,0,0.0,2,1,0,0,0,0,0,2,1,0,0,0,1,0,0,0.5,0.5,
+7975,Lukáš Haraslín,Slovakia,W,Left Wing,4,277.0,0,8,0.427,1,7,0.532,68,48,8,1,2,13,7,7,6,2,5,5,22,4,3,0.706,0.857,0.053
+11383,László Bénes,Slovakia,DM,Left Defensive Midfield,2,84.3,0,1,0.08,0,3,0.573,51,40,2,1,0,0,0,0,0,1,1,4,5,1,0,0.784,,0.08
+3711,Martin Dúbravka,Slovakia,GK,Goalkeeper,4,427.9,0,0,0.0,0,0,0.0,164,108,9,0,0,0,0,0,0,0,0,16,1,0,0,0.659,,
+15546,Matúš Bero,Slovakia,FB,Right Wing Back,2,51.3,0,1,0.014,0,0,0.0,25,19,1,1,0,0,0,0,0,1,1,3,8,1,1,0.76,,0.014
+6990,Milan Škriniar,Slovakia,CB,Left Center Back,4,427.9,0,3,0.219,0,2,0.038,284,258,12,15,0,5,0,0,0,1,6,16,12,15,7,0.908,,0.073
+20043,Norbert Gyömbér,Slovakia,CB,Center Back,2,40.1,0,0,0.0,0,1,0.068,37,35,4,6,1,1,0,0,0,0,0,2,7,3,1,0.946,,
+8967,Ondrej Duda,Slovakia,CM,Left Center Midfield,4,336.6,1,2,0.135,0,3,0.191,175,137,6,12,0,2,0,3,3,3,6,10,70,5,4,0.783,1.0,0.067
+9722,Peter Pekarík,Slovakia,FB,Right Back,4,412.1,0,3,0.55,0,2,0.202,128,111,7,7,3,5,1,3,0,0,6,11,29,6,4,0.867,0.0,0.183
+34904,Róbert Boženík,Slovakia,FW,Center Forward,4,225.8,0,3,0.12,0,1,0.014,37,26,0,0,0,1,0,1,0,5,0,9,67,4,3,0.703,0.0,0.04
+6798,Stanislav Lobotka,Slovakia,DM,Center Defensive Midfield,4,427.9,0,1,0.022,0,4,0.088,243,230,14,23,1,7,0,2,2,5,3,20,50,8,3,0.947,1.0,0.022
+35653,Tomáš Suslov,Slovakia,W,Left Wing,4,150.9,0,0,0.0,0,3,0.156,53,39,5,2,4,4,1,7,3,0,0,8,38,0,0,0.736,0.429,
+8422,Ľubomír Tupta,Slovakia,W,Left Wing,1,12.8,0,1,0.029,0,0,0.0,4,4,0,0,0,0,0,0,0,0,0,0,1,0,0,1.0,,0.029
+31968,Adam Gnezda Čerin,Slovenia,DM,Right Defensive Midfield,4,415.4,0,4,0.286,0,2,0.056,165,130,3,6,0,1,0,2,1,4,6,15,123,8,5,0.788,0.5,0.071
+31866,Andraž Šporar,Slovenia,FW,Right Center Forward,4,354.2,0,8,1.249,0,5,0.289,68,46,2,3,1,5,0,1,0,1,0,8,53,4,7,0.676,0.0,0.156
+16510,Benjamin Verbič,Slovenia,W,Left Midfield,3,88.7,0,1,0.045,0,1,0.026,14,6,1,1,1,4,1,4,2,2,0,3,23,3,2,0.429,0.5,0.045
+38759,Benjamin Šeško,Slovenia,FW,Left Center Forward,4,374.7,0,8,0.844,0,2,0.153,72,46,2,4,0,8,2,9,2,4,0,14,62,5,12,0.639,0.222,0.106
+101806,David Brekalo,Slovenia,CB,Left Center Back,2,6.6,0,0,0.0,0,0,0.0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0.0,,
+28211,Erik Janža,Slovenia,FB,Left Back,3,282.9,1,3,0.056,0,3,0.536,116,78,6,7,1,2,0,0,0,3,0,5,67,7,4,0.672,,0.019
+16047,Jaka Bijol,Slovenia,CB,Left Center Back,4,415.4,0,1,0.036,0,1,0.023,137,110,10,4,1,0,0,1,1,6,5,6,46,32,13,0.803,1.0,0.036
+31089,Jan Mlakar,Slovenia,W,Left Midfield,4,300.0,0,2,0.165,0,1,0.043,65,38,5,1,3,6,2,3,1,2,1,7,53,5,3,0.585,0.333,0.082
+6378,Jan Oblak,Slovenia,GK,Goalkeeper,4,415.4,0,0,0.0,0,0,0.0,129,79,15,1,0,0,0,0,0,0,0,13,0,0,0,0.612,,
+6941,Jasmin Kurtič,Slovenia,,,1,0.6,0,0,0.0,0,0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,
+11416,Jon Gorenc Stankovič,Slovenia,DM,Left Defensive Midfield,4,115.0,0,1,0.039,0,0,0.0,22,16,2,3,1,0,0,0,0,1,1,3,17,3,1,0.727,,0.039
+7139,Josip Iličić,Slovenia,FW,Left Center Forward,2,35.2,0,1,0.045,0,0,0.0,9,6,0,1,0,1,0,0,0,0,0,3,9,0,0,0.667,,0.045
+30940,Jure Balkovec,Slovenia,FB,Left Back,2,132.4,0,0,0.0,0,1,0.039,37,24,4,2,0,1,0,0,0,4,5,3,19,5,1,0.649,,
+16528,Petar Stojanović,Slovenia,W,Right Midfield,4,326.6,0,1,0.023,0,3,0.123,110,79,5,5,2,12,4,12,4,2,2,22,47,3,3,0.718,0.333,0.023
+15896,Timi Elšnik,Slovenia,DM,Left Defensive Midfield,4,374.1,0,3,0.215,1,3,0.383,117,88,14,14,3,7,3,7,4,6,7,20,75,4,4,0.752,0.571,0.072
+205932,Vanja Drkušić,Slovenia,CB,Right Center Back,4,415.4,0,0,0.0,0,1,0.07,103,80,9,6,1,2,0,0,0,6,3,8,54,16,7,0.777,,
+24109,Žan Celar,Slovenia,FW,Right Center Forward,3,80.1,0,1,0.039,0,0,0.0,18,15,0,1,0,2,0,1,0,0,1,3,15,1,2,0.833,0.0,0.039
+137487,Žan Karničnik,Slovenia,FB,Right Back,4,415.4,1,3,0.356,0,0,0.0,190,149,12,7,1,7,1,5,4,8,7,17,68,11,0,0.784,0.8,0.119
+290289,Žan Vipotnik,Slovenia,FW,Left Center Forward,1,20.9,0,0,0.0,0,0,0.0,3,1,0,0,0,0,0,0,0,0,0,0,6,1,2,0.333,,
+41115,Alejandro Baena Rodríguez,Spain,AM,Center Attacking Midfield,2,36.4,0,0,0.0,0,1,0.081,12,11,2,0,2,2,0,1,0,1,0,2,18,0,0,0.917,0.0,
+10336,Alejandro Grimaldo García,Spain,FB,Left Back,2,122.9,0,0,0.0,0,8,0.46,104,89,8,4,5,4,1,1,1,1,3,4,11,2,1,0.856,1.0,
+4353,Aymeric Laporte,Spain,CB,Left Center Back,6,567.2,0,5,0.268,0,2,0.077,489,456,29,63,3,20,0,1,1,3,4,6,24,27,13,0.933,1.0,0.054
+3076,Ayoze Pérez Gutiérrez,Spain,W,Left Wing,1,19.1,0,3,0.324,0,0,0.0,3,3,0,0,0,4,2,2,2,0,0,1,2,0,0,1.0,1.0,0.108
+5721,Daniel Carvajal Ramos,Spain,FB,Right Back,5,507.5,1,2,0.349,0,5,0.372,325,292,24,27,2,2,1,5,1,2,3,21,55,5,5,0.898,0.2,0.174
+16532,Daniel Olmo Carvajal,Spain,AM,Center Attacking Midfield,6,461.6,3,17,1.378,2,11,1.237,186,151,14,16,9,17,5,15,10,3,5,17,75,2,1,0.812,0.667,0.081
+41542,Daniel Vivian Moreno,Spain,CB,Right Center Back,2,134.2,0,1,0.047,0,0,0.0,109,102,10,13,0,1,0,0,0,1,1,6,16,7,2,0.936,,0.047
+4127,David Raya Martin,Spain,GK,Goalkeeper,1,95.6,0,0,0.0,0,0,0.0,41,35,0,0,0,0,0,0,0,0,0,6,0,0,0,0.854,,
+6655,Fabián Ruiz Peña,Spain,DM,Left Defensive Midfield,6,579.2,2,17,1.145,2,11,1.165,437,388,27,45,6,11,3,11,7,5,3,37,84,4,2,0.888,0.636,0.067
+143864,Fermin Lopez Marin,Spain,AM,Center Attacking Midfield,1,33.4,0,2,0.038,0,0,0.0,10,9,0,0,0,2,0,3,1,0,0,4,11,0,0,0.9,0.333,0.019
+6748,Ferrán Torres García,Spain,W,Right Wing,5,178.7,1,5,0.492,0,1,0.091,45,34,3,0,3,5,3,2,0,0,2,3,34,0,2,0.756,0.0,0.098
+6821,Jesús Navas González,Spain,FB,Right Back,3,167.6,0,0,0.0,0,2,0.129,74,59,4,2,2,6,1,2,1,1,2,3,20,8,0,0.797,0.5,
+5202,José Ignacio Fernández Iglesias,Spain,CB,Right Center Back,4,293.7,0,0,0.0,0,1,0.027,137,127,6,7,0,3,0,1,1,2,2,8,12,15,3,0.927,1.0,
+3265,José Luis Sanmartín Mato,Spain,FW,Center Forward,2,97.1,0,3,0.143,0,0,0.0,14,11,0,0,0,1,1,1,1,0,0,2,15,2,4,0.786,1.0,0.048
+316046,Lamine Yamal Nasraoui Ebana,Spain,W,Right Wing,7,530.9,1,18,1.587,4,18,2.15,204,161,28,4,12,45,18,27,12,6,3,22,112,2,1,0.789,0.444,0.088
+17620,Marc Cucurella Saseta,Spain,FB,Left Back,6,592.0,0,1,0.016,1,6,0.621,368,336,22,23,4,8,1,3,0,8,11,13,90,8,11,0.913,0.0,0.016
+24921,Martín Zubimendi Ibáñez,Spain,DM,Right Defensive Midfield,4,157.4,0,0,0.0,0,2,0.053,117,105,3,8,1,6,0,1,1,5,0,6,38,0,0,0.897,1.0,
+3042,Mikel Merino Zazón,Spain,DM,Left Defensive Midfield,7,216.3,1,3,0.326,0,4,0.31,136,115,5,11,2,1,2,2,1,4,2,17,46,3,12,0.846,0.5,0.109
+6685,Mikel Oyarzabal Ugarte,Spain,FW,Center Forward,7,235.1,1,6,0.599,1,4,0.444,67,60,5,2,3,4,1,1,0,1,0,6,57,3,2,0.896,0.0,0.1
+68574,Nicholas Williams Arthuer,Spain,W,Left Wing,6,517.2,2,12,0.949,1,12,1.234,219,178,22,2,14,32,11,32,15,2,1,25,106,0,2,0.813,0.469,0.079
+30486,Pedro González López,Spain,AM,Center Attacking Midfield,4,196.8,0,6,0.851,1,10,0.619,92,83,8,11,2,6,6,4,0,3,2,11,61,0,0,0.902,0.0,0.142
+22128,Robin Aime Robert Le Normand,Spain,CB,Right Center Back,6,473.4,0,3,0.296,0,1,0.007,351,325,16,38,0,0,0,0,0,3,1,10,22,11,13,0.926,,0.099
+6765,Rodrigo Hernández Cascante,Spain,DM,Right Defensive Midfield,6,560.3,1,5,0.191,0,6,0.269,436,411,19,40,2,7,1,3,0,8,3,26,88,11,8,0.943,0.0,0.038
+11748,Unai Simón Mendibil,Spain,GK,Goalkeeper,6,619.4,0,0,0.0,0,0,0.0,246,188,32,1,0,0,0,0,0,0,0,25,0,0,0,0.764,,
+3477,Álvaro Borja Morata Martín,Spain,FW,Center Forward,7,470.2,1,14,1.567,0,3,0.343,112,79,4,7,3,8,1,3,1,5,0,12,129,3,14,0.705,0.333,0.112
+5545,Breel-Donald Embolo,Switzerland,FW,Center Forward,5,317.9,2,8,1.57,0,1,0.035,48,41,6,3,1,6,9,4,2,3,1,6,64,3,2,0.854,0.5,0.196
+45190,Dan Ndoye,Switzerland,FB,Right Wing Back,5,422.5,1,14,1.24,0,3,0.118,111,87,7,2,3,28,12,19,13,3,3,14,77,1,0,0.784,0.684,0.089
+5538,Denis Lemi Zakaria Lako Lado,Switzerland,AM,Right Attacking Midfield,1,23.5,0,0,0.0,0,0,0.0,7,7,0,0,0,0,0,0,0,0,0,0,7,0,0,1.0,,
+5537,Fabian Lukas Schär,Switzerland,CB,Right Center Back,5,511.4,0,5,0.22,0,3,0.102,256,206,40,27,3,8,2,1,0,7,8,15,43,23,8,0.805,0.0,0.044
+50436,Fabian Rieder,Switzerland,AM,Right Attacking Midfield,5,235.3,0,1,0.008,0,3,0.205,89,61,9,5,2,6,5,3,2,4,2,8,84,0,1,0.685,0.667,0.008
+3500,Granit Xhaka,Switzerland,DM,Left Defensive Midfield,5,511.4,0,4,0.152,0,8,0.445,406,371,28,46,4,5,1,2,2,5,3,20,69,10,11,0.914,1.0,0.038
+49007,Kwadwo Duah,Switzerland,FW,Center Forward,3,113.6,1,4,0.582,0,0,0.0,24,13,1,0,0,1,1,1,1,1,1,0,24,0,5,0.542,1.0,0.146
+29227,Leonidas Stergiou,Switzerland,FB,Right Wing Back,3,59.1,0,0,0.0,0,0,0.0,11,6,0,0,0,0,0,0,0,2,0,2,24,4,1,0.545,,
+5549,Manuel Obafemi Akanji,Switzerland,CB,Center Back,5,511.4,0,0,0.0,0,1,0.014,333,307,12,21,0,5,0,0,0,3,5,17,29,22,10,0.922,,
+16016,Michel Aebischer,Switzerland,FB,Left Wing Back,5,507.1,1,2,0.09,2,6,0.735,248,222,23,14,8,2,1,4,1,3,3,21,89,7,5,0.895,0.25,0.045
+48335,Mohamed Zeki Amdouni,Switzerland,AM,Right Attacking Midfield,4,71.2,0,2,0.149,0,0,0.0,15,9,0,1,0,2,0,3,1,0,0,4,23,1,1,0.6,0.333,0.075
+6983,Remo Freuler,Switzerland,DM,Right Defensive Midfield,5,475.8,1,3,0.211,2,3,0.269,234,207,11,16,2,5,0,1,0,4,5,12,108,8,6,0.885,0.0,0.07
+12326,Renato Steffen,Switzerland,FB,Left Wing Back,1,0.7,0,0,0.0,0,0,0.0,2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,1.0,,
+5544,Ricardo Iván Rodríguez Araya,Switzerland,CB,Left Center Back,5,511.4,0,3,0.074,0,2,0.262,256,216,17,23,5,11,0,1,0,3,2,14,46,15,4,0.844,0.0,0.025
+30401,Ruben Vargas,Switzerland,AM,Left Attacking Midfield,5,318.6,1,5,0.691,1,7,0.901,120,88,10,2,3,11,8,4,1,3,3,8,61,2,1,0.733,0.25,0.138
+7796,Silvan Widmer,Switzerland,FB,Right Wing Back,4,315.4,0,2,0.16,0,1,0.012,127,100,4,3,0,0,2,2,0,2,2,14,49,6,3,0.787,0.0,0.08
+5548,Steven Zuber,Switzerland,AM,Left Attacking Midfield,2,82.3,0,2,0.094,0,1,0.028,35,32,3,3,2,1,0,1,1,0,0,4,10,0,0,0.914,1.0,0.047
+11457,Vincent Sierro,Switzerland,DM,Right Defensive Midfield,4,51.2,0,1,0.02,0,0,0.0,24,14,1,0,0,1,0,1,0,0,1,2,11,2,1,0.583,0.0,0.02
+3533,Xherdan Shaqiri,Switzerland,AM,Center Attacking Midfield,2,74.3,1,2,0.086,0,1,0.04,35,23,4,2,0,0,0,0,0,0,0,2,7,0,2,0.657,,0.043
+5550,Yann Sommer,Switzerland,GK,Goalkeeper,5,511.4,0,0,0.0,0,0,0.0,168,139,13,0,0,0,0,0,0,0,0,15,0,0,0,0.827,,
+48383,Abdülkerim Bardakcı,Turkey,CB,Left Center Back,4,389.3,0,2,0.221,0,2,0.214,216,186,9,19,4,5,0,1,0,2,3,18,25,15,10,0.861,0.0,0.111
+30442,Altay Bayındır,Turkey,GK,Goalkeeper,1,96.0,0,0,0.0,0,0,0.0,35,28,0,0,0,0,0,0,0,0,0,5,0,0,0,0.8,,
+116587,Arda Güler,Turkey,FW,Center Forward,5,360.8,1,9,0.334,2,9,1.214,194,164,11,11,5,17,4,15,7,5,3,17,60,1,1,0.845,0.467,0.037
+134209,Barış Alper Yılmaz,Turkey,W,Right Wing,5,490.2,0,4,0.349,0,4,0.3,105,81,11,4,1,20,8,11,7,4,1,14,69,5,7,0.771,0.636,0.087
+3648,Cenk Tosun,Turkey,FW,Center Forward,2,37.0,1,3,0.206,0,0,0.0,4,2,0,0,0,2,1,0,0,0,0,0,4,0,1,0.5,,0.069
+30310,Fehmi Mert Günok,Turkey,GK,Goalkeeper,4,394.1,0,0,0.0,0,0,0.0,128,83,10,3,0,0,0,0,0,0,0,14,0,0,0,0.648,,
+30438,Ferdi Erenay Kadıoğlu,Turkey,FB,Left Back,5,490.2,0,2,0.055,0,12,0.847,283,240,12,14,5,28,6,7,5,8,4,25,64,8,3,0.848,0.714,0.028
+7039,Hakan Çalhanoğlu,Turkey,DM,Left Defensive Midfield,4,375.8,1,10,0.27,0,4,0.22,258,229,9,18,1,6,1,3,1,6,3,14,49,6,4,0.888,0.333,0.027
+12293,Kaan Ayhan,Turkey,CB,Right Center Back,5,377.9,0,3,0.233,1,4,0.195,187,163,13,13,2,1,0,1,1,6,3,8,31,12,7,0.872,1.0,0.078
+151813,Kenan Yildiz,Turkey,W,Left Wing,5,359.5,0,11,0.59,0,1,0.047,110,93,5,4,3,14,6,12,7,2,2,12,44,0,4,0.845,0.583,0.054
+10349,Mehmet Zeki Çelik,Turkey,FB,Right Back,3,123.4,0,1,0.242,0,3,0.651,54,43,3,3,3,2,0,0,0,0,0,5,14,1,2,0.796,,0.242
+23558,Merih Demiral,Turkey,CB,Left Center Back,4,236.4,2,3,0.717,0,1,0.049,97,84,5,3,1,1,0,0,0,1,5,3,21,22,12,0.866,,0.239
+10826,Mert Müldür,Turkey,FB,Right Back,4,366.8,1,3,0.468,0,1,0.01,171,137,14,3,4,10,0,6,3,4,5,14,37,11,4,0.801,0.5,0.156
+49689,Muhammed Kerem Aktürkoğlu,Turkey,W,Left Wing,5,130.6,1,6,1.246,0,3,0.11,38,22,3,4,0,6,2,8,5,0,2,9,24,1,0,0.579,0.625,0.208
+12555,Okay Yokuşlu,Turkey,DM,Center Defensive Midfield,3,71.9,0,1,0.04,0,0,0.0,27,26,1,2,0,0,0,0,0,1,2,3,10,6,2,0.963,,0.04
+22212,Orkun Kökçü,Turkey,AM,Center Attacking Midfield,4,239.2,0,6,0.8,1,2,0.137,124,94,5,6,3,6,1,4,1,2,1,14,29,1,3,0.758,0.25,0.133
+9085,Salih Özcan,Turkey,DM,Right Defensive Midfield,4,171.8,0,1,0.026,0,0,0.0,72,60,2,3,0,0,0,0,0,2,5,4,44,3,3,0.833,,0.026
+133305,Samet Akaydin,Turkey,CB,Right Center Back,4,359.1,1,2,0.321,0,0,0.0,207,186,15,19,0,2,0,0,0,4,5,6,32,12,14,0.899,,0.16
+149576,Semih Kılıçsoy,Turkey,AM,Center Attacking Midfield,1,7.8,0,1,0.114,0,0,0.0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1.0,,0.114
+18723,Yunus Akgün,Turkey,W,Right Wing,1,69.9,0,0,0.0,0,2,0.055,17,15,3,0,1,3,1,3,2,1,0,1,19,0,0,0.882,0.667,
+29989,Yusuf Yazıcı,Turkey,FW,Center Forward,2,69.6,0,3,0.185,0,0,0.0,19,16,0,1,0,0,0,1,1,1,0,3,12,0,2,0.842,1.0,0.062
+30311,İrfan Can Kahveci,Turkey,CM,Left Center Midfield,1,12.7,0,0,0.0,0,0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,,,
+78241,İsmail Yüksek,Turkey,DM,Left Defensive Midfield,3,161.6,0,1,0.046,1,3,0.124,99,92,2,8,1,0,0,0,0,5,1,9,37,2,2,0.929,,0.046
+37330,Anatolii Trubin,Ukraine,GK,Goalkeeper,2,192.5,0,0,0.0,0,0,0.0,71,55,6,0,0,0,0,0,0,0,0,8,0,0,0,0.775,,
+21390,Andriy Lunin,Ukraine,GK,Goalkeeper,1,96.1,0,0,0.0,0,0,0.0,24,23,0,0,0,0,0,0,0,0,0,2,0,0,0,0.958,,
+8830,Andriy Yarmolenko,Ukraine,W,Right Midfield,3,112.9,0,4,0.519,0,0,0.0,50,34,7,1,1,5,1,0,0,1,1,6,10,1,0,0.68,,0.13
+25079,Artem Dovbyk,Ukraine,FW,Center Forward,3,259.4,0,6,0.545,0,6,0.468,35,27,2,0,2,5,3,4,3,1,0,6,31,1,5,0.771,0.75,0.091
+38975,Georgiy Sudakov,Ukraine,AM,Center Attacking Midfield,3,276.8,0,9,0.43,0,4,0.126,118,101,14,12,2,9,2,6,3,2,0,7,40,2,3,0.856,0.5,0.048
+39136,Illia Zabarnyi,Ukraine,CB,Right Center Back,3,288.6,0,0,0.0,0,2,0.06,200,173,18,14,1,6,0,1,0,3,3,11,20,8,2,0.865,0.0,
+36911,Maksym Talovierov,Ukraine,CM,Left Center Midfield,1,4.2,0,0,0.0,0,0,0.0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1.0,,
+39483,Mykhailo Mudryk,Ukraine,W,Left Midfield,2,181.5,0,6,0.298,0,5,0.475,52,35,8,2,3,12,5,6,5,2,1,8,14,1,3,0.673,0.833,0.05
+18617,Mykola Matvienko,Ukraine,CB,Left Center Back,3,288.6,0,0,0.0,0,4,0.141,227,212,16,22,1,7,0,0,0,3,2,8,20,11,4,0.934,,
+21294,Mykola Shaparenko,Ukraine,DM,Right Defensive Midfield,3,228.3,1,1,0.24,1,2,0.417,130,115,8,12,3,3,2,3,2,0,3,4,77,0,2,0.885,0.667,0.24
+30059,Oleksandr Svatok,Ukraine,CB,Center Back,1,82.2,0,0,0.0,0,0,0.0,24,23,1,2,0,0,0,0,0,0,4,0,10,3,0,0.958,,
+45863,Oleksandr Tymchyk,Ukraine,FB,Right Back,3,215.3,0,0,0.0,0,1,0.018,81,66,7,4,1,3,0,0,0,5,4,9,46,7,3,0.815,,
+3575,Oleksandr Zinchenko,Ukraine,FB,Left Back,3,229.0,0,1,0.008,1,2,0.271,158,136,12,10,2,2,0,2,2,4,1,14,21,4,8,0.861,1.0,0.008
+31892,Oleksandr Zubkov,Ukraine,W,Right Midfield,1,29.0,0,0,0.0,0,0,0.0,9,6,1,1,0,0,0,0,0,1,0,1,12,1,0,0.667,,
+23649,Roman Yaremchuk,Ukraine,FW,Left Center Forward,3,132.5,1,6,0.662,0,2,0.123,28,23,4,0,2,2,1,1,1,0,0,3,31,1,1,0.821,1.0,0.11
+16557,Ruslan Malinovskiy,Ukraine,DM,Left Defensive Midfield,3,47.0,0,2,0.063,0,2,0.248,27,24,4,2,0,1,0,0,0,2,2,2,18,1,0,0.889,,0.031
+16514,Serhii Sydorchuk,Ukraine,DM,Center Defensive Midfield,1,10.6,0,0,0.0,0,0,0.0,2,1,0,0,0,0,0,0,0,0,0,0,5,0,0,0.5,,
+11000,Taras Stepanenko,Ukraine,DM,Left Defensive Midfield,2,88.4,0,1,0.067,0,0,0.0,73,61,1,3,0,0,0,1,0,1,1,3,6,1,4,0.836,0.0,0.067
+16509,Viktor Tsygankov,Ukraine,W,Right Wing,1,64.6,0,2,0.11,0,0,0.0,31,24,0,0,0,2,3,0,0,1,0,1,3,0,0,0.774,,0.055
+20827,Vitalii Mykolenko,Ukraine,FB,Left Wing Back,1,59.5,0,0,0.0,0,2,0.152,18,14,5,2,2,0,0,0,0,0,1,1,7,0,0,0.778,,
+40141,Vladyslav Vanat,Ukraine,FW,Right Center Forward,1,24.5,0,0,0.0,0,0,0.0,2,1,0,0,0,0,0,0,0,0,1,0,5,0,0,0.5,,
+144127,Volodymyr Brazhko,Ukraine,DM,Left Defensive Midfield,3,189.6,0,2,0.044,0,1,0.032,85,73,2,1,1,0,0,1,1,3,3,4,35,2,1,0.859,1.0,0.022
+45785,Yukhym Konoplya,Ukraine,FB,Right Back,1,73.3,0,0,0.0,0,0,0.0,42,32,2,3,0,1,0,2,0,1,1,1,8,0,0,0.762,0.0,
