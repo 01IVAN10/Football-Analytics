@@ -91,6 +91,18 @@ def test_open_from_url():
     assert at.title[0].value == "Artem Dovbyk"
 
 
+def test_tab_from_url():
+    """?tab=Similar+players відкриває одразу вкладку схожих (і вона лишається в URL)."""
+    at = AppTest.from_file(APP, default_timeout=60)
+    at.query_params["player"] = "Toni Kroos (Germany)"
+    at.query_params["tab"] = "Similar players"
+    at.run()
+    assert not at.exception
+    assert at.title[0].value == "Toni Kroos"
+    assert len(at.dataframe) == 1                        # таблиця схожих, а не профіль
+    assert at.query_params["tab"] == ["Similar players"]
+
+
 # ---------- карти ----------
 
 # Зірки + крайні випадки: < 270 хв, воротар, гравець без позиції (3 хв на полі)

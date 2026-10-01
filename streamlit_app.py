@@ -370,12 +370,12 @@ def render_similar(player_id: int, player: pd.Series,
         selection_default={"selection": {"rows": [0]}},
         key=f"similar_{player_id}_{other_teams}",
         column_config={
-            "player": st.column_config.TextColumn("Player", width=190),
-            "team": st.column_config.TextColumn("Team", width=100),
+            "player": st.column_config.TextColumn("Player", width=170),
+            "team": st.column_config.TextColumn("Team", width=95),
             "pos": st.column_config.TextColumn(
-                "Pos", width=45, help="Position group: CB, FB, DM, CM, AM, W, FW."),
+                "Pos", width=42, help="Position group: CB, FB, DM, CM, AM, W, FW."),
             "similarity": st.column_config.ProgressColumn(
-                "Similarity", min_value=0, max_value=1, format="%.2f", width=110),
+                "Similarity", min_value=0, max_value=1, format="%.2f", width=100),
             "shared": st.column_config.TextColumn(
                 "Shared strengths",
                 help="Top-2 metrics where both players are above the pool average "
@@ -394,6 +394,10 @@ def render_similar(player_id: int, player: pd.Series,
     compare_id = int(other["player_id"])
 
     st.subheader(f"{player['player']} vs {other['player']}")
+    # Те саме, що в колонках таблиці, але для вибраного гравця і завжди на виду:
+    # на екрані ~1200 px остання колонка таблиці ховається за горизонтальною прокруткою
+    st.markdown(f"**Shared strengths:** {other['shared']}  \n"
+                f"**Main difference:** {other['difference']}")
     view = st.segmented_control("View", ["Z-profile", "Radar"], default="Z-profile",
                                 required=True, key="compare_view", label_visibility="collapsed")
     if view == "Z-profile":
@@ -487,7 +491,23 @@ header(player)
 # on_change="rerun" + .open = "ліниві" вкладки: виконується код лише відкритої.
 # Без цього Streamlit рахує вміст УСІХ вкладок на кожен прогін і лише ховає зайві:
 # радар + 3 карти + таблиця схожих на кожен клік.
-profile_tab, maps_tab, similar_tab, about_tab = st.tabs(TABS, key="tab", on_change="rerun")
+#
+# Вкладка в URL (?tab=Pitch+maps), щоб посилання вело одразу куди треба.
+# У st.tabs немає bind="query-params", як у selectbox, тому синхронізуємо вручну:
+# з URL читаємо лише стартову вкладку, а після кожного прогону записуємо активну.
+# Стартову вкладку запам'ятовуємо в session_state ОДИН раз на сесію: default входить
+# в "особу" віджета, і якби він мінявся разом з URL, Streamlit вважав би вкладки
+# новим віджетом і скидав вибір користувача (клік по Profile повертав би на Pitch maps).
+# Для першої вкладки параметр прибираємо, щоб звичайне посилання лишалось коротким.
+if "start_tab" not in st.session_state:
+    requested_tab = st.query_params.get("tab")
+    st.session_state["start_tab"] = requested_tab if requested_tab in TABS else None
+profile_tab, maps_tab, similar_tab, about_tab = st.tabs(
+    TABS, key="tab", on_change="rerun", default=st.session_state["start_tab"])
+if st.session_state["tab"] == TABS[0]:
+    st.query_params.pop("tab", None)
+else:
+    st.query_params["tab"] = st.session_state["tab"]
 if profile_tab.open:
     with profile_tab:
         render_profile(player_id, player, per90, pct)
